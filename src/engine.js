@@ -9,9 +9,109 @@ document.addEventListener('DOMContentLoaded', function () {
     const header = document.querySelector('.header');
     const sections = document.querySelectorAll('section[id]');
     const contactForm = document.querySelector('.contact-form');
+    const themeToggle = document.querySelector('#themeToggle');
 
     let isScrolling = false;
     let currentSection = 'home';
+
+    // Theme Management
+    const themeManager = {
+        STORAGE_KEY: 'portfolio-theme',
+        DARK: 'dark',
+        LIGHT: 'light',
+
+        init() {
+            const savedTheme = this.getSavedTheme();
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? this.DARK : this.LIGHT);
+            
+            this.setTheme(theme);
+            this.bindEvents();
+        },
+
+        getSavedTheme() {
+            try {
+                return null; // Não usa localStorage conforme instruções
+            } catch {
+                return null;
+            }
+        },
+
+        saveTheme(theme) {
+            // Mantém em memória apenas durante a sessão
+            this.currentTheme = theme;
+        },
+
+        setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            this.saveTheme(theme);
+            this.updateThemeIcon(theme);
+            this.updateMetaThemeColor(theme);
+        },
+
+        toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || this.DARK;
+            const newTheme = currentTheme === this.DARK ? this.LIGHT : this.DARK;
+            this.setTheme(newTheme);
+            this.animateToggle();
+        },
+
+        updateThemeIcon(theme) {
+            const lightIcon = document.querySelector('.theme-icon-light');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            
+            if (lightIcon && darkIcon) {
+                if (theme === this.DARK) {
+                    lightIcon.style.opacity = '1';
+                    lightIcon.style.transform = 'rotate(0deg) scale(1)';
+                    darkIcon.style.opacity = '0';
+                    darkIcon.style.transform = 'rotate(-90deg) scale(0.5)';
+                } else {
+                    lightIcon.style.opacity = '0';
+                    lightIcon.style.transform = 'rotate(90deg) scale(0.5)';
+                    darkIcon.style.opacity = '1';
+                    darkIcon.style.transform = 'rotate(0deg) scale(1)';
+                }
+            }
+        },
+
+        updateMetaThemeColor(theme) {
+            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+                metaThemeColor.setAttribute('content', theme === this.DARK ? '#8b5cf6' : '#7c3aed');
+            }
+        },
+
+        animateToggle() {
+            if (themeToggle) {
+                themeToggle.style.transform = 'scale(0.9) rotate(180deg)';
+                setTimeout(() => {
+                    themeToggle.style.transform = 'scale(1) rotate(0deg)';
+                }, 150);
+            }
+        },
+
+        bindEvents() {
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => this.toggleTheme());
+            }
+
+            // Detecta mudanças na preferência do sistema
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!this.currentTheme) {
+                    this.setTheme(e.matches ? this.DARK : this.LIGHT);
+                }
+            });
+
+            // Atalho de teclado (Ctrl/Cmd + Shift + T)
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'T') {
+                    e.preventDefault();
+                    this.toggleTheme();
+                }
+            });
+        }
+    };
 
     // Image Handling
     function handleImageError(img) {
@@ -211,6 +311,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.onmouseleave = () => icon.style.transform = 'scale(1) rotate(0deg)';
             }
         });
+
+        // Adiciona efeito hover ao botão de tema
+        if (themeToggle) {
+            themeToggle.onmouseenter = () => {
+                themeToggle.style.transform = 'scale(1.1)';
+            };
+            themeToggle.onmouseleave = () => {
+                themeToggle.style.transform = 'scale(1)';
+            };
+        }
     }
 
     // Utility Functions
@@ -257,6 +367,31 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Theme Accessibility
+    function announceThemeChange(theme) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.style.cssText = 'position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;';
+        announcement.textContent = `Tema alterado para ${theme === 'dark' ? 'escuro' : 'claro'}`;
+        
+        document.body.appendChild(announcement);
+        setTimeout(() => document.body.removeChild(announcement), 1000);
+    }
+
+    // Enhanced Theme Manager
+    themeManager.setTheme = function(theme) {
+        const oldTheme = document.documentElement.getAttribute('data-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        this.saveTheme(theme);
+        this.updateThemeIcon(theme);
+        this.updateMetaThemeColor(theme);
+        
+        if (oldTheme && oldTheme !== theme) {
+            announceThemeChange(theme);
+        }
+    };
+
     // Event Listeners
     if (hamburger) hamburger.onclick = toggleMobileMenu;
     if (backToTopBtn) backToTopBtn.onclick = e => { e.preventDefault(); smoothScrollTo('#home'); };
@@ -276,7 +411,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateActiveNavLink();
     }, 250));
 
-    document.onkeydown = e => { if (e.key === 'Escape') closeMobileMenu(); };
+    document.onkeydown = e => { 
+        if (e.key === 'Escape') closeMobileMenu(); 
+    };
     
     document.onclick = e => {
         if (hamburger && navMenu && !hamburger.contains(e.target) && !navMenu.contains(e.target)) {
@@ -286,6 +423,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize
     function init() {
+        // Inicializa o sistema de temas
+        themeManager.init();
+        
         // Setup image error handling
         document.querySelectorAll('img').forEach(img => {
             img.onload = () => img.style.opacity = '1';
@@ -305,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         animateOnScroll();
-        console.log('🚀 Portfólio inicializado!');
+        console.log('🚀 Portfólio inicializado com sistema de temas!');
     }
 
     init();
