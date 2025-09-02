@@ -88,19 +88,25 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateProjectFallbackIcon(fallback, projectTitle) {
         if (!fallback) return;
 
-        const iconElement = fallback.querySelector('i');
-        if (!iconElement) return;
+        let iconClass = 'fas fa-laptop-code';
+        let projectName = projectTitle;
 
-        // Set appropriate icon based on project
+        // Define ícone baseado no projeto
         if (projectTitle.toLowerCase().includes('spider') || projectTitle.toLowerCase().includes('aranha')) {
-            iconElement.className = 'fas fa-spider';
-        } else if (projectTitle.toLowerCase().includes('mundo') || projectTitle.toLowerCase().includes('stranger')) {
-            iconElement.className = 'fas fa-magic';
+            iconClass = 'fas fa-mask';
+            projectName = 'Spider-Man';
+        } else if (projectTitle.toLowerCase().includes('mundo') || projectTitle.toLowerCase().includes('invertido')) {
+            iconClass = 'fas fa-magic';
+            projectName = 'Stranger Things';
         } else if (projectTitle.toLowerCase().includes('barber')) {
-            iconElement.className = 'fas fa-cut';
-        } else {
-            iconElement.className = 'fas fa-laptop-code';
+            iconClass = 'fas fa-cut';
+            projectName = 'Barbearia';
         }
+
+        fallback.innerHTML = `
+        <i class="${iconClass}"></i>
+        <span>${projectName}</span>
+    `;
     }
 
     function initLazyLoading() {
@@ -563,6 +569,16 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('🚀 Portfólio inicializado com sucesso!');
     }
 
+    // Dentro da função init(), após as outras inicializações
+    setTimeout(() => {
+        fixProjectImagesOnMobile();
+    }, 1000);
+
+    // Verifica imagens especificamente no mobile
+    if (window.innerWidth <= 768) {
+        setTimeout(checkMobileImageSupport, 500);
+    }
+
     // Initialize everything
     init();
 
@@ -778,3 +794,59 @@ document.addEventListener('DOMContentLoaded', function () {
         images.forEach(img => imageObserver.observe(img));
     });
 })();
+
+function fixProjectImagesOnMobile() {
+    if (window.innerWidth <= 768) {
+        const projectImages = document.querySelectorAll('.project-image img');
+
+        projectImages.forEach((img, index) => {
+            // Força o carregamento da imagem
+            const originalSrc = img.src;
+
+            // Remove e re-adiciona a imagem
+            setTimeout(() => {
+                img.style.display = 'none';
+                img.src = '';
+
+                setTimeout(() => {
+                    img.src = originalSrc;
+                    img.style.display = 'block';
+
+                    // Se ainda não carregar, mostra o fallback
+                    setTimeout(() => {
+                        if (img.naturalWidth === 0) {
+                            handleImageError(img);
+                        }
+                    }, 2000);
+                }, 100);
+            }, index * 200);
+        });
+    }
+}
+
+function checkMobileImageSupport() {
+    if (window.innerWidth <= 768) {
+        // Verifica se as imagens dos projetos existem
+        const projectImages = [
+            './src/imagens/homem-aranha1.png',
+            './src/imagens/mundo-invertido1.png',
+            './src/imagens/barbearia1.png'
+        ];
+
+        projectImages.forEach((src, index) => {
+            const testImg = new Image();
+            testImg.onload = () => {
+                console.log(`Projeto ${index + 1} OK: ${src}`);
+            };
+            testImg.onerror = () => {
+                console.error(`Projeto ${index + 1} ERRO: ${src}`);
+                // Força fallback para esta imagem específica
+                const projectImgs = document.querySelectorAll('.project-image img');
+                if (projectImgs[index]) {
+                    handleImageError(projectImgs[index]);
+                }
+            };
+            testImg.src = src;
+        });
+    }
+}
