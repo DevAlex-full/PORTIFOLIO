@@ -4,7 +4,7 @@ Um portfólio web moderno e responsivo desenvolvido com tecnologias front-end, a
 
 ## 🌟 Visão Geral
 
-Este portfólio foi criado para apresentar meus projetos, habilidades e experiência como desenvolvedor full stack. O site conta com design moderno, animações fluidas e uma experiência de usuário otimizada.
+Este portfólio foi criado para apresentar meus projetos, habilidades e experiência como desenvolvedor Fron-End. O site conta com design moderno, animações fluidas e uma experiência de usuário otimizada.
 
 ### 🔗 Links Importantes
 
