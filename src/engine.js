@@ -579,6 +579,9 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(checkMobileImageSupport, 500);
     }
 
+    // Initialize everything
+    init();
+
     function testImageConnectivity() {
         const testImages = [
             './src/imagens/EU1.jpg',
@@ -594,10 +597,6 @@ document.addEventListener('DOMContentLoaded', function () {
             testImg.src = src;
         });
     }
-
-    // Initialize everything
-    init();
-
 
     // Chame esta função no final da função init()
 
