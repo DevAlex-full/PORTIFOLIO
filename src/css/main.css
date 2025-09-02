@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Main Styles - css/main.css
+   Main Styles - css/main.css (Otimizado)
    ========================================================================== */
 
 :root {
@@ -119,14 +119,12 @@
     display: flex;
     align-items: center;
     gap: 1.2rem;
-    position: relative;
 }
 
-.logo-icon {
+.logo-icon, .logo-fallback {
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    object-fit: cover;
     transition: var(--transition);
 }
 
@@ -135,10 +133,7 @@
 }
 
 .logo-fallback {
-    width: 40px;
-    height: 40px;
     background: var(--gradient-primary);
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,8 +165,7 @@
     text-decoration: none;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover, .nav-link.active {
     color: var(--primary-color);
 }
 
@@ -186,8 +180,7 @@
     transition: var(--transition);
 }
 
-.nav-link:hover::after,
-.nav-link.active::after {
+.nav-link:hover::after, .nav-link.active::after {
     width: 100%;
 }
 
@@ -195,8 +188,6 @@
     display: none;
     flex-direction: column;
     cursor: pointer;
-    background: none;
-    border: none;
 }
 
 .bar {
@@ -216,7 +207,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
 }
 
@@ -314,7 +304,6 @@
     justify-content: center;
     font-size: 6rem;
     color: white;
-    position: relative;
     overflow: hidden;
 }
 
@@ -356,33 +345,14 @@
 }
 
 @keyframes rotate {
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes bounce {
-
-    0%,
-    20%,
-    53%,
-    80%,
-    100% {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    40%,
-    43% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-
-    70% {
-        transform: translateX(-50%) translateY(-5px);
-    }
-
-    90% {
-        transform: translateX(-50%) translateY(-2px);
-    }
+    0%, 20%, 53%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40%, 43% { transform: translateX(-50%) translateY(-10px); }
+    70% { transform: translateX(-50%) translateY(-5px); }
+    90% { transform: translateX(-50%) translateY(-2px); }
 }
 
 /* ==========================================================================
@@ -475,7 +445,6 @@
     overflow: hidden;
     border: 1px solid rgba(139, 92, 246, 0.2);
     transition: var(--transition);
-    position: relative;
 }
 
 .project-card:hover {
@@ -492,7 +461,6 @@
     justify-content: center;
     font-size: 4rem;
     color: white;
-    position: relative;
     overflow: hidden;
 }
 
@@ -640,8 +608,7 @@
     font-weight: 600;
 }
 
-.contact-item span:last-child,
-.contact-item a {
+.contact-item span:last-child, .contact-item a {
     font-size: 1.6rem;
     color: var(--text-secondary);
     margin-top: 0.4rem;
@@ -689,8 +656,7 @@
     margin-bottom: 2.4rem;
 }
 
-.form-group input,
-.form-group textarea {
+.form-group input, .form-group textarea {
     width: 100%;
     padding: 1.2rem 1.6rem;
     background: var(--dark-surface);
@@ -702,15 +668,13 @@
     font-family: inherit;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-group input:focus, .form-group textarea:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
     outline: none;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
+.form-group input::placeholder, .form-group textarea::placeholder {
     color: var(--text-muted);
 }
 
@@ -781,36 +745,6 @@
 }
 
 /* ==========================================================================
-   Image Loading States
-   ========================================================================== */
-
-.image-loading {
-    position: relative;
-    overflow: hidden;
-}
-
-.image-loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        transform: translateX(-100%);
-    }
-
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-/* ==========================================================================
    Responsive Design
    ========================================================================== */
 
@@ -830,29 +764,12 @@
         list-style: none;
     }
 
-    .nav-menu.active {
-        left: 0;
-    }
-
-    .nav-menu li {
-        margin: 1rem 0;
-    }
-
-    .hamburger {
-        display: flex;
-    }
-
-    .hamburger.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
+    .nav-menu.active { left: 0; }
+    .nav-menu li { margin: 1rem 0; }
+    .hamburger { display: flex; }
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     .hero-content {
         grid-template-columns: 1fr;
@@ -860,40 +777,15 @@
         text-align: center;
     }
 
-    .hero-title {
-        font-size: 3.6rem;
-    }
-
-    .hero-subtitle {
-        font-size: 2rem;
-    }
-
-    .hero-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .section-title {
-        font-size: 2.8rem;
-    }
-
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 4rem;
-    }
-
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .skills-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .container {
-        padding: 0 1.6rem;
-    }
-
+    .hero-title { font-size: 3.6rem; }
+    .hero-subtitle { font-size: 2rem; }
+    .hero-buttons { justify-content: center; flex-wrap: wrap; }
+    .section-title { font-size: 2.8rem; }
+    .contact-content { grid-template-columns: 1fr; gap: 4rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+    .container { padding: 0 1.6rem; }
+    
     .back-to-top {
         bottom: 2rem;
         right: 2rem;
@@ -901,114 +793,46 @@
         height: 4.5rem;
         font-size: 1.8rem;
     }
+
+    .project-image {
+        height: 180px;
+        min-height: 180px;
+    }
+    
+    .project-fallback {
+        font-size: 3rem;
+    }
+    
+    .project-fallback span {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
-
-    .logo-icon,
-    .logo-fallback {
-        width: 28px;
-        height: 28px;
-    }
-
-    .nav-logo h2 {
-        font-size: 1.8rem;
-    }
-
-    .hero-title {
-        font-size: 3rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.8rem;
-    }
-
-    .section-title {
-        font-size: 2.4rem;
-    }
-
-    .btn {
-        padding: 1rem 2rem;
-        font-size: 1.3rem;
-    }
-
-    .profile-card {
-        padding: 3rem;
-    }
-
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        font-size: 4.5rem;
-    }
-
-    .contact-form {
-        padding: 2rem;
-    }
+    .logo-icon, .logo-fallback { width: 28px; height: 28px; }
+    .nav-logo h2 { font-size: 1.8rem; }
+    .hero-title { font-size: 3rem; }
+    .hero-subtitle { font-size: 1.8rem; }
+    .section-title { font-size: 2.4rem; }
+    .btn { padding: 1rem 2rem; font-size: 1.3rem; }
+    .profile-card { padding: 3rem; }
+    .profile-img { width: 150px; height: 150px; font-size: 4.5rem; }
+    .contact-form { padding: 2rem; }
 }
 
 /* ==========================================================================
-   Animations & Effects
+   Utilities & Effects
    ========================================================================== */
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--dark-bg); }
+::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+::selection { background: rgba(139, 92, 246, 0.3); color: white; }
+::-moz-selection { background: rgba(139, 92, 246, 0.3); color: white; }
 
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.fade-in-left {
-    animation: fadeInLeft 0.6s ease-out;
-}
-
-.fade-in-right {
-    animation: fadeInRight 0.6s ease-out;
-}
-
-/* ==========================================================================
-   Loading States & Utilities
-   ========================================================================== */
-
-.loading {
-    position: relative;
-    overflow: hidden;
-}
-
-.loading::after {
+.image-loading::after {
     content: '';
     position: absolute;
     top: 0;
@@ -1019,99 +843,7 @@
     animation: shimmer 1.5s infinite;
 }
 
-.visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-}
-
-/* ==========================================================================
-   Custom Scrollbar
-   ========================================================================== */
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--dark-bg);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-color);
-}
-
-/* ==========================================================================
-   Selection Styles
-   ========================================================================== */
-
-::selection {
-    background: rgba(139, 92, 246, 0.3);
-    color: white;
-}
-
-::-moz-selection {
-    background: rgba(139, 92, 246, 0.3);
-    color: white;
-}
-
-/* Otimizações para conexões lentas */
-@media (max-width: 768px) and (max-resolution: 150dpi) {
-
-    .project-image img,
-    .profile-img img {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-    }
-}
-
-/* Para dispositivos com conexão lenta */
-@media (prefers-reduced-data: reduce) {
-
-    .project-image::before,
-    .profile-img::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--gradient-primary);
-        z-index: 1;
-    }
-}
-
-/* Correções específicas para imagens de projetos no mobile */
-@media (max-width: 768px) {
-    .project-image {
-        height: 180px; /* Reduz a altura no mobile */
-        min-height: 180px;
-    }
-    
-    .project-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        display: block; /* Força exibição */
-    }
-    
-    .project-fallback {
-        font-size: 3rem; /* Reduz o tamanho do ícone fallback */
-    }
-    
-    .project-fallback span {
-        font-size: 1rem;
-    }
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
