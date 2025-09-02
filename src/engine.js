@@ -21,6 +21,91 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSection = 'home';
 
     // ==========================================================================
+    // Image Management Functions
+    // ==========================================================================
+    
+    function initImageHandling() {
+        const images = document.querySelectorAll('img[data-src], img[src]');
+        
+        images.forEach(img => {
+            // Add loading state
+            img.parentElement.classList.add('image-loading');
+            
+            img.addEventListener('load', function() {
+                this.parentElement.classList.remove('image-loading');
+                this.style.opacity = '1';
+            });
+            
+            img.addEventListener('error', function() {
+                console.warn(`Falha ao carregar imagem: ${this.src}`);
+                this.parentElement.classList.remove('image-loading');
+                handleImageError(this);
+            });
+        });
+        
+        // Initialize lazy loading if supported
+        if ('IntersectionObserver' in window) {
+            initLazyLoading();
+        }
+    }
+    
+    function handleImageError(img) {
+        // Hide the broken image
+        img.style.display = 'none';
+        
+        // Show the fallback element if it exists
+        const fallback = img.nextElementSibling;
+        if (fallback && (fallback.classList.contains('profile-fallback') || fallback.classList.contains('project-fallback'))) {
+            fallback.style.display = 'flex';
+        }
+        
+        // For project images, ensure proper icon is shown
+        if (img.closest('.project-image')) {
+            const projectCard = img.closest('.project-card');
+            const projectTitle = projectCard.querySelector('.project-title').textContent;
+            updateProjectFallbackIcon(fallback, projectTitle);
+        }
+    }
+    
+    function updateProjectFallbackIcon(fallback, projectTitle) {
+        if (!fallback) return;
+        
+        const iconElement = fallback.querySelector('i');
+        if (!iconElement) return;
+        
+        // Set appropriate icon based on project
+        if (projectTitle.toLowerCase().includes('spider') || projectTitle.toLowerCase().includes('aranha')) {
+            iconElement.className = 'fas fa-spider';
+        } else if (projectTitle.toLowerCase().includes('mundo') || projectTitle.toLowerCase().includes('stranger')) {
+            iconElement.className = 'fas fa-magic';
+        } else if (projectTitle.toLowerCase().includes('barber')) {
+            iconElement.className = 'fas fa-cut';
+        } else {
+            iconElement.className = 'fas fa-laptop-code';
+        }
+    }
+    
+    function initLazyLoading() {
+        const lazyImages = document.querySelectorAll('img[data-src]');
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px 0px',
+            threshold: 0.01
+        });
+        
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+    
+    // ==========================================================================
     // Navigation Functions
     // ==========================================================================
     
@@ -112,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.forEach(element => {
             const elementTop = element.offsetTop;
             const elementHeight = element.offsetHeight;
-            const elementBottom = elementTop + elementHeight;
             
             if ((scrollTop + windowHeight) >= (elementTop + 100)) {
                 element.classList.add('animate-in');
@@ -249,12 +333,16 @@ document.addEventListener('DOMContentLoaded', function() {
         skillItems.forEach(item => {
             item.addEventListener('mouseenter', function() {
                 const icon = this.querySelector('i');
-                icon.style.transform = 'scale(1.2) rotate(10deg)';
+                if (icon) {
+                    icon.style.transform = 'scale(1.2) rotate(10deg)';
+                }
             });
             
             item.addEventListener('mouseleave', function() {
                 const icon = this.querySelector('i');
-                icon.style.transform = 'scale(1) rotate(0deg)';
+                if (icon) {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                }
             });
         });
     }
@@ -263,34 +351,52 @@ document.addEventListener('DOMContentLoaded', function() {
         const hero = document.querySelector('.hero');
         const profileCard = document.querySelector('.profile-card');
         
-        window.addEventListener('scroll', () => {
+        if (!hero || !profileCard) return;
+        
+        const handleParallax = throttle(() => {
             if (window.innerWidth > 768) {
                 const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.5;
-                
-                if (hero && profileCard) {
-                    profileCard.style.transform = `translateY(${rate}px)`;
-                }
+                const rate = scrolled * -0.3;
+                profileCard.style.transform = `translateY(${rate}px)`;
+            } else {
+                profileCard.style.transform = 'translateY(0)';
+            }
+        }, 16);
+        
+        window.addEventListener('scroll', handleParallax);
+    }
+    
+    // ==========================================================================
+    // Performance Optimization
+    // ==========================================================================
+    
+    function optimizeImages() {
+        const images = document.querySelectorAll('img');
+        
+        images.forEach(img => {
+            // Add loading="lazy" if not present
+            if (!img.hasAttribute('loading')) {
+                img.setAttribute('loading', 'lazy');
+            }
+            
+            // Add proper alt attributes if missing
+            if (!img.getAttribute('alt')) {
+                const src = img.src || img.dataset.src || '';
+                const filename = src.split('/').pop().split('.')[0];
+                img.setAttribute('alt', filename.replace(/[_-]/g, ' '));
             }
         });
     }
     
-    function addTypingEffect() {
-        const titles = document.querySelectorAll('.hero-title');
+    function preloadCriticalImages() {
+        const criticalImages = [
+            './src/imagens/EU1.jpg',
+            './favicon-32x32.png'
+        ];
         
-        titles.forEach(title => {
-            const text = title.textContent;
-            title.textContent = '';
-            
-            let i = 0;
-            const typeWriter = setInterval(() => {
-                if (i < text.length) {
-                    title.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typeWriter);
-                }
-            }, 100);
+        criticalImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
         });
     }
 
@@ -375,7 +481,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Click outside to close mobile menu
     document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+        if (hamburger && navMenu && 
+            !hamburger.contains(e.target) && 
+            !navMenu.contains(e.target)) {
             closeMobileMenu();
         }
     });
@@ -385,6 +493,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==========================================================================
     
     function init() {
+        // Initialize image handling
+        initImageHandling();
+        optimizeImages();
+        preloadCriticalImages();
+        
         // Initial setup
         updateActiveNavLink();
         addHoverEffects();
@@ -405,6 +518,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize scroll animations
         animateOnScroll();
+        
+        // Handle image errors on load
+        setTimeout(() => {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                if (img.naturalWidth === 0 && img.naturalHeight === 0) {
+                    handleImageError(img);
+                }
+            });
+        }, 1000);
         
         console.log('🚀 Portfólio inicializado com sucesso!');
     }
@@ -427,6 +550,115 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
+    
+    // ==========================================================================
+    // Additional Image Utilities
+    // ==========================================================================
+    
+    function createImagePlaceholder(width = 300, height = 200, text = '') {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#8b5cf6');
+        gradient.addColorStop(1, '#a855f7');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Text
+        if (text) {
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, width / 2, height / 2);
+        }
+        
+        return canvas.toDataURL();
+    }
+    
+    function retryImageLoad(img, maxRetries = 3) {
+        let retries = 0;
+        const originalSrc = img.src;
+        
+        function attemptLoad() {
+            if (retries >= maxRetries) {
+                handleImageError(img);
+                return;
+            }
+            
+            retries++;
+            img.src = '';
+            
+            setTimeout(() => {
+                img.src = originalSrc + '?retry=' + retries;
+            }, 1000 * retries);
+        }
+        
+        img.addEventListener('error', attemptLoad, { once: true });
+    }
+    
+    // ==========================================================================
+    // Accessibility Improvements
+    // ==========================================================================
+    
+    function improveAccessibility() {
+        // Add skip link
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main-content';
+        skipLink.textContent = 'Pular para conteúdo principal';
+        skipLink.className = 'skip-link';
+        skipLink.style.cssText = `
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 10000;
+            transition: top 0.3s;
+        `;
+        
+        skipLink.addEventListener('focus', () => {
+            skipLink.style.top = '6px';
+        });
+        
+        skipLink.addEventListener('blur', () => {
+            skipLink.style.top = '-40px';
+        });
+        
+        document.body.insertBefore(skipLink, document.body.firstChild);
+        
+        // Add main content id
+        const heroSection = document.getElementById('home');
+        if (heroSection) {
+            heroSection.id = 'main-content';
+        }
+        
+        // Improve keyboard navigation
+        const focusableElements = document.querySelectorAll('a, button, input, textarea, select');
+        focusableElements.forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.outline = '2px solid var(--primary-color)';
+                this.style.outlineOffset = '2px';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.style.outline = '';
+                this.style.outlineOffset = '';
+            });
+        });
+    }
+    
+    // Initialize accessibility improvements
+    improveAccessibility();
+
 });
 
 /* ==========================================================================
@@ -467,7 +699,33 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (pageLoadTime > 0) {
                 console.log(`⚡ Página carregada em: ${pageLoadTime}ms`);
+                
+                // Log image load performance
+                const images = document.querySelectorAll('img');
+                const loadedImages = Array.from(images).filter(img => img.complete);
+                console.log(`🖼️ Imagens carregadas: ${loadedImages.length}/${images.length}`);
             }
         }, 0);
+    });
+})();
+
+// Image intersection observer for analytics
+(function() {
+    'use strict';
+    
+    if (!window.IntersectionObserver) return;
+    
+    const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                console.log(`📸 Imagem visualizada: ${img.alt || img.src.split('/').pop()}`);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    window.addEventListener('load', () => {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => imageObserver.observe(img));
     });
 })();

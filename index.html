@@ -19,6 +19,11 @@
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-logo">
+                    <img src="./favicon-32x32.png" alt="Logo" class="logo-icon" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-fallback" style="display:none;">
+                        <i class="fas fa-code"></i>
+                    </div>
                     <h2>Alexander Bueno Santiago</h2>
                 </div>
                 <ul class="nav-menu">
@@ -64,14 +69,20 @@
                 <div class="hero-image">
                     <div class="profile-card">
                         <div class="profile-img">
-                            <i class="fas fa-user"></i>
+                            <img src="./src/imagens/EU1.jpg" alt="Alexander Bueno Santiago"
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="profile-fallback"
+                                 style="display:none; width:100%; height:100%; background: var(--gradient-primary); align-items:center; justify-content:center; font-size:6rem; color:white; border-radius:50%;">
+                                <i class="fas fa-user"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </div>
     </section>
 
@@ -118,7 +129,7 @@
                                 <span>Node.js</span>
                             </div>
                             <div class="skill-item">
-                                <i class="fas fa-database"></i>
+                                <i class="fab fa-java"></i>
                                 <span>Java</span>
                             </div>
                         </div>
@@ -138,25 +149,33 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-laptop-code"></i>
+                        <img src="./src/imagens/homem-aranha1.png" alt="Projeto Spider-Man Multiverses"
+                             loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback" style="display:none;">
+                            <i class="fas fa-laptop-code"></i>
+                            <span>Spider-Man Multiverses</span>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">E-commerce Platform</h3>
+                        <h3 class="project-title">Homem Aranha Multiversos</h3>
                         <p class="project-description">
-                            Plataforma completa de e-commerce com painel administrativo,
-                            sistema de pagamentos e gestão de produtos.
+                            O Spider-Man Multiverses é uma aplicação web interativa que celebra o universo
+                            cinematográfico do Homem-Aranha, apresentando os diferentes atores e suas interpretações
+                            icônicas do personagem ao longo dos anos. O projeto oferece uma experiência imersiva por
+                            meio de design responsivo, animações fluidas e navegação intuitiva.
                         </p>
                         <div class="project-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">MongoDB</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link">
+                            <a href="https://spider-man-multiverses-dio-chi.vercel.app/" class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fas fa-external-link-alt"></i>
                                 Demo
                             </a>
-                            <a href="#" class="project-link">
+                            <a href="https://github.com/DevAlex-full/spider-man-multiverses" class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-github"></i>
                                 Código
                             </a>
@@ -166,25 +185,34 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-mobile-alt"></i>
+                        <img src="./src/imagens/mundo-invertido1.png" alt="Projeto Mundo Invertido"
+                             loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback" style="display:none;">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Mundo Invertido</span>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">App Mobile</h3>
+                        <h3 class="project-title">Mundo Invertido</h3>
                         <p class="project-description">
-                            Aplicativo mobile responsivo para gerenciamento de tarefas
-                            com sincronização em tempo real.
+                            Uma experiência web imersiva inspirada na série Stranger Things, onde os usuários podem
+                            alternar entre o mundo normal e o mundo invertido, explorando diferentes visuais, sons e
+                            interações.
                         </p>
                         <div class="project-tags">
-                            <span class="tag">React Native</span>
-                            <span class="tag">Firebase</span>
-                            <span class="tag">Redux</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link">
+                            <a href="https://devalex-full.github.io/semana-frontend-mundo-invertido/"
+                               class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fas fa-external-link-alt"></i>
                                 Demo
                             </a>
-                            <a href="#" class="project-link">
+                            <a href="https://github.com/DevAlex-full/semana-frontend-mundo-invertido"
+                               class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-github"></i>
                                 Código
                             </a>
@@ -194,25 +222,32 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <i class="fas fa-chart-line"></i>
+                        <img src="./src/imagens/barbearia1.png" alt="Projeto BarberLess"
+                             loading="lazy"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback" style="display:none;">
+                            <i class="fas fa-cut"></i>
+                            <span>BarberLess</span>
+                        </div>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Dashboard Analytics</h3>
+                        <h3 class="project-title">BarberLess</h3>
                         <p class="project-description">
-                            Dashboard interativo para análise de dados com gráficos
-                            dinâmicos e relatórios personalizados.
+                            Uma aplicação web moderna e responsiva para a barbearia Barber Less, localizada em São
+                            Paulo. O projeto oferece uma interface intuitiva para visualização de serviços,
+                            profissionais e agendamentos via WhatsApp.
                         </p>
                         <div class="project-tags">
-                            <span class="tag">Vue.js</span>
-                            <span class="tag">D3.js</span>
-                            <span class="tag">Python</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
                         </div>
                         <div class="project-links">
-                            <a href="#" class="project-link">
+                            <a href="https://devalex-full.github.io/projeto-barbearia/" class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fas fa-external-link-alt"></i>
                                 Demo
                             </a>
-                            <a href="#" class="project-link">
+                            <a href="https://github.com/DevAlex-full/projeto-barbearia" class="project-link" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-github"></i>
                                 Código
                             </a>
@@ -242,14 +277,14 @@
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <span>Email</span>
-                                <a href="mailto:seuemail@exemplo.com">alex.bueno22@hotmail.com</a>
+                                <a href="mailto:alex.bueno22@hotmail.com">alex.bueno22@hotmail.com</a>
                             </div>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
                             <div>
                                 <span>Telefone</span>
-                                <a href="tel:+5511999999999">+55 11 98394-3905</a>
+                                <a href="tel:+5511983943905">+55 11 98394-3905</a>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -261,16 +296,16 @@
                         </div>
                     </div>
                     <div class="social-links">
-                        <a href="https://www.linkedin.com/in/alexander-bueno-43823a358/" class="social-link">
+                        <a href="https://www.linkedin.com/in/alexander-bueno-43823a358/" class="social-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-linkedin"></i>
                         </a>
-                        <a href="https://github.com/DevAlex-full" class="social-link">
+                        <a href="https://github.com/DevAlex-full" class="social-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-github"></i>
                         </a>
                         <a href="#" class="social-link">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="https://www.instagram.com/devalex_full/" class="social-link">
+                        <a href="https://www.instagram.com/devalex_full/" class="social-link" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-instagram"></i>
                         </a>
                     </div>
