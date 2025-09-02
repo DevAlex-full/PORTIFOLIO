@@ -598,27 +598,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Chame esta função no final da função init()
-
-    // ==========================================================================
-    // Service Worker Registration (Optional)
-    // ==========================================================================
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => {
-                    console.log('SW registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
-        });
-    }
-
-    // ==========================================================================
     // Additional Image Utilities
-    // ==========================================================================
 
     function createImagePlaceholder(width = 300, height = 200, text = '') {
         const canvas = document.createElement('canvas');
