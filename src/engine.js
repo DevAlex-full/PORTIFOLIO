@@ -382,14 +382,188 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ==========================================================================
-    // Initialization
+    // Mobile Optimizations
+    // ==========================================================================
+
+    function initMobileOptimizations() {
+        // Detecta se é mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            // Otimiza scroll em dispositivos móveis
+            let ticking = false;
+            const optimizedHandleScroll = () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        handleScroll();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            };
+            
+            window.removeEventListener('scroll', throttle(handleScroll, 16));
+            window.addEventListener('scroll', optimizedHandleScroll, { passive: true });
+            
+            // Melhora responsividade do touch
+            document.body.style.webkitOverflowScrolling = 'touch';
+            
+            // Previne zoom no input
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.fontSize = '16px';
+                });
+            });
+            
+            // Otimiza imagens para mobile
+            optimizeMobileImages();
+            
+            // Adiciona suporte a gestos
+            addTouchGestures();
+        }
+    }
+
+    function optimizeMobileImages() {
+        const projectImages = document.querySelectorAll('.project-image img');
+        const profileImg = document.querySelector('.profile-img img');
+        
+        // Força carregamento correto no mobile
+        setTimeout(() => {
+            projectImages.forEach((img, index) => {
+                const originalSrc = img.src;
+                
+                setTimeout(() => {
+                    // Reset da imagem
+                    img.style.display = 'none';
+                    img.removeAttribute('src');
+                    
+                    setTimeout(() => {
+                        img.src = originalSrc;
+                        img.style.display = 'block';
+                        
+                        // Verifica se carregou após 3 segundos
+                        setTimeout(() => {
+                            if (img.naturalWidth === 0 || img.complete === false) {
+                                handleImageError(img);
+                            }
+                        }, 3000);
+                    }, 200);
+                }, index * 300);
+            });
+        }, 1000);
+        
+        // Trata imagem de perfil separadamente
+        if (profileImg) {
+            setTimeout(() => {
+                if (profileImg.naturalWidth === 0) {
+                    handleImageError(profileImg);
+                }
+            }, 2000);
+        }
+    }
+
+    function addTouchGestures() {
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleGesture();
+        }, { passive: true });
+        
+        function handleGesture() {
+            const swipeThreshold = 100;
+            const diff = touchStartY - touchEndY;
+            
+            // Swipe up para mostrar botão back-to-top
+            if (diff > swipeThreshold && window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            }
+        }
+    }
+
+    // ==========================================================================
+    // Enhanced Form Handling for Mobile
+    // ==========================================================================
+
+    function enhanceMobileForm() {
+        if (window.innerWidth <= 768 && contactForm) {
+            const inputs = contactForm.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                // Melhora UX em dispositivos móveis
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transition = 'transform 0.2s ease';
+                    
+                    // Scroll suave para o campo em foco
+                    setTimeout(() => {
+                        this.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center',
+                            inline: 'nearest'
+                        });
+                    }, 300);
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        }
+    }
+
+    // ==========================================================================
+    // Performance Optimizations
+    // ==========================================================================
+
+    function optimizePerformance() {
+        // Reduz animações em dispositivos com pouca bateria
+        if (navigator.getBattery) {
+            navigator.getBattery().then(battery => {
+                if (battery.level < 0.2) {
+                    document.body.classList.add('low-battery');
+                    // CSS pode usar esta classe para reduzir animações
+                }
+            });
+        }
+        
+        // Detecta conexão lenta
+        if (navigator.connection) {
+            const connection = navigator.connection;
+            if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                document.body.classList.add('slow-connection');
+                // Desabilita algumas animações para melhor performance
+            }
+        }
+        
+        // Lazy load melhorado para mobile
+        if (window.innerWidth <= 768) {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.loading = 'lazy';
+                img.decoding = 'async';
+            });
+        }
+    }
+
+    // ==========================================================================
+    // Initialization (Updated)
     // ==========================================================================
 
     function init() {
         initImageHandling();
+        initMobileOptimizations();
         updateActiveNavLink();
         addInteractiveEffects();
         addParallaxEffect();
+        enhanceMobileForm();
+        optimizePerformance();
 
         // Add loading animations
         const animatedElements = document.querySelectorAll('.hero-content, .section-header');
@@ -405,28 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         animateOnScroll();
-
-        // Mobile image fixes
-        if (window.innerWidth <= 768) {
-            setTimeout(() => {
-                const projectImages = document.querySelectorAll('.project-image img');
-                projectImages.forEach((img, index) => {
-                    const originalSrc = img.src;
-                    setTimeout(() => {
-                        img.style.display = 'none';
-                        img.src = '';
-                        setTimeout(() => {
-                            img.src = originalSrc;
-                            img.style.display = 'block';
-                            setTimeout(() => {
-                                if (img.naturalWidth === 0) handleImageError(img);
-                            }, 2000);
-                        }, 100);
-                    }, index * 200);
-                });
-            }, 500);
-        }
-
+        
         console.log('🚀 Portfólio inicializado com sucesso!');
     }
 
