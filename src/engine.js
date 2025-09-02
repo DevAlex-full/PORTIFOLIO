@@ -86,28 +86,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateProjectFallbackIcon(fallback, projectTitle) {
-        if (!fallback) return;
-
-        let iconClass = 'fas fa-laptop-code';
-        let projectName = projectTitle;
-
-        // Define ícone baseado no projeto
-        if (projectTitle.toLowerCase().includes('spider') || projectTitle.toLowerCase().includes('aranha')) {
-            iconClass = 'fas fa-mask';
-            projectName = 'Spider-Man';
-        } else if (projectTitle.toLowerCase().includes('mundo') || projectTitle.toLowerCase().includes('invertido')) {
-            iconClass = 'fas fa-magic';
-            projectName = 'Stranger Things';
-        } else if (projectTitle.toLowerCase().includes('barber')) {
-            iconClass = 'fas fa-cut';
-            projectName = 'Barbearia';
-        }
-
-        fallback.innerHTML = `
+    if (!fallback) return;
+    
+    let iconClass = 'fas fa-laptop-code';
+    let projectName = projectTitle;
+    
+    // Define ícone baseado no projeto
+    if (projectTitle.toLowerCase().includes('spider') || projectTitle.toLowerCase().includes('aranha')) {
+        iconClass = 'fas fa-mask';
+        projectName = 'Spider-Man';
+    } else if (projectTitle.toLowerCase().includes('mundo') || projectTitle.toLowerCase().includes('invertido')) {
+        iconClass = 'fas fa-magic';
+        projectName = 'Stranger Things';
+    } else if (projectTitle.toLowerCase().includes('barber')) {
+        iconClass = 'fas fa-cut';
+        projectName = 'Barbearia';
+    }
+    
+    fallback.innerHTML = `
         <i class="${iconClass}"></i>
         <span>${projectName}</span>
     `;
-    }
+}
 
     function initLazyLoading() {
         const lazyImages = document.querySelectorAll('img[loading="lazy"]');
@@ -575,9 +575,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 1000);
 
     // Verifica imagens especificamente no mobile
-    if (window.innerWidth <= 768) {
-        setTimeout(checkMobileImageSupport, 500);
-    }
+        if (window.innerWidth <= 768) {
+            setTimeout(checkMobileImageSupport, 500);
+        }
 
     // Initialize everything
     init();
@@ -829,10 +829,10 @@ function checkMobileImageSupport() {
         // Verifica se as imagens dos projetos existem
         const projectImages = [
             './src/imagens/homem-aranha1.png',
-            './src/imagens/mundo-invertido1.png',
+            './src/imagens/mundo-invertido1.png', 
             './src/imagens/barbearia1.png'
         ];
-
+        
         projectImages.forEach((src, index) => {
             const testImg = new Image();
             testImg.onload = () => {
