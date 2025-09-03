@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Alexander Portfolio">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Todos os Projetos - Alexander Bueno Santiago</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../src/css/reset.css">
+    <link rel="stylesheet" href="../src/css/main.css">
+    <link rel="stylesheet" href="../src/css/projetos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="../favicon-32x32.png" alt="Logo" class="logo-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="logo-fallback"><i class="fas fa-code"></i></div>
+                    <h2>Alexander Bueno Santiago</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../index.html#home" class="nav-link">Início</a></li>
+                    <li><a href="../index.html#about" class="nav-link">Sobre</a></li>
+                    <li><a href="../index.html#certifications" class="nav-link">Certificações</a></li>
+                    <li><a href="../index.html#projects" class="nav-link">Projetos</a></li>
+                    <li><a href="#all-projects" class="nav-link active">Todos os Projetos</a></li>
+                    <li><a href="../index.html#contact" class="nav-link">Contato</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+                        <i class="fas fa-sun theme-icon-light"></i>
+                        <i class="fas fa-moon theme-icon-dark"></i>
+                    </button>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- All Projects Section -->
+    <section id="all-projects" class="all-projects">
+        <div class="container">
+            <a href="../index.html#projects" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                Voltar ao Portfólio
+            </a>
+
+            <div class="projects-hero">
+                <h1>Todos os Meus Projetos</h1>
+                <p>Uma coleção completa dos projetos que desenvolvi, desde aplicações web interativas até soluções comerciais.</p>
+            </div>
+
+            <!-- Projects Stats -->
+            <div class="projects-stats">
+                <div class="stat-card-mini">
+                    <i class="fas fa-laptop-code"></i>
+                    <span class="stat-number-mini">3+</span>
+                    <span class="stat-label-mini">Projetos</span>
+                </div>
+                <div class="stat-card-mini">
+                    <i class="fab fa-html5"></i>
+                    <span class="stat-number-mini">6+</span>
+                    <span class="stat-label-mini">Tecnologias</span>
+                </div>
+                <div class="stat-card-mini">
+                    <i class="fas fa-eye"></i>
+                    <span class="stat-number-mini">500+</span>
+                    <span class="stat-label-mini">Visualizações</span>
+                </div>
+                <div class="stat-card-mini">
+                    <i class="fas fa-star"></i>
+                    <span class="stat-number-mini">4+</span>
+                    <span class="stat-label-mini">Stars GitHub</span>
+                </div>
+            </div>
+
+            <!-- Project Filter -->
+            <div class="projects-filter">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="web">Web Apps</button>
+                <button class="filter-btn" data-filter="landing">Landing Pages</button>
+                <button class="filter-btn" data-filter="interactive">Interativos</button>
+                <button class="filter-btn" data-filter="commercial">Comerciais</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projeto Spider-Man -->
+                <div class="project-card" data-category="interactive web">
+                    <div class="project-image">
+                        <img src="../src/imagens/homem-aranha1.png" alt="Projeto Spider-Man Multiverses" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>Spider-Man Multiverses</span></div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Homem Aranha Multiversos</h3>
+                        <p class="project-description">Uma aplicação web interativa que celebra o universo cinematográfico do Homem-Aranha, apresentando os diferentes atores e suas interpretações icônicas do personagem ao longo dos anos.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Responsivo</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://spider-man-multiverses-dio-chi.vercel.app/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/spider-man-multiverses" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projeto Mundo Invertido -->
+                <div class="project-card" data-category="interactive web">
+                    <div class="project-image">
+                        <img src="../src/imagens/mundo-invertido1.png" alt="Projeto Mundo Invertido" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-mobile-alt"></i><span>Mundo Invertido</span></div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Mundo Invertido</h3>
+                        <p class="project-description">Uma experiência web imersiva inspirada na série Stranger Things, onde os usuários podem alternar entre o mundo normal e o mundo invertido, explorando diferentes visuais, sons e interações.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Animações</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://devalex-full.github.io/semana-frontend-mundo-invertido/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/semana-frontend-mundo-invertido" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projeto BarberLess -->
+                <div class="project-card" data-category="commercial landing">
+                    <div class="project-image">
+                        <img src="../src/imagens/barbearia1.png" alt="Projeto BarberLess" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-cut"></i><span>BarberLess</span></div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">BarberLess</h3>
+                        <p class="project-description">Uma aplicação web moderna e responsiva para a barbearia Barber Less, localizada em São Paulo. O projeto oferece uma interface intuitiva para visualização de serviços, profissionais e agendamentos via WhatsApp.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">WhatsApp API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://devalex-full.github.io/projeto-barbearia/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/projeto-barbearia" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projeto Portfolio (este site) -->
+                <div class="project-card" data-category="web landing">
+                    <div class="project-image">
+                        <img src="../src/imagens/portifolio.png" alt="Portfólio Pessoal" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-user"></i><span>Portfólio</span></div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Portfólio Pessoal</h3>
+                        <p class="project-description">Meu portfólio pessoal desenvolvido com foco em performance, acessibilidade e design moderno. Apresenta meus projetos, habilidades e certificações de forma interativa.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Responsivo</span>
+                            <span class="tag">Dark Mode</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://portifoliodevalex.netlify.app/" class="project-link"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/PORTIFOLIO" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 6rem;">
+                <p style="font-size: 1.6rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Mais projetos em desenvolvimento...
+                </p>
+                <a href="../index.html#contact" class="btn btn-primary">Entre em Contato</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Alexander Bueno Santiago. Todos os direitos reservados.</p>
+                <p>Desenvolvido com <i class="fas fa-heart"></i> e muito código</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Scripts -->
+    <script src="../src/scripts/engine.js"></script>
+    <script src="../src/scripts/projetos.js"></script>
+</body>
+</html>
