@@ -180,6 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             updateActiveNavLink();
             animateOnScroll();
+            animateStatsOnScroll();
             isScrolling = false;
         });
     }
@@ -195,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function animateOnScroll() {
-        const elements = document.querySelectorAll('.project-card, .skill-item, .contact-item');
+        const elements = document.querySelectorAll('.project-card, .skill-item, .contact-item, .certification-card');
         const threshold = window.innerHeight + window.pageYOffset - 100;
 
         elements.forEach(el => {
@@ -203,6 +204,101 @@ document.addEventListener('DOMContentLoaded', function () {
                 el.classList.add('animate-in');
             }
         });
+    }
+
+    // Certificates Animation
+    function animateStatsOnScroll() {
+        const statCards = document.querySelectorAll('.stat-card');
+        const certificationsSection = document.querySelector('#certifications');
+        
+        if (certificationsSection) {
+            const sectionTop = certificationsSection.offsetTop;
+            const sectionBottom = sectionTop + certificationsSection.offsetHeight;
+            const scrollPos = window.scrollY + window.innerHeight / 2;
+            
+            if (scrollPos >= sectionTop && scrollPos <= sectionBottom) {
+                statCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        if (!card.classList.contains('animated')) {
+                            card.classList.add('animated');
+                            animateNumber(card.querySelector('.stat-number'));
+                        }
+                    }, index * 200);
+                });
+            }
+        }
+    }
+
+    function animateNumber(element) {
+        if (!element || element.hasAttribute('data-animated')) return;
+        
+        const text = element.textContent;
+        const number = parseInt(text.replace(/\D/g, ''));
+        const suffix = text.replace(/[\d]/g, '');
+        
+        if (isNaN(number)) return;
+        
+        element.setAttribute('data-animated', 'true');
+        let current = 0;
+        const increment = number / 30; // 30 frames de animação
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= number) {
+                current = number;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current) + suffix;
+        }, 50);
+    }
+
+    // Certifications Interactive Effects
+    function addCertificationEffects() {
+        const certCards = document.querySelectorAll('.certification-card');
+        
+        certCards.forEach(card => {
+            const certIcon = card.querySelector('.cert-icon');
+            const certStatus = card.querySelector('.cert-status');
+            
+            card.addEventListener('mouseenter', () => {
+                if (certIcon) {
+                    certIcon.style.transform = 'scale(1.1) rotate(5deg)';
+                }
+                if (certStatus && certStatus.classList.contains('verified')) {
+                    certStatus.style.transform = 'scale(1.2)';
+                    certStatus.style.animation = 'pulse 1s ease-in-out';
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                if (certIcon) {
+                    certIcon.style.transform = 'scale(1) rotate(0deg)';
+                }
+                if (certStatus) {
+                    certStatus.style.transform = 'scale(1)';
+                    certStatus.style.animation = 'none';
+                }
+            });
+
+            // Adiciona efeito de clique para certificações verificadas
+            if (certStatus && certStatus.classList.contains('verified')) {
+                card.addEventListener('click', () => {
+                    showCertificationDetails(card);
+                });
+                card.style.cursor = 'pointer';
+            }
+        });
+    }
+
+    function showCertificationDetails(card) {
+        const title = card.querySelector('.cert-title').textContent;
+        const institution = card.querySelector('.cert-institution').textContent;
+        const skills = Array.from(card.querySelectorAll('.cert-skill')).map(skill => skill.textContent);
+        
+        showNotification(
+            `Certificação: ${title} | Instituição: ${institution} | Habilidades: ${skills.join(', ')}`,
+            'info'
+        );
     }
 
     // Form Handling
@@ -321,6 +417,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 themeToggle.style.transform = 'scale(1)';
             };
         }
+
+        // Efeitos interativos para as estatísticas
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.stat-icon');
+                if (icon) {
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.stat-icon');
+                if (icon) {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                }
+            });
+        });
     }
 
     // Utility Functions
@@ -392,6 +505,65 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Certification Filter (funcionalidade adicional)
+    function initCertificationFilters() {
+        const certCards = document.querySelectorAll('.certification-card');
+        
+        // Adiciona função de filtro por status
+        function filterByStatus(status) {
+            certCards.forEach(card => {
+                const cardStatus = card.querySelector('.cert-status');
+                const shouldShow = !status || cardStatus.classList.contains(status);
+                
+                card.style.display = shouldShow ? 'block' : 'none';
+                
+                if (shouldShow) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                }
+            });
+        }
+
+        // Adiciona contador de certificações
+        function updateCertificationCount() {
+            const verified = document.querySelectorAll('.cert-status.verified').length;
+            const inProgress = document.querySelectorAll('.cert-status.in-progress').length;
+            
+            // Atualiza os números nas estatísticas
+            const statNumbers = document.querySelectorAll('.stat-number');
+            if (statNumbers[0]) statNumbers[0].textContent = (verified + inProgress) + '+';
+        }
+
+        updateCertificationCount();
+    }
+
+    // Adiciona animação de entrada para certificações
+    function animateCertificationsEntrance() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 150);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.certification-card, .stat-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    }
+
     // Event Listeners
     if (hamburger) hamburger.onclick = toggleMobileMenu;
     if (backToTopBtn) backToTopBtn.onclick = e => { e.preventDefault(); smoothScrollTo('#home'); };
@@ -434,7 +606,10 @@ document.addEventListener('DOMContentLoaded', function () {
         
         updateActiveNavLink();
         addInteractiveEffects();
+        addCertificationEffects();
+        initCertificationFilters();
         optimizeMobile();
+        animateCertificationsEntrance();
 
         // Initial animations
         document.querySelectorAll('.hero-content, .section-header').forEach((el, i) => {
@@ -445,8 +620,48 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         animateOnScroll();
-        console.log('🚀 Portfólio inicializado com sistema de temas!');
+        console.log('🚀 Portfólio inicializado com sistema de temas e certificações!');
     }
+
+    // Adiciona animação CSS para o pulso das certificações
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        .certification-card {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .stat-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .hamburger.active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+    `;
+    document.head.appendChild(style);
 
     init();
 });

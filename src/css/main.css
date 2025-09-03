@@ -22,6 +22,11 @@
     --border-color: rgba(139, 92, 246, 0.2);
     --header-bg: rgba(10, 10, 26, 0.95);
     --input-bg: var(--dark-surface);
+    
+    /* Cores para certificações */
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
 }
 
 /* Variáveis do Tema Claro */
@@ -505,10 +510,235 @@ body {
     color: var(--text-secondary);
 }
 
+/* Certifications */
+.certifications {
+    padding: 10rem 0;
+    background: var(--bg-primary);
+}
+
+.certifications-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.certifications-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 6rem;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    padding: 3rem 2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+}
+
+.stat-card:hover::before {
+    left: 100%;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon i {
+    font-size: 2.4rem;
+    color: white;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+}
+
+.certification-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.certification-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+}
+
+.cert-header {
+    padding: 2.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.cert-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cert-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.cert-info {
+    flex: 1;
+}
+
+.cert-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.cert-institution {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.cert-status {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.cert-status.verified {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success-color);
+}
+
+.cert-status.in-progress {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning-color);
+}
+
+.cert-details {
+    padding: 2.4rem;
+}
+
+.cert-description {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.cert-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.cert-skill {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary);
+    padding: 0.4rem 1rem;
+    border-radius: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="light"] .cert-skill {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: rgba(124, 58, 237, 0.2);
+}
+
+.cert-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.cert-date,
+.cert-duration {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+}
+
+.cert-date i,
+.cert-duration i {
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
 /* Projects */
 .projects {
     padding: 10rem 0;
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
 }
 
 .projects-grid {
@@ -518,7 +748,7 @@ body {
 }
 
 .project-card {
-    background: var(--bg-secondary);
+    background: var(--bg-primary);
     border-radius: var(--radius);
     overflow: hidden;
     border: 1px solid var(--border-color);
@@ -636,7 +866,7 @@ body {
 /* Contact */
 .contact {
     padding: 10rem 0;
-    background: var(--bg-secondary);
+    background: var(--bg-primary);
 }
 
 .contact-content {
@@ -707,7 +937,7 @@ body {
 .social-link {
     width: 4.8rem;
     height: 4.8rem;
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 50%;
     display: flex;
@@ -726,7 +956,7 @@ body {
 }
 
 .contact-form {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     padding: 3rem;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
@@ -769,7 +999,7 @@ body {
 
 /* Footer */
 .footer {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
     padding: 3rem 0;
 }
@@ -821,7 +1051,7 @@ body {
     transform: translateY(-3px);
 }
 
-/* Mobile Optimizations - Mantendo Layout Desktop-like */
+/* Mobile Optimizations */
 @media (max-width: 768px) {
     .container,
     .nav-container {
@@ -877,7 +1107,7 @@ body {
         font-size: 1.6rem;
     }
 
-    /* Hero Mobile - Mantendo layout side-by-side */
+    /* Hero Mobile */
     .hero {
         padding: 8rem 0 4rem;
         min-height: 100vh;
@@ -953,7 +1183,8 @@ body {
         font-size: 1.8rem;
     }
 
-    /* Outras seções */
+    /* Certificações Mobile */
+    .certifications,
     .about,
     .projects,
     .contact {
@@ -972,6 +1203,99 @@ body {
         font-size: 1.5rem;
     }
 
+    .certifications-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+    }
+
+    .stat-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .stat-icon i {
+        font-size: 2rem;
+    }
+
+    .stat-number {
+        font-size: 2.8rem;
+    }
+
+    .stat-label {
+        font-size: 1.3rem;
+    }
+
+    .certifications-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .certification-card {
+        margin-bottom: 1rem;
+    }
+
+    .cert-header {
+        padding: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .cert-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .cert-icon i {
+        font-size: 1.8rem;
+    }
+
+    .cert-title {
+        font-size: 1.6rem;
+    }
+
+    .cert-institution {
+        font-size: 1.3rem;
+    }
+
+    .cert-status {
+        width: 35px;
+        height: 35px;
+        font-size: 1.4rem;
+    }
+
+    .cert-details {
+        padding: 2rem;
+    }
+
+    .cert-description {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cert-skills {
+        gap: 0.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cert-skill {
+        font-size: 1.1rem;
+        padding: 0.3rem 0.8rem;
+    }
+
+    .cert-meta {
+        gap: 1.5rem;
+        flex-direction: column;
+    }
+
+    .cert-date,
+    .cert-duration {
+        font-size: 1.2rem;
+    }
+
     .skills-grid {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 1.5rem;
@@ -984,11 +1308,6 @@ body {
 
     .skill-item i {
         font-size: 2.5rem;
-    }
-
-    .projects-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
     }
 
     .project-content {
@@ -1017,7 +1336,6 @@ body {
         min-height: 44px;
     }
 
-    /* Tema claro para mobile */
     [data-theme="light"] .project-link {
         background: rgba(124, 58, 237, 0.1);
     }
@@ -1034,7 +1352,6 @@ body {
         margin-bottom: 1.5rem;
     }
 
-    /* Tema claro para contact-item mobile */
     [data-theme="light"] .contact-item {
         background: rgba(124, 58, 237, 0.08);
     }
@@ -1116,6 +1433,30 @@ body {
         width: 140px;
         height: 140px;
     }
+
+    .certifications-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .cert-header {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .cert-details {
+        padding: 1.5rem;
+    }
+
+    .cert-meta {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 
 /* Smartphones pequenos */
@@ -1191,6 +1532,67 @@ body {
     .profile-card {
         padding: 1.5rem;
     }
+
+    .stat-card {
+        padding: 1.2rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .stat-icon i {
+        font-size: 1.8rem;
+    }
+
+    .stat-number {
+        font-size: 2.4rem;
+    }
+
+    .cert-header {
+        padding: 1.2rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .cert-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .cert-icon i {
+        font-size: 1.6rem;
+    }
+
+    .cert-title {
+        font-size: 1.4rem;
+    }
+
+    .cert-institution {
+        font-size: 1.2rem;
+    }
+
+    .cert-details {
+        padding: 1.2rem;
+    }
+
+    .cert-description {
+        font-size: 1.2rem;
+    }
+
+    .cert-skills {
+        gap: 0.4rem;
+    }
+
+    .cert-skill {
+        font-size: 1rem;
+        padding: 0.2rem 0.6rem;
+    }
 }
 
 /* Smartphones muito pequenos */
@@ -1229,6 +1631,31 @@ body {
     .theme-toggle .theme-icon-light,
     .theme-toggle .theme-icon-dark {
         font-size: 1.2rem;
+    }
+
+    .nav-menu {
+        gap: 0.5rem;
+    }
+
+    .nav-link {
+        font-size: 1.6rem;
+        padding: 1.2rem 0;
+    }
+
+    .certifications-stats {
+        gap: 0.8rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .cert-header {
+        padding: 1rem;
+    }
+
+    .cert-details {
+        padding: 1rem;
     }
 }
 
