@@ -1,7 +1,4 @@
-/* ==========================================================================
-   Reset CSS - css/reset.css
-   ========================================================================== */
-
+/* Reset CSS Otimizado */
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +13,7 @@ html {
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #ffffff;
+    color: #fff;
     background-color: #0a0a0a;
 }
 
@@ -25,9 +22,7 @@ a {
     color: inherit;
 }
 
-ul, ol {
-    list-style: none;
-}
+ul, ol { list-style: none; }
 
 img {
     max-width: 100%;
@@ -53,6 +48,4 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.2;
 }
 
-p {
-    font-size: 1.6rem;
-}
+p { font-size: 1.6rem; }
