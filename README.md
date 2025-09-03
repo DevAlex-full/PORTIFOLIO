@@ -195,7 +195,6 @@ Contribuições são sempre bem-vindas! Para contribuir:
 ## 📈 Próximas Atualizações
 
 - [ ] Seção de blog/artigos
-- [ ] Integração com CMS
 - [ ] Versão em inglês
 
 ---
