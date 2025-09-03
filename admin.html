@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Painel Admin - Portfolio CMS</title>
+    <link rel="stylesheet" href="./src/css/reset.css">
+    <link rel="stylesheet" href="./src/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">Portfolio CMS</h1>
+            </div>
+            <nav>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="#dashboard" class="sidebar-link active" data-section="dashboard">
+                            <i class="fas fa-chart-pie"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#projects" class="sidebar-link" data-section="projects">
+                            <i class="fas fa-folder-open"></i>
+                            Projetos
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#certifications" class="sidebar-link" data-section="certifications">
+                            <i class="fas fa-certificate"></i>
+                            Certificações
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#content" class="sidebar-link" data-section="content">
+                            <i class="fas fa-edit"></i>
+                            Conteúdo
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#settings" class="sidebar-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            Configurações
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Preview Button -->
+            <a href="../index.html" target="_blank" class="btn btn-primary preview-btn">
+                <i class="fas fa-eye"></i>
+                Visualizar Site
+            </a>
+
+            <!-- Dashboard -->
+            <section id="dashboard-content" class="content-section active">
+                <div class="content-header">
+                    <h2 class="content-title">Dashboard</h2>
+                    <button class="btn btn-success" id="refreshData">
+                        <i class="fas fa-sync-alt"></i>
+                        Atualizar Dados
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number" id="projectsCount">-</span>
+                        <span class="stat-label">Projetos Ativos</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="certificationsCount">-</span>
+                        <span class="stat-label">Certificações</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="skillsCount">-</span>
+                        <span class="stat-label">Habilidades</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="lastUpdate">-</span>
+                        <span class="stat-label">Última Atualização</span>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Ações Rápidas</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" onclick="showAddModal('project')">
+                            <i class="fas fa-plus"></i>
+                            Novo Projeto
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddModal('certification')">
+                            <i class="fas fa-plus"></i>
+                            Nova Certificação
+                        </button>
+                        <button class="btn btn-warning" onclick="exportContent()">
+                            <i class="fas fa-download"></i>
+                            Exportar Dados
+                        </button>
+                        <button class="btn btn-success" onclick="importContent()">
+                            <i class="fas fa-upload"></i>
+                            Importar Dados
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects-content" class="content-section">
+                <div class="content-header">
+                    <h2 class="content-title">Gerenciar Projetos</h2>
+                    <button class="btn btn-primary" onclick="showAddModal('project')">
+                        <i class="fas fa-plus"></i>
+                        Novo Projeto
+                    </button>
+                </div>
+                <div id="projectsList" class="content-grid"></div>
+            </section>
+
+            <!-- Certifications Section -->
+            <section id="certifications-content" class="content-section">
+                <div class="content-header">
+                    <h2 class="content-title">Gerenciar Certificações</h2>
+                    <button class="btn btn-primary" onclick="showAddModal('certification')">
+                        <i class="fas fa-plus"></i>
+                        Nova Certificação
+                    </button>
+                </div>
+                <div id="certificationsList" class="content-grid"></div>
+            </section>
+
+            <!-- Content Section -->
+            <section id="content-content" class="content-section">
+                <div class="content-header">
+                    <h2 class="content-title">Editar Conteúdo</h2>
+                    <button class="btn btn-success" onclick="saveAllContent()">
+                        <i class="fas fa-save"></i>
+                        Salvar Tudo
+                    </button>
+                </div>
+                <div id="contentEditor"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-content" class="content-section">
+                <div class="content-header">
+                    <h2 class="content-title">Configurações</h2>
+                </div>
+                <div id="settingsPanel"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Editar Item</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editForm">
+                <div id="formFields"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Salvar</span>
+                        <span class="loading-spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./src/scripts/cms.js"></script>
+    <script src="./src/scripts/admin.js"></script>
+</body>
+</html>

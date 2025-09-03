@@ -557,3 +557,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     init();
 });
+
+// Integração CMS - adicione no final do arquivo
+document.addEventListener('cms:contentLoaded', (e) => {
+    console.log('🎯 Conteúdo CMS carregado, re-inicializando componentes');
+    
+    // Re-executar funções que dependem do conteúdo
+    updateActiveNavLink();
+    addInteractiveEffects();
+    addCertificationEffects();
+    optimizeMobile();
+    
+    // Re-bind eventos de navegação
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            smoothScrollTo(link.getAttribute('href'));
+            closeMobileMenu();
+        });
+    });
+});
