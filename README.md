@@ -195,11 +195,9 @@ Contribuições são sempre bem-vindas! Para contribuir:
 
 ## 📈 Próximas Atualizações
 
-- [ ] Implementação de tema claro/escuro
 - [ ] Seção de blog/artigos
 - [ ] Integração com CMS
 - [ ] Versão em inglês
-- [ ] Certificações e cursos
 
 ---
 
