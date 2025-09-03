@@ -34,28 +34,27 @@ Este portfólio foi criado para apresentar meus projetos, habilidades e experiê
 
 ```
 portfolio/
-│
-├── index.html              # Página principal
-├── favicon.ico             # Ícone do site
-├── favicon-32x32.png       # Ícone 32x32
-├── README.md              # Este arquivo
-│
+├── index.html
+├── admin.html                
+├── pages
+│   ├── projetos.html          
 ├── src/
 │   ├── css/
-│   │   ├── reset.css      # Reset CSS
-│   │   └── main.css       # Estilos principais
-│   │
-│   ├── js/
-│   │   └── engine.js      # JavaScript principal
-│   │
-│   ├── imagens/
-│   │   ├── EU1.jpg        # Foto de perfil
-│   │   ├── homem-aranha1.png    # Projeto Spider-Man
-│   │   ├── mundo-invertido1.png # Projeto Stranger Things
-│   │   └── barbearia1.png       # Projeto BarberLess
-│   │
-│   └── favicon.ico        # Backup do favicon
-```
+│   │   ├── reset.css         
+│   │   ├── main.css            
+│   │   └── admin.css  
+│   │   └── projetos.css        
+│   ├── scripts/
+│   │   ├── engine.js         
+│   │   ├── cms.js            
+│   │   ├── services.js        
+│   │   └── admin.js
+│   │   └── projetos.js          
+│   │   └── admin-auth.js       
+│   ├── data/
+│   │   └── content.json     
+│   └── imagens/
+│       └── (suas imagens)
 
 ## 🎨 Seções do Portfólio
 
