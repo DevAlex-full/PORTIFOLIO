@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         init() {
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = prefersDark ? this.DARK : this.LIGHT;
+            const theme = prefersDark ? this.DARK : this.DARK;
             this.setTheme(theme);
             this.bindEvents();
         },
