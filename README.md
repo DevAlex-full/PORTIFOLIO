@@ -8,7 +8,7 @@ Este portfólio foi criado para apresentar meus projetos, habilidades e experiê
 
 ### 🔗 Links Importantes
 
-- **Demo ao vivo**: [https://devalex-full.github.io/PORTIFOLIO/]
+- **Demo ao vivo**: [https://portifoliodevalex.netlify.app/]
 - **Repositório**: [https://github.com/DevAlex-full/PORTIFOLIO)
 
 ## 🚀 Funcionalidades
