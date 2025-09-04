@@ -53,7 +53,7 @@ class PortfolioServices {
                 provider: 'emailjs',
                 serviceId: 'service_d6r94y9',
                 templateId: 'template_5d22ssi',
-                publicKey: 'ZLn7rnePhl9P3as4v',
+                publicKey: '4UjTKqTMYtiAldXj0',
                 fallbackEmail: 'alex.bueno22@hotmail.com'
             },
             analytics: {
