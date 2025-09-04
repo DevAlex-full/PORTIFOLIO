@@ -34,27 +34,36 @@ Este portfólio foi criado para apresentar meus projetos, habilidades e experiê
 
 ```
 portfolio/
-├── index.html
-├── admin.html                
-├── pages
-│   ├── projetos.html          
-├── src/
-│   ├── css/
-│   │   ├── reset.css         
-│   │   ├── main.css            
-│   │   └── admin.css  
-│   │   └── projetos.css        
-│   ├── scripts/
-│   │   ├── engine.js         
-│   │   ├── cms.js            
-│   │   ├── services.js        
-│   │   └── admin.js
-│   │   └── projetos.js          
-│   │   └── admin-auth.js       
-│   ├── data/
-│   │   └── content.json     
-│   └── imagens/
-│       └── (suas imagens)
+├── 📁 pages/
+│   └── projetos.html
+│
+├── 📁 src/
+│   ├── 📁 css/
+│   │   ├── admin.css
+│   │   ├── main.css
+│   │   ├── projetos.css
+│   │   └── reset.css
+│   │
+│   ├── 📁 data/
+│   │   ├── content.json
+│   │   └── services-config.json
+│   │
+│   ├── 📁 imagens/
+│   │   └── (suas imagens)
+│   │
+│   └── 📁 scripts/
+│       ├── admin-auth.js
+│       ├── admin.js
+│       ├── cms.js
+│       ├── engine.js
+│       ├── projetos.js
+│       └── services.js
+│
+├── 📄 admin.html
+├── 🖼️ favicon-32x32.png
+├── 🖼️ favicon.ico
+├── 📄 index.html
+└── 📄 README.md
 
 ## 🎨 Seções do Portfólio
 
