@@ -56,7 +56,13 @@ class PortfolioCMS {
                 title: 'Olá, eu sou <span class="highlight">Alexander Bueno Santiago</span>',
                 subtitle: 'Desenvolvedor Front-End & Designer',
                 description: 'Criando experiências digitais incríveis através de código limpo e design inovador.'
-            }
+            },
+            projects: { items: [] }, // Inicializa com array vazio
+            certifications: { items: [] }, // Inicializa com array vazio
+            about: { skills: [] },
+            contact: { info: [], social: [] },
+            site: {},
+            settings: {}
         };
         this.isLoaded = true;
         this.renderContent();
@@ -549,10 +555,10 @@ class PortfolioCMS {
     }
 
     /**
-     * Obtém conteúdo específico
+     * Obtém conteúdo específico - CORREÇÃO DO ERRO PRINCIPAL
      */
     getContent(section, itemId = null) {
-        if (!this.content[section]) return null;
+        if (!this.content || !this.content[section]) return null;
         
         if (itemId) {
             return this.content[section].items?.find(item => item.id === itemId) || null;
@@ -786,13 +792,19 @@ class PortfolioCMS {
     }
 
     /**
-     * API para desenvolvedores
+     * API para desenvolvedores - CORREÇÃO DO ERRO PRINCIPAL
      */
     getAPI() {
         return {
-            // Getters
-            getProjects: () => this.getContent('projects')?.items || [],
-            getCertifications: () => this.getContent('certifications')?.items || [],
+            // Getters - com verificação de existência
+            getProjects: () => {
+                if (!this.content || !this.content.projects) return [];
+                return this.content.projects.items || [];
+            },
+            getCertifications: () => {
+                if (!this.content || !this.content.certifications) return [];
+                return this.content.certifications.items || [];
+            },
             getProject: (id) => this.getContent('projects', id),
             getCertification: (id) => this.getContent('certifications', id),
             
@@ -810,7 +822,7 @@ class PortfolioCMS {
             clearCache: () => this.clearCache(),
             
             // Data
-            getAllContent: () => this.content,
+            getAllContent: () => this.content || {},
             isLoaded: () => this.isLoaded
         };
     }
@@ -857,17 +869,5 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = PortfolioCMS;
 }
 
-// Acessar API do CMS
-const cmsAPI = window.portfolioCMS.getAPI();
-
-// Exemplos de uso
-cmsAPI.getProjects();
-cmsAPI.addProject({
-    title: "Novo Projeto",
-    description: "Descrição...",
-    technologies: ["HTML", "CSS"]
-});
-
-// API de Serviços
-const servicesAPI = window.portfolioServices.getAPI();
-servicesAPI.showNotification("Mensagem", "success");
+// REMOÇÃO DA CHAMADA PROBLEMÁTICA
+// A chamada direta da API foi removida para evitar o erro

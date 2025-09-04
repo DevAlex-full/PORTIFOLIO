@@ -1,0 +1,63 @@
+{
+  "email": {
+    "enabled": true,
+    "provider": "emailjs",
+    "serviceId": "YOUR_SERVICE_ID",
+    "templateId": "YOUR_TEMPLATE_ID",
+    "publicKey": "YOUR_PUBLIC_KEY",
+    "fallbackEmail": "alex.bueno22@hotmail.com",
+    "formspreeUrl": "",
+    "allowedDomains": ["localhost", "127.0.0.1", "seu-dominio.com"]
+  },
+  "analytics": {
+    "enabled": false,
+    "provider": "gtag",
+    "trackingId": "G-XXXXXXXXXX",
+    "enableCookieConsent": true
+  },
+  "notifications": {
+    "enabled": true,
+    "position": "top-right",
+    "autoClose": 5000,
+    "sound": false,
+    "maxNotifications": 3
+  },
+  "validation": {
+    "email": true,
+    "phone": true,
+    "honeypot": true,
+    "reCaptcha": false,
+    "reCaptchaSiteKey": ""
+  },
+  "security": {
+    "rateLimitEnabled": true,
+    "maxAttemptsPerHour": 3,
+    "blockDuration": 3600000,
+    "allowedOrigins": ["localhost", "127.0.0.1"],
+    "csrfProtection": false
+  },
+  "features": {
+    "autoSave": false,
+    "offlineSupport": false,
+    "darkModeSync": true,
+    "keyboardShortcuts": true
+  },
+  "api": {
+    "timeout": 10000,
+    "retries": 3,
+    "retryDelay": 1000,
+    "enableCache": true,
+    "cacheTimeout": 300000
+  },
+  "ui": {
+    "theme": "dark",
+    "language": "pt-BR",
+    "animations": true,
+    "reducedMotion": false
+  },
+  "debug": {
+    "enabled": false,
+    "logLevel": "warn",
+    "showPerformanceMetrics": false
+  }
+}

@@ -21,6 +21,7 @@ class PortfolioCMSAdmin {
     async loadContent() {
         try {
             const response = await fetch('./src/data/content.json');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             this.content = await response.json();
         } catch (error) {
             console.error('Erro ao carregar conteúdo:', error);
@@ -51,15 +52,21 @@ class PortfolioCMSAdmin {
         });
 
         // Form submission
-        document.getElementById('editForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.saveItem();
-        });
+        const editForm = document.getElementById('editForm');
+        if (editForm) {
+            editForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveItem();
+            });
+        }
 
         // Refresh data
-        document.getElementById('refreshData').addEventListener('click', () => {
-            this.loadContent().then(() => this.renderCurrentSection());
-        });
+        const refreshBtn = document.getElementById('refreshData');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                this.loadContent().then(() => this.renderCurrentSection());
+            });
+        }
     }
 
     switchSection(section) {
@@ -108,14 +115,21 @@ class PortfolioCMSAdmin {
         const certifications = this.content.certifications?.items?.filter(c => c.isActive) || [];
         const skills = this.content.about?.skills || [];
 
-        document.getElementById('projectsCount').textContent = projects.length;
-        document.getElementById('certificationsCount').textContent = certifications.length;
-        document.getElementById('skillsCount').textContent = skills.length;
-        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('pt-BR');
+        const projectsCountEl = document.getElementById('projectsCount');
+        const certificationsCountEl = document.getElementById('certificationsCount');
+        const skillsCountEl = document.getElementById('skillsCount');
+        const lastUpdateEl = document.getElementById('lastUpdate');
+
+        if (projectsCountEl) projectsCountEl.textContent = projects.length;
+        if (certificationsCountEl) certificationsCountEl.textContent = certifications.length;
+        if (skillsCountEl) skillsCountEl.textContent = skills.length;
+        if (lastUpdateEl) lastUpdateEl.textContent = new Date().toLocaleDateString('pt-BR');
     }
 
     renderProjectsList() {
         const container = document.getElementById('projectsList');
+        if (!container) return;
+
         const projects = this.content.projects?.items || [];
 
         container.innerHTML = projects.map(project => `
@@ -151,6 +165,8 @@ class PortfolioCMSAdmin {
 
     renderCertificationsList() {
         const container = document.getElementById('certificationsList');
+        if (!container) return;
+
         const certifications = this.content.certifications?.items || [];
 
         container.innerHTML = certifications.map(cert => `
@@ -185,6 +201,7 @@ class PortfolioCMSAdmin {
 
     renderContentEditor() {
         const container = document.getElementById('contentEditor');
+        if (!container) return;
         
         container.innerHTML = `
             <div class="content-card">
@@ -231,6 +248,7 @@ class PortfolioCMSAdmin {
 
     renderSettings() {
         const container = document.getElementById('settingsPanel');
+        if (!container) return;
         
         container.innerHTML = `
             <div class="content-card">
@@ -286,6 +304,8 @@ class PortfolioCMSAdmin {
         
         // Preencher campos
         const form = document.getElementById('editForm');
+        if (!form) return;
+
         Object.keys(item).forEach(key => {
             const field = form.querySelector(`[name="${key}"]`);
             if (field) {
@@ -304,7 +324,10 @@ class PortfolioCMSAdmin {
             }
         });
         
-        document.getElementById('modalTitle').textContent = `Editar ${type === 'project' ? 'Projeto' : 'Certificação'}`;
+        const modalTitle = document.getElementById('modalTitle');
+        if (modalTitle) {
+            modalTitle.textContent = `Editar ${type === 'project' ? 'Projeto' : 'Certificação'}`;
+        }
     }
 
     deleteItem(section, id) {
@@ -323,6 +346,8 @@ class PortfolioCMSAdmin {
 
     saveItem() {
         const form = document.getElementById('editForm');
+        if (!form) return;
+
         const formData = new FormData(form);
         const data = {};
         
@@ -375,6 +400,8 @@ class PortfolioCMSAdmin {
 
 // Global functions
 function showAddModal(type) {
+    if (!window.admin) return;
+
     admin.editingType = type;
     admin.editingItem = null;
     
@@ -382,6 +409,8 @@ function showAddModal(type) {
     const title = document.getElementById('modalTitle');
     const formFields = document.getElementById('formFields');
     
+    if (!modal || !title || !formFields) return;
+
     title.textContent = type === 'project' ? 'Novo Projeto' : 'Nova Certificação';
     
     if (type === 'project') {
@@ -487,32 +516,56 @@ function showAddModal(type) {
 }
 
 function closeModal() {
-    document.getElementById('editModal').classList.remove('active');
-    admin.editingItem = null;
-    admin.editingType = null;
+    const modal = document.getElementById('editModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    if (window.admin) {
+        admin.editingItem = null;
+        admin.editingType = null;
+    }
 }
 
 function saveAllContent() {
+    if (!window.admin || !admin.content) return;
+
     const content = admin.content;
     
     // Update from content editor
     if (admin.currentSection === 'content') {
-        content.hero.title = document.getElementById('heroTitle').value;
-        content.hero.subtitle = document.getElementById('heroSubtitle').value;
-        content.hero.description = document.getElementById('heroDescription').value;
+        const heroTitle = document.getElementById('heroTitle');
+        const heroSubtitle = document.getElementById('heroSubtitle');
+        const heroDescription = document.getElementById('heroDescription');
+        const aboutContent = document.getElementById('aboutContent');
+        const contactEmail = document.getElementById('contactEmail');
+        const contactPhone = document.getElementById('contactPhone');
+        const contactLocation = document.getElementById('contactLocation');
+
+        if (heroTitle) content.hero.title = heroTitle.value;
+        if (heroSubtitle) content.hero.subtitle = heroSubtitle.value;
+        if (heroDescription) content.hero.description = heroDescription.value;
         
-        const aboutContent = document.getElementById('aboutContent').value;
-        content.about.content = aboutContent.split('\n').filter(line => line.trim());
+        if (aboutContent) {
+            const aboutContentValue = aboutContent.value;
+            content.about.content = aboutContentValue.split('\n').filter(line => line.trim());
+        }
         
         // Update contact info
-        const emailField = content.contact.info.find(i => i.type === 'email');
-        if (emailField) emailField.value = document.getElementById('contactEmail').value;
+        if (contactEmail) {
+            const emailField = content.contact.info.find(i => i.type === 'email');
+            if (emailField) emailField.value = contactEmail.value;
+        }
         
-        const phoneField = content.contact.info.find(i => i.type === 'phone');
-        if (phoneField) phoneField.value = document.getElementById('contactPhone').value;
+        if (contactPhone) {
+            const phoneField = content.contact.info.find(i => i.type === 'phone');
+            if (phoneField) phoneField.value = contactPhone.value;
+        }
         
-        const locationField = content.contact.info.find(i => i.type === 'location');
-        if (locationField) locationField.value = document.getElementById('contactLocation').value;
+        if (contactLocation) {
+            const locationField = content.contact.info.find(i => i.type === 'location');
+            if (locationField) locationField.value = contactLocation.value;
+        }
     }
     
     // Save to JSON (simulated)
@@ -521,6 +574,7 @@ function saveAllContent() {
 }
 
 function exportContent() {
+    if (!window.admin) return;
     downloadJSON(admin.content, 'portfolio-backup.json');
     showNotification('Backup exportado com sucesso!', 'success');
 }
@@ -537,9 +591,11 @@ function importContent() {
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
-                admin.content = JSON.parse(e.target.result);
-                admin.renderCurrentSection();
-                showNotification('Conteúdo importado com sucesso!', 'success');
+                if (window.admin) {
+                    admin.content = JSON.parse(e.target.result);
+                    admin.renderCurrentSection();
+                    showNotification('Conteúdo importado com sucesso!', 'success');
+                }
             } catch (error) {
                 showNotification('Erro ao importar arquivo!', 'error');
             }
@@ -598,6 +654,7 @@ function showNotification(message, type = 'info') {
 
 // Admin instance
 const admin = new PortfolioCMSAdmin();
+window.admin = admin;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {

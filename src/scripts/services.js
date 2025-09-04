@@ -35,6 +35,7 @@ class PortfolioServices {
     async loadConfig() {
         try {
             const response = await fetch('./src/data/services-config.json');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } catch (error) {
             console.warn('Config não encontrada, usando padrão:', error.message);
@@ -43,7 +44,7 @@ class PortfolioServices {
     }
 
     /**
-     * Configuração padrão dos serviços
+     * Configuração padrão dos serviços - CORREÇÃO: Inicialização completa
      */
     getDefaultConfig() {
         return {
@@ -68,7 +69,7 @@ class PortfolioServices {
             validation: {
                 email: true,
                 phone: true,
-                honeypot: true
+                honeypot: true // CORREÇÃO: Propriedade sempre definida
             }
         };
     }
@@ -245,7 +246,7 @@ class PortfolioServices {
     }
 
     /**
-     * Bind eventos de formulário
+     * Bind eventos de formulário - CORREÇÃO: Verificação de config
      */
     bindFormEvents() {
         const contactForm = document.querySelector('.contact-form');
@@ -261,8 +262,8 @@ class PortfolioServices {
         // Validação em tempo real
         this.addRealTimeValidation(newForm);
 
-        // Honeypot para spam
-        if (this.config.validation.honeypot) {
+        // Honeypot para spam - CORREÇÃO: Verificação de config
+        if (this.config && this.config.validation && this.config.validation.honeypot) {
             this.addHoneypot(newForm);
         }
     }
@@ -395,8 +396,13 @@ class PortfolioServices {
         submitBtn.disabled = true;
 
         try {
-            // Enviar email
-            await this.emailService.send(data);
+            // Enviar email - CORREÇÃO: Verificação de serviço
+            if (this.emailService && this.emailService.send) {
+                await this.emailService.send(data);
+            } else {
+                // Fallback para mailto se não houver serviço configurado
+                this.sendWithMailto(data);
+            }
             
             // Analytics tracking
             if (this.analytics) {
@@ -499,7 +505,7 @@ class PortfolioServices {
     }
 
     /**
-     * Mostra notificação
+     * Mostra notificação - CORREÇÃO: Verificação de config
      */
     showNotification(message, type = 'info') {
         // Remove notificações existentes
@@ -533,8 +539,10 @@ class PortfolioServices {
             </div>
         `;
 
-        // Position based on config
-        const position = this.config.notifications?.position || 'top-right';
+        // Position based on config - CORREÇÃO: Verificação de config
+        const position = (this.config && this.config.notifications && this.config.notifications.position) 
+            ? this.config.notifications.position 
+            : 'top-right';
         const [vertical, horizontal] = position.split('-');
 
         Object.assign(notification.style, {
@@ -563,8 +571,10 @@ class PortfolioServices {
             notification.style.transform = 'translateX(0)';
         });
 
-        // Auto remove
-        const autoClose = this.config.notifications?.autoClose || 5000;
+        // Auto remove - CORREÇÃO: Verificação de config
+        const autoClose = (this.config && this.config.notifications && this.config.notifications.autoClose) 
+            ? this.config.notifications.autoClose 
+            : 5000;
         if (autoClose > 0) {
             setTimeout(() => {
                 if (document.contains(notification)) {
@@ -668,8 +678,10 @@ document.addEventListener('cms:contentLoaded', async () => {
     // Inject styles
     window.portfolioServices.injectStyles();
     
-    // Initialize with CMS content config
-    const cmsContent = window.portfolioCMS?.getAPI().getAllContent();
+    // Initialize with CMS content config - CORREÇÃO: Verificação de existência
+    const cmsAPI = window.portfolioCMS?.getAPI();
+    const cmsContent = cmsAPI?.getAllContent() || {};
+    
     const serviceConfig = {
         email: {
             enabled: true,
@@ -683,21 +695,32 @@ document.addEventListener('cms:contentLoaded', async () => {
             enabled: cmsContent?.settings?.enableAnalytics || false,
             provider: 'gtag',
             trackingId: cmsContent?.settings?.analyticsId || ''
+        },
+        notifications: {
+            enabled: true,
+            position: 'top-right',
+            autoClose: 5000
+        },
+        validation: {
+            email: true,
+            phone: true,
+            honeypot: true
         }
     };
     
     await window.portfolioServices.init(serviceConfig);
 });
 
-// Fallback se CMS não estiver disponível
+// Fallback se CMS não estiver disponível - CORREÇÃO: Inicialização mais robusta
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', async () => {
+        // Aguarda um tempo para o CMS carregar
         setTimeout(async () => {
             if (!window.portfolioServices.emailService) {
                 window.portfolioServices.injectStyles();
                 await window.portfolioServices.init();
             }
-        }, 1000);
+        }, 2000); // Aumentado para 2 segundos
     });
 } else {
     setTimeout(async () => {
@@ -705,7 +728,7 @@ if (document.readyState === 'loading') {
             window.portfolioServices.injectStyles();
             await window.portfolioServices.init();
         }
-    }, 1000);
+    }, 2000); // Aumentado para 2 segundos
 }
 
 // Export para módulos ES6

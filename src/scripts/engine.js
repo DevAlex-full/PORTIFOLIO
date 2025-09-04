@@ -127,20 +127,8 @@ document.addEventListener('DOMContentLoaded', function () {
         tryNext();
     }
 
-    // Navigation
-    const toggleMobileMenu = () => {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
-    };
-
-    const closeMobileMenu = () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-        document.body.classList.remove('menu-open');
-    };
-
-    const updateActiveNavLink = () => {
+    // Navigation - FUNÇÃO GLOBAL EXPOSTA
+    window.updateActiveNavLink = () => {
         const scrollPos = window.scrollY + 100;
 
         sections.forEach(section => {
@@ -154,28 +142,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         navLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${currentSection}`);
+            const href = link.getAttribute('href');
+            const anchor = href.includes('#') ? href.split('#')[1] : href.replace('#', '');
+            link.classList.toggle('active', anchor === currentSection);
         });
     };
 
-    // Scroll Functions
-    const handleScroll = () => {
-        if (isScrolling) return;
+    const toggleMobileMenu = () => {
+        hamburger?.classList.toggle('active');
+        navMenu?.classList.toggle('active');
+        document.body.classList.toggle('menu-open');
+    };
+
+    const closeMobileMenu = () => {
+        hamburger?.classList.remove('active');
+        navMenu?.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    };
+
+    // Função para smooth scroll - GLOBAL
+    window.smoothScrollTo = (target) => {
+        let anchor = target;
+        if (target.includes('#')) {
+            anchor = '#' + target.split('#')[1];
+        }
         
-        isScrolling = true;
-        requestAnimationFrame(() => {
-            const scrollTop = window.pageYOffset;
-            header.classList.toggle('scrolled', scrollTop > 50);
-            backToTopBtn.classList.toggle('show', scrollTop > 300);
-            updateActiveNavLink();
-            animateOnScroll();
-            animateStatsOnScroll();
-            isScrolling = false;
-        });
-    };
-
-    const smoothScrollTo = (target) => {
-        const element = $(target);
+        if (!anchor.startsWith('#')) {
+            anchor = '#' + anchor;
+        }
+        
+        const element = $(anchor);
         if (element) {
             window.scrollTo({ 
                 top: element.offsetTop - 70, 
@@ -243,12 +239,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         
+        if (!contactForm) return;
+        
         const data = new FormData(contactForm);
         const fields = {
-            name: data.get('name'),
-            email: data.get('email'),
-            subject: data.get('subject'),
-            message: data.get('message')
+            name: data.get('name') || '',
+            email: data.get('email') || '',
+            subject: data.get('subject') || '',
+            message: data.get('message') || ''
         };
 
         if (!validateForm(fields)) {
@@ -257,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const btn = contactForm.querySelector('button[type="submit"]');
+        if (!btn) return;
+        
         const originalText = btn.textContent;
         btn.textContent = 'Enviando...';
         btn.disabled = true;
@@ -322,12 +322,12 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => notification.remove(), 300);
         };
 
-        notification.querySelector('.notification-close').onclick = close;
+        notification.querySelector('.notification-close')?.addEventListener('click', close);
         setTimeout(() => document.contains(notification) && close(), 5000);
     };
 
-    // Interactive Effects
-    const addInteractiveEffects = () => {
+    // Interactive Effects - FUNÇÃO GLOBAL
+    window.addInteractiveEffects = () => {
         $$('.project-card').forEach(card => {
             card.onmouseenter = () => card.style.transform = 'translateY(-10px) scale(1.02)';
             card.onmouseleave = () => card.style.transform = 'translateY(0) scale(1)';
@@ -359,8 +359,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Certification Effects
-    const addCertificationEffects = () => {
+    // Certification Effects - FUNÇÃO GLOBAL
+    window.addCertificationEffects = () => {
         $$('.certification-card').forEach(card => {
             const certIcon = card.querySelector('.cert-icon');
             const certStatus = card.querySelector('.cert-status');
@@ -389,8 +389,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const showCertificationDetails = (card) => {
-        const title = card.querySelector('.cert-title').textContent;
-        const institution = card.querySelector('.cert-institution').textContent;
+        const title = card.querySelector('.cert-title')?.textContent || '';
+        const institution = card.querySelector('.cert-institution')?.textContent || '';
         const skills = Array.from(card.querySelectorAll('.cert-skill')).map(skill => skill.textContent);
         
         showNotification(
@@ -399,8 +399,8 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Mobile Optimizations
-    const optimizeMobile = () => {
+    // Mobile Optimizations - FUNÇÃO GLOBAL
+    window.optimizeMobile = () => {
         if (window.innerWidth <= 768) {
             window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
             
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const filterByStatus = (status) => {
             certCards.forEach(card => {
                 const cardStatus = card.querySelector('.cert-status');
-                const shouldShow = !status || cardStatus.classList.contains(status);
+                const shouldShow = !status || cardStatus?.classList.contains(status);
                 
                 card.style.display = shouldShow ? 'block' : 'none';
                 
@@ -471,23 +471,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
+    // Scroll Functions
+    const handleScroll = () => {
+        if (isScrolling) return;
+        
+        isScrolling = true;
+        requestAnimationFrame(() => {
+            const scrollTop = window.pageYOffset;
+            header?.classList.toggle('scrolled', scrollTop > 50);
+            backToTopBtn?.classList.toggle('show', scrollTop > 300);
+            window.updateActiveNavLink();
+            animateOnScroll();
+            animateStatsOnScroll();
+            isScrolling = false;
+        });
+    };
+
+    // Bind navigation events - FUNÇÃO GLOBAL
+    window.bindNavigationEvents = () => {
+        const currentNavLinks = $$('.nav-link');
+        currentNavLinks.forEach(link => {
+            // Remove event listeners anteriores
+            link.removeEventListener('click', handleNavClick);
+            // Adiciona novo event listener
+            link.addEventListener('click', handleNavClick);
+        });
+    };
+
+    const handleNavClick = (e) => {
+        e.preventDefault();
+        const href = e.target.getAttribute('href');
+        if (href) {
+            window.smoothScrollTo(href);
+            closeMobileMenu();
+        }
+    };
+
     // Event Listeners
     hamburger?.addEventListener('click', toggleMobileMenu);
-    backToTopBtn?.addEventListener('click', e => { e.preventDefault(); smoothScrollTo('#home'); });
+    backToTopBtn?.addEventListener('click', e => { 
+        e.preventDefault(); 
+        window.smoothScrollTo('#home'); 
+    });
     contactForm?.addEventListener('submit', handleFormSubmit);
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            smoothScrollTo(link.getAttribute('href'));
-            closeMobileMenu();
-        });
-    });
+    // Initial navigation binding
+    window.bindNavigationEvents();
 
     window.addEventListener('scroll', throttle(handleScroll, 16));
     window.addEventListener('resize', debounce(() => {
         closeMobileMenu();
-        updateActiveNavLink();
+        window.updateActiveNavLink();
     }, 250));
 
     document.addEventListener('keydown', e => { 
@@ -509,11 +543,11 @@ document.addEventListener('DOMContentLoaded', function () {
             img.onerror = () => handleImageError(img);
         });
         
-        updateActiveNavLink();
-        addInteractiveEffects();
-        addCertificationEffects();
+        window.updateActiveNavLink();
+        window.addInteractiveEffects();
+        window.addCertificationEffects();
         initCertificationFilters();
-        optimizeMobile();
+        window.optimizeMobile();
         animateCertificationsEntrance();
 
         $$('.hero-content, .section-header').forEach((el, i) => {
@@ -556,24 +590,24 @@ document.addEventListener('DOMContentLoaded', function () {
     document.head.appendChild(style);
 
     init();
-});
 
-// Integração CMS - adicione no final do arquivo
-document.addEventListener('cms:contentLoaded', (e) => {
-    console.log('🎯 Conteúdo CMS carregado, re-inicializando componentes');
-    
-    // Re-executar funções que dependem do conteúdo
-    updateActiveNavLink();
-    addInteractiveEffects();
-    addCertificationEffects();
-    optimizeMobile();
-    
-    // Re-bind eventos de navegação
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', e => {
-            e.preventDefault();
-            smoothScrollTo(link.getAttribute('href'));
-            closeMobileMenu();
-        });
+    // Integração CMS - Listener melhorado
+    document.addEventListener('cms:contentLoaded', (e) => {
+        console.log('🎯 Conteúdo CMS carregado, re-inicializando componentes');
+        
+        try {
+            // Re-executar funções que dependem do conteúdo
+            window.updateActiveNavLink();
+            window.addInteractiveEffects();
+            window.addCertificationEffects();
+            window.optimizeMobile();
+            
+            // Re-bind eventos de navegação
+            window.bindNavigationEvents();
+            
+            console.log('✅ Componentes re-inicializados com sucesso');
+        } catch (error) {
+            console.error('❌ Erro ao re-inicializar componentes:', error);
+        }
     });
 });
