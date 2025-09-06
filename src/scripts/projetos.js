@@ -1,4 +1,4 @@
-// Projects Page Enhanced JavaScript - VERSÃO ATUALIZADA
+// Projects Page Enhanced JavaScript - VERSÃO CORRIGIDA
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
@@ -735,15 +735,14 @@ document.addEventListener('DOMContentLoaded', function() {
         bindEvents();
         animateEntrance();
 
-        // IMPLEMENTAÇÃO DEFINITIVA DA NAVEGAÇÃO
-        // Remove código temporário e implementa solução final
+        // CORREÇÃO DA NAVEGAÇÃO - VERSÃO CORRIGIDA
         setTimeout(() => {
-            console.log('Aplicando navegação definitiva...');
+            console.log('Aplicando navegação corrigida...');
             
             // Selecionar todos os links de navegação
             const allNavLinks = document.querySelectorAll('.nav-link');
             
-            allNavLinks.forEach((link, index) => {
+            allNavLinks.forEach((link) => {
                 const href = link.getAttribute('href');
                 const text = link.textContent.trim();
                 
@@ -751,41 +750,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 const newLink = link.cloneNode(true);
                 link.parentNode.replaceChild(newLink, link);
                 
-                // Adicionar novo listener
+                // Adicionar novo listener com lógica corrigida
                 newLink.addEventListener('click', (e) => {
-                    e.preventDefault();
                     console.log(`Navegação: ${text} -> ${href}`);
                     
-                    // Fechar menu mobile
+                    // Fechar menu mobile sempre
                     const hamburger = document.querySelector('.hamburger');
                     const navMenu = document.querySelector('.nav-menu');
                     hamburger?.classList.remove('active');
                     navMenu?.classList.remove('active');
                     document.body.classList.remove('menu-open');
                     
-                    // Determinar URL de destino
-                    let targetUrl;
-                    
-                    if (href.includes('index.html')) {
-                        targetUrl = href;
-                    } else if (href.startsWith('#')) {
-                        if (href === '#all-projects') {
-                            // Link interno da página atual
-                            document.querySelector(href)?.scrollIntoView({ 
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                            return;
-                        } else {
-                            // Links para seções do index.html
-                            targetUrl = `../index.html${href}`;
-                        }
+                    // CORREÇÃO: Só prevenir default para links internos da página atual
+                    if (href === '#all-projects') {
+                        e.preventDefault();
+                        document.querySelector(href)?.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        return;
                     }
                     
-                    if (targetUrl) {
-                        console.log(`Redirecionando para: ${targetUrl}`);
-                        window.location.href = targetUrl;
-                    }
+                    // Para todos os outros links (../index.html#home, #about, etc.), 
+                    // deixar o comportamento padrão do navegador
+                    // NÃO usar preventDefault() aqui!
                 });
             });
             
@@ -841,7 +829,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.head.appendChild(style);
 
-        console.log('Página de Projetos inicializada com filtros funcionais!');
+        console.log('Página de Projetos inicializada com navegação corrigida!');
     };
 
     // Start initialization
