@@ -2,12 +2,12 @@
   "email": {
     "enabled": true,
     "provider": "emailjs",
-    "serviceId": "YOUR_SERVICE_ID",
-    "templateId": "YOUR_TEMPLATE_ID",
-    "publicKey": "YOUR_PUBLIC_KEY",
+    "serviceId": "service_d6r94y9",
+    "templateId": "template_5d22ssi",
+    "publicKey": "4UjTKqTMYtiAldXj0",
     "fallbackEmail": "alex.bueno22@hotmail.com",
     "formspreeUrl": "",
-    "allowedDomains": ["localhost", "127.0.0.1", "seu-dominio.com"]
+    "allowedDomains": ["localhost", "127.0.0.1", "portifoliodevalex.netlify.app"]
   },
   "analytics": {
     "enabled": false,
@@ -33,11 +33,11 @@
     "rateLimitEnabled": true,
     "maxAttemptsPerHour": 3,
     "blockDuration": 3600000,
-    "allowedOrigins": ["localhost", "127.0.0.1"],
+    "allowedOrigins": ["localhost", "127.0.0.1", "portifoliodevalex.netlify.app"],
     "csrfProtection": false
   },
   "features": {
-    "autoSave": false,
+    "autoSave": true,
     "offlineSupport": false,
     "darkModeSync": true,
     "keyboardShortcuts": true

@@ -1,6 +1,6 @@
 /**
  * Admin Panel JavaScript
- * Sistema de administração para o Portfolio CMS
+ * Sistema de administração com persistência local
  */
 
 class PortfolioCMSAdmin {
@@ -9,23 +9,145 @@ class PortfolioCMSAdmin {
         this.currentSection = 'dashboard';
         this.editingItem = null;
         this.editingType = null;
+        this.storageKey = 'portfolio_cms_content';
     }
 
     async init() {
         await this.loadContent();
         this.bindEvents();
         this.renderDashboard();
-        console.log('🔧 Admin CMS inicializado');
+        this.showPersistenceInfo();
+        console.log('🔧 Admin CMS inicializado com persistência local');
     }
 
+    /**
+     * Carrega conteúdo com prioridade para localStorage
+     */
     async loadContent() {
         try {
-            const response = await fetch('./src/data/content.json');
+            // Primeiro tenta carregar do localStorage
+            const localContent = this.loadFromLocalStorage();
+            if (localContent) {
+                this.content = localContent;
+                console.log('📦 Conteúdo carregado do localStorage no admin');
+                return;
+            }
+
+            // Se não há dados locais, carrega do servidor
+            const response = await fetch('./src/data/content.json?v=' + Date.now());
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             this.content = await response.json();
+            console.log('📡 Conteúdo carregado do servidor no admin');
+
         } catch (error) {
             console.error('Erro ao carregar conteúdo:', error);
             this.content = this.getDefaultContent();
+        }
+    }
+
+    /**
+     * Carrega do localStorage
+     */
+    loadFromLocalStorage() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            if (!stored) return null;
+
+            const data = JSON.parse(stored);
+            return data.content;
+        } catch (error) {
+            console.error('Erro ao carregar do localStorage:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Salva no localStorage
+     */
+    saveToLocalStorage() {
+        try {
+            const dataToSave = {
+                content: this.content,
+                timestamp: Date.now(),
+                version: '1.0.0'
+            };
+            localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+            this.showPersistenceInfo();
+            console.log('💾 Conteúdo salvo no localStorage');
+            return true;
+        } catch (error) {
+            console.error('Erro ao salvar no localStorage:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Mostra informações sobre persistência
+     */
+    showPersistenceInfo() {
+        // Remove info existente
+        const existing = document.querySelector('.persistence-info');
+        if (existing) existing.remove();
+
+        const hasLocalChanges = localStorage.getItem(this.storageKey);
+        if (!hasLocalChanges) return;
+
+        const info = document.createElement('div');
+        info.className = 'persistence-info';
+        info.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Suas alterações estão salvas localmente</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="admin.previewChanges()" class="btn btn-small btn-primary">
+                        <i class="fas fa-eye"></i> Visualizar
+                    </button>
+                    <button onclick="admin.clearLocalStorage()" class="btn btn-small btn-warning">
+                        <i class="fas fa-undo"></i> Resetar
+                    </button>
+                </div>
+            </div>
+        `;
+
+        Object.assign(info.style, {
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            color: 'white',
+            padding: '1rem',
+            borderRadius: 'var(--radius)',
+            margin: '1rem 0',
+            fontSize: '0.9rem',
+            fontWeight: '500'
+        });
+
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.insertBefore(info, mainContent.firstChild);
+        }
+    }
+
+    /**
+     * Visualiza as alterações no site principal
+     */
+    previewChanges() {
+        const previewUrl = window.location.href.replace('/admin', '');
+        window.open(previewUrl, '_blank');
+    }
+
+    /**
+     * Limpa localStorage
+     */
+    clearLocalStorage() {
+        if (confirm('Tem certeza que deseja descartar todas as alterações locais?')) {
+            try {
+                localStorage.removeItem(this.storageKey);
+                localStorage.removeItem('portfolio_cms_server_backup');
+                location.reload();
+            } catch (error) {
+                console.error('Erro ao limpar localStorage:', error);
+                showNotification('Erro ao limpar dados locais', 'error');
+            }
         }
     }
 
@@ -152,10 +274,10 @@ class PortfolioCMSAdmin {
                     </div>
                 </div>
                 <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
-                    ${project.description?.substring(0, 100)}...
+                    ${project.description?.substring(0, 100) || 'Sem descrição'}...
                 </p>
                 <div style="margin-top: 1rem;">
-                    ${project.technologies?.map(tech => 
+                    ${project.technologies?.map(tech =>
                         `<span style="background: rgba(139, 92, 246, 0.2); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem; margin-right: 0.5rem;">${tech}</span>`
                     ).join('') || ''}
                 </div>
@@ -189,7 +311,7 @@ class PortfolioCMSAdmin {
                     </div>
                 </div>
                 <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
-                    ${cert.description?.substring(0, 100)}...
+                    ${cert.description?.substring(0, 100) || 'Sem descrição'}...
                 </p>
                 <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
                     <span><i class="fas fa-calendar"></i> ${cert.date}</span>
@@ -202,7 +324,7 @@ class PortfolioCMSAdmin {
     renderContentEditor() {
         const container = document.getElementById('contentEditor');
         if (!container) return;
-        
+
         container.innerHTML = `
             <div class="content-card">
                 <h3>Informações Pessoais</h3>
@@ -288,6 +410,27 @@ class PortfolioCMSAdmin {
                     </label>
                 </div>
             </div>
+
+            <div class="content-card">
+                <h3>Gerenciamento Local</h3>
+                <div class="form-group">
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                        Suas alterações são salvas automaticamente no navegador. 
+                        Use as opções abaixo para gerenciar seus dados.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-warning" onclick="admin.downloadBackup()">
+                            <i class="fas fa-download"></i> Baixar Backup
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="admin.uploadBackup()">
+                            <i class="fas fa-upload"></i> Restaurar Backup
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="admin.clearLocalStorage()">
+                            <i class="fas fa-trash"></i> Limpar Dados
+                        </button>
+                    </div>
+                </div>
+            </div>
         `;
     }
 
@@ -337,6 +480,7 @@ class PortfolioCMSAdmin {
                 const index = items.findIndex(item => item.id === id);
                 if (index !== -1) {
                     items.splice(index, 1);
+                    this.saveToLocalStorage();
                     this.renderCurrentSection();
                     showNotification('Item excluído com sucesso!', 'success');
                 }
@@ -392,9 +536,64 @@ class PortfolioCMSAdmin {
             this.content[section].items.push(data);
         }
         
+        this.saveToLocalStorage();
         this.renderCurrentSection();
         closeModal();
         showNotification(`${this.editingType === 'project' ? 'Projeto' : 'Certificação'} salvo com sucesso!`, 'success');
+    }
+
+    downloadBackup() {
+        const backup = {
+            content: this.content,
+            timestamp: Date.now(),
+            version: '1.0.0',
+            source: 'admin-panel'
+        };
+        
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { 
+            type: 'application/json' 
+        });
+        
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `portfolio-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        showNotification('Backup baixado com sucesso!', 'success');
+    }
+
+    uploadBackup() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    if (backup.content) {
+                        this.content = backup.content;
+                        this.saveToLocalStorage();
+                        this.renderCurrentSection();
+                        showNotification('Backup restaurado com sucesso!', 'success');
+                    } else {
+                        showNotification('Formato de backup inválido!', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Erro ao restaurar backup!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+        
+        input.click();
     }
 }
 
@@ -520,7 +719,7 @@ function closeModal() {
     if (modal) {
         modal.classList.remove('active');
     }
-    
+
     if (window.admin) {
         admin.editingItem = null;
         admin.editingType = null;
@@ -531,7 +730,7 @@ function saveAllContent() {
     if (!window.admin || !admin.content) return;
 
     const content = admin.content;
-    
+
     // Update from content editor
     if (admin.currentSection === 'content') {
         const heroTitle = document.getElementById('heroTitle');
@@ -545,120 +744,175 @@ function saveAllContent() {
         if (heroTitle) content.hero.title = heroTitle.value;
         if (heroSubtitle) content.hero.subtitle = heroSubtitle.value;
         if (heroDescription) content.hero.description = heroDescription.value;
-        
+
         if (aboutContent) {
             const aboutContentValue = aboutContent.value;
             content.about.content = aboutContentValue.split('\n').filter(line => line.trim());
         }
-        
+
         // Update contact info
+        if (!content.contact.info) content.contact.info = [];
+
         if (contactEmail) {
-            const emailField = content.contact.info.find(i => i.type === 'email');
-            if (emailField) emailField.value = contactEmail.value;
+            let emailField = content.contact.info.find(i => i.type === 'email');
+            if (!emailField) {
+                emailField = { type: 'email', icon: 'fas fa-envelope', label: 'Email' };
+                content.contact.info.push(emailField);
+            }
+            emailField.value = contactEmail.value;
+            emailField.link = `mailto:${contactEmail.value}`;
         }
-        
+
         if (contactPhone) {
-            const phoneField = content.contact.info.find(i => i.type === 'phone');
-            if (phoneField) phoneField.value = contactPhone.value;
+            let phoneField = content.contact.info.find(i => i.type === 'phone');
+            if (!phoneField) {
+                phoneField = { type: 'phone', icon: 'fas fa-phone', label: 'Telefone' };
+                content.contact.info.push(phoneField);
+            }
+            phoneField.value = contactPhone.value;
+            phoneField.link = `tel:${contactPhone.value.replace(/\D/g, '')}`;
         }
-        
+
         if (contactLocation) {
-            const locationField = content.contact.info.find(i => i.type === 'location');
-            if (locationField) locationField.value = contactLocation.value;
+            let locationField = content.contact.info.find(i => i.type === 'location');
+            if (!locationField) {
+                locationField = { type: 'location', icon: 'fas fa-map-marker-alt', label: 'Localização' };
+                content.contact.info.push(locationField);
+            }
+            locationField.value = contactLocation.value;
         }
     }
-    
-    // Save to JSON (simulated)
-    downloadJSON(content, 'content.json');
-    showNotification('Conteúdo salvo! Baixe o arquivo e substitua o content.json', 'success');
+
+    // Update from settings
+    if (admin.currentSection === 'settings') {
+        const siteTitle = document.getElementById('siteTitle');
+        const siteDescription = document.getElementById('siteDescription');
+        const themeColor = document.getElementById('themeColor');
+        const animationsEnabled = document.getElementById('animationsEnabled');
+        const lazyLoadImages = document.getElementById('lazyLoadImages');
+        const showBackToTop = document.getElementById('showBackToTop');
+
+        if (siteTitle) content.site.title = siteTitle.value;
+        if (siteDescription) content.site.description = siteDescription.value;
+        if (themeColor) content.site.themeColor = themeColor.value;
+
+        if (!content.settings) content.settings = {};
+        if (animationsEnabled) content.settings.animationsEnabled = animationsEnabled.checked;
+        if (lazyLoadImages) content.settings.lazyLoadImages = lazyLoadImages.checked;
+        if (showBackToTop) content.settings.showBackToTop = showBackToTop.checked;
+    }
+
+    // Salva automaticamente no localStorage
+    admin.saveToLocalStorage();
+    showNotification('Conteúdo salvo automaticamente!', 'success');
 }
 
 function exportContent() {
     if (!window.admin) return;
-    downloadJSON(admin.content, 'portfolio-backup.json');
-    showNotification('Backup exportado com sucesso!', 'success');
+    admin.downloadBackup();
 }
 
 function importContent() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    
-    input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                if (window.admin) {
-                    admin.content = JSON.parse(e.target.result);
-                    admin.renderCurrentSection();
-                    showNotification('Conteúdo importado com sucesso!', 'success');
-                }
-            } catch (error) {
-                showNotification('Erro ao importar arquivo!', 'error');
-            }
-        };
-        reader.readAsText(file);
-    };
-    
-    input.click();
-}
-
-function downloadJSON(data, filename) {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (!window.admin) return;
+    admin.uploadBackup();
 }
 
 function showNotification(message, type = 'info') {
+    // Remove notificações existentes
+    document.querySelectorAll('.admin-notification').forEach(n => n.remove());
+
     const notification = document.createElement('div');
+    notification.className = `admin-notification notification-${type}`;
+
+    const icons = {
+        success: 'fas fa-check-circle',
+        error: 'fas fa-exclamation-circle',
+        warning: 'fas fa-exclamation-triangle',
+        info: 'fas fa-info-circle'
+    };
+
     const colors = {
         success: '#10b981',
         error: '#ef4444',
         warning: '#f59e0b',
         info: '#6366f1'
     };
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${colors[type]};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
+
+    notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+            <i class="${icons[type]}" style="font-size: 1.2rem;"></i>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" 
+                    style="background: none; border: none; color: inherit; cursor: pointer; margin-left: auto;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
     `;
-    
-    notification.textContent = message;
+
+    Object.assign(notification.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        background: colors[type],
+        color: 'white',
+        padding: '1rem 1.5rem',
+        borderRadius: '8px',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)',
+        zIndex: '9999',
+        maxWidth: '400px',
+        opacity: '0',
+        transform: 'translateX(100%)',
+        transition: 'all 0.3s ease',
+        fontSize: '0.9rem',
+        fontWeight: '500'
+    });
+
     document.body.appendChild(notification);
-    
+
+    // Animate in
     requestAnimationFrame(() => {
+        notification.style.opacity = '1';
         notification.style.transform = 'translateX(0)';
     });
-    
+
+    // Auto remove
     setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+        if (document.contains(notification)) {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
 }
 
 // Admin instance
 const admin = new PortfolioCMSAdmin();
 window.admin = admin;
 
+// Auto-save quando há mudanças
+function setupAutoSave() {
+    // Salva automaticamente a cada 30 segundos se houver mudanças
+    setInterval(() => {
+        if (admin.content) {
+            admin.saveToLocalStorage();
+        }
+    }, 30000);
+
+    // Salva antes de sair da página
+    window.addEventListener('beforeunload', () => {
+        if (admin.content) {
+            admin.saveToLocalStorage();
+        }
+    });
+}
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => admin.init());
+    document.addEventListener('DOMContentLoaded', () => {
+        admin.init();
+        setupAutoSave();
+    });
 } else {
     admin.init();
+    setupAutoSave();
 }

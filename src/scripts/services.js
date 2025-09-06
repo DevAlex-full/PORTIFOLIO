@@ -1,6 +1,6 @@
 /**
  * Services - Integração com serviços externos
- * Sistema otimizado para email, analytics e outras integrações
+ * Sistema compatível com persistência local
  */
 
 class PortfolioServices {
@@ -9,6 +9,7 @@ class PortfolioServices {
         this.emailService = null;
         this.analytics = null;
         this.cache = new Map();
+        this.storageKey = 'portfolio_cms_content';
     }
 
     /**
@@ -26,17 +27,30 @@ class PortfolioServices {
         }
         
         this.bindFormEvents();
-        console.log('🔧 Serviços inicializados');
+        this.injectStyles();
+        console.log('🔧 Serviços inicializados com persistência local');
     }
 
     /**
-     * Carrega configuração dos serviços
+     * Carrega configuração com suporte ao localStorage
      */
     async loadConfig() {
         try {
+            // Primeiro tenta carregar configuração personalizada do localStorage
+            const localContent = this.loadLocalContent();
+            if (localContent?.services) {
+                console.log('📦 Configuração de serviços do localStorage');
+                return { ...this.getDefaultConfig(), ...localContent.services };
+            }
+
+            // Tenta carregar do arquivo de configuração
             const response = await fetch('./src/data/services-config.json');
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.json();
+            if (response.ok) {
+                const serverConfig = await response.json();
+                return serverConfig;
+            }
+            
+            throw new Error('Arquivo de configuração não encontrado');
         } catch (error) {
             console.warn('Config não encontrada, usando padrão:', error.message);
             return this.getDefaultConfig();
@@ -44,7 +58,22 @@ class PortfolioServices {
     }
 
     /**
-     * Configuração padrão dos serviços - CORREÇÃO: Inicialização completa
+     * Carrega conteúdo do localStorage
+     */
+    loadLocalContent() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            if (!stored) return null;
+            
+            const data = JSON.parse(stored);
+            return data.content;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    /**
+     * Configuração padrão dos serviços
      */
     getDefaultConfig() {
         return {
@@ -69,7 +98,7 @@ class PortfolioServices {
             validation: {
                 email: true,
                 phone: true,
-                honeypot: true // CORREÇÃO: Propriedade sempre definida
+                honeypot: true
             }
         };
     }
@@ -214,13 +243,11 @@ class PortfolioServices {
      * Carrega Google Analytics
      */
     loadGoogleAnalytics(trackingId) {
-        // Global site tag (gtag.js)
         const gtagScript = document.createElement('script');
         gtagScript.async = true;
         gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${trackingId}`;
         document.head.appendChild(gtagScript);
 
-        // Initialize gtag
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -246,26 +273,29 @@ class PortfolioServices {
     }
 
     /**
-     * Bind eventos de formulário - CORREÇÃO: Verificação de config
+     * Bind eventos de formulário com suporte ao conteúdo dinâmico
      */
     bindFormEvents() {
-        const contactForm = document.querySelector('.contact-form');
-        if (!contactForm) return;
+        // Aguarda um pouco para que o CMS termine de renderizar
+        setTimeout(() => {
+            const contactForm = document.querySelector('.contact-form');
+            if (!contactForm) return;
 
-        // Remove listener anterior se existir
-        const newForm = contactForm.cloneNode(true);
-        contactForm.parentNode.replaceChild(newForm, contactForm);
+            // Remove listener anterior se existir
+            const newForm = contactForm.cloneNode(true);
+            contactForm.parentNode.replaceChild(newForm, contactForm);
 
-        // Adiciona novo listener
-        newForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
+            // Adiciona novo listener
+            newForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
 
-        // Validação em tempo real
-        this.addRealTimeValidation(newForm);
+            // Validação em tempo real
+            this.addRealTimeValidation(newForm);
 
-        // Honeypot para spam - CORREÇÃO: Verificação de config
-        if (this.config && this.config.validation && this.config.validation.honeypot) {
-            this.addHoneypot(newForm);
-        }
+            // Honeypot para spam
+            if (this.config?.validation?.honeypot) {
+                this.addHoneypot(newForm);
+            }
+        }, 1000);
     }
 
     /**
@@ -318,7 +348,7 @@ class PortfolioServices {
         const existingError = field.parentNode.querySelector('.field-error');
         if (existingError) existingError.remove();
 
-        field.style.borderColor = isValid ? 'var(--border-color)' : 'var(--danger-color, #ef4444)';
+        field.style.borderColor = isValid ? 'var(--border-color)' : '#ef4444';
 
         if (!isValid && message) {
             const errorDiv = document.createElement('div');
@@ -396,11 +426,10 @@ class PortfolioServices {
         submitBtn.disabled = true;
 
         try {
-            // Enviar email - CORREÇÃO: Verificação de serviço
-            if (this.emailService && this.emailService.send) {
+            // Enviar email
+            if (this.emailService?.send) {
                 await this.emailService.send(data);
             } else {
-                // Fallback para mailto se não houver serviço configurado
                 this.sendWithMailto(data);
             }
             
@@ -505,7 +534,7 @@ class PortfolioServices {
     }
 
     /**
-     * Mostra notificação - CORREÇÃO: Verificação de config
+     * Mostra notificação
      */
     showNotification(message, type = 'info') {
         // Remove notificações existentes
@@ -539,10 +568,8 @@ class PortfolioServices {
             </div>
         `;
 
-        // Position based on config - CORREÇÃO: Verificação de config
-        const position = (this.config && this.config.notifications && this.config.notifications.position) 
-            ? this.config.notifications.position 
-            : 'top-right';
+        // Position
+        const position = this.config?.notifications?.position || 'top-right';
         const [vertical, horizontal] = position.split('-');
 
         Object.assign(notification.style, {
@@ -571,10 +598,8 @@ class PortfolioServices {
             notification.style.transform = 'translateX(0)';
         });
 
-        // Auto remove - CORREÇÃO: Verificação de config
-        const autoClose = (this.config && this.config.notifications && this.config.notifications.autoClose) 
-            ? this.config.notifications.autoClose 
-            : 5000;
+        // Auto remove
+        const autoClose = this.config?.notifications?.autoClose || 5000;
         if (autoClose > 0) {
             setTimeout(() => {
                 if (document.contains(notification)) {
@@ -593,6 +618,14 @@ class PortfolioServices {
         if (this.analytics) {
             this.analytics.trackEvent(action, category, label, value);
         }
+    }
+
+    /**
+     * Re-inicializa formulários quando há mudanças no CMS
+     */
+    reinitializeForms() {
+        this.bindFormEvents();
+        console.log('🔄 Formulários re-inicializados após mudança de conteúdo');
     }
 
     /**
@@ -618,7 +651,10 @@ class PortfolioServices {
             updateConfig: (newConfig) => {
                 this.config = { ...this.config, ...newConfig };
                 this.bindFormEvents();
-            }
+            },
+            
+            // Forms
+            reinitializeForms: () => this.reinitializeForms()
         };
     }
 
@@ -670,68 +706,14 @@ class PortfolioServices {
     }
 }
 
-// Instância global
+// Initialize services
 window.portfolioServices = new PortfolioServices();
 
-// Auto-inicialização quando CMS estiver pronto
-document.addEventListener('cms:contentLoaded', async () => {
-    // Inject styles
-    window.portfolioServices.injectStyles();
-    
-    // Initialize with CMS content config - CORREÇÃO: Verificação de existência
-    const cmsAPI = window.portfolioCMS?.getAPI();
-    const cmsContent = cmsAPI?.getAllContent() || {};
-    
-    const serviceConfig = {
-        email: {
-            enabled: true,
-            provider: 'emailjs', // ou 'formspree' ou 'mailto'
-            serviceId: cmsContent?.contact?.form?.emailService?.serviceId || 'YOUR_SERVICE_ID',
-            templateId: cmsContent?.contact?.form?.emailService?.templateId || 'YOUR_TEMPLATE_ID',
-            publicKey: cmsContent?.contact?.form?.emailService?.publicKey || 'YOUR_PUBLIC_KEY',
-            fallbackEmail: cmsContent?.contact?.info?.find(i => i.type === 'email')?.value || 'alex.bueno22@hotmail.com'
-        },
-        analytics: {
-            enabled: cmsContent?.settings?.enableAnalytics || false,
-            provider: 'gtag',
-            trackingId: cmsContent?.settings?.analyticsId || ''
-        },
-        notifications: {
-            enabled: true,
-            position: 'top-right',
-            autoClose: 5000
-        },
-        validation: {
-            email: true,
-            phone: true,
-            honeypot: true
-        }
-    };
-    
-    await window.portfolioServices.init(serviceConfig);
-});
-
-// Fallback se CMS não estiver disponível - CORREÇÃO: Inicialização mais robusta
+// Auto-initialization when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Aguarda um tempo para o CMS carregar
-        setTimeout(async () => {
-            if (!window.portfolioServices.emailService) {
-                window.portfolioServices.injectStyles();
-                await window.portfolioServices.init();
-            }
-        }, 2000); // Aumentado para 2 segundos
+    document.addEventListener('DOMContentLoaded', () => {
+        window.portfolioServices.init();
     });
 } else {
-    setTimeout(async () => {
-        if (!window.portfolioServices.emailService) {
-            window.portfolioServices.injectStyles();
-            await window.portfolioServices.init();
-        }
-    }, 2000); // Aumentado para 2 segundos
-}
-
-// Export para módulos ES6
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PortfolioServices;
+    window.portfolioServices.init();
 }
