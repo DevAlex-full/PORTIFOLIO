@@ -127,8 +127,8 @@ document.addEventListener('DOMContentLoaded', function () {
         tryNext();
     }
 
-    // Navigation - FUNÇÃO GLOBAL EXPOSTA
-    window.updateActiveNavLink = () => {
+    // Navigation Functions
+    const updateActiveNavLink = () => {
         const scrollPos = window.scrollY + 100;
 
         sections.forEach(section => {
@@ -160,8 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.remove('menu-open');
     };
 
-    // Função para smooth scroll - GLOBAL (CORRIGIDA)
-    window.smoothScrollTo = (target) => {
+    // Smooth scroll function
+    const smoothScrollTo = (target) => {
         let anchor = target;
         if (target.includes('#')) {
             anchor = '#' + target.split('#')[1];
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Função para verificar se é link externo
+    // Check if link is external
     const isExternalLink = (href) => {
         return href && (
             href.startsWith('http') ||
@@ -189,6 +189,32 @@ document.addEventListener('DOMContentLoaded', function () {
             href.includes('.php') ||
             href.includes('.aspx')
         );
+    };
+
+    // Handle navigation clicks
+    const handleNavClick = (e) => {
+        const href = e.target.getAttribute('href');
+
+        // Se é um link externo, permite navegação normal
+        if (isExternalLink(href)) {
+            closeMobileMenu();
+            return true;
+        }
+
+        // Se é uma âncora interna, previne comportamento padrão e faz scroll suave
+        e.preventDefault();
+        if (href) {
+            smoothScrollTo(href);
+            closeMobileMenu();
+        }
+    };
+
+    // Bind navigation events
+    const bindNavigationEvents = () => {
+        navLinks.forEach(link => {
+            link.removeEventListener('click', handleNavClick);
+            link.addEventListener('click', handleNavClick);
+        });
     };
 
     const animateOnScroll = () => {
@@ -337,8 +363,8 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => document.contains(notification) && close(), 5000);
     };
 
-    // Interactive Effects - FUNÇÃO GLOBAL
-    window.addInteractiveEffects = () => {
+    // Interactive Effects
+    const addInteractiveEffects = () => {
         $$('.project-card').forEach(card => {
             card.onmouseenter = () => card.style.transform = 'translateY(-10px) scale(1.02)';
             card.onmouseleave = () => card.style.transform = 'translateY(0) scale(1)';
@@ -370,8 +396,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Certification Effects - FUNÇÃO GLOBAL
-    window.addCertificationEffects = () => {
+    // Certification Effects
+    const addCertificationEffects = () => {
         $$('.certification-card').forEach(card => {
             const certIcon = card.querySelector('.cert-icon');
             const certStatus = card.querySelector('.cert-status');
@@ -410,8 +436,8 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Mobile Optimizations - FUNÇÃO GLOBAL
-    window.optimizeMobile = () => {
+    // Mobile Optimizations
+    const optimizeMobile = () => {
         if (window.innerWidth <= 768) {
             window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
 
@@ -491,59 +517,28 @@ document.addEventListener('DOMContentLoaded', function () {
             const scrollTop = window.pageYOffset;
             header?.classList.toggle('scrolled', scrollTop > 50);
             backToTopBtn?.classList.toggle('show', scrollTop > 300);
-            window.updateActiveNavLink();
+            updateActiveNavLink();
             animateOnScroll();
             animateStatsOnScroll();
             isScrolling = false;
         });
     };
 
-    // Bind navigation events - FUNÇÃO GLOBAL (CORRIGIDA)
-    window.bindNavigationEvents = () => {
-        const currentNavLinks = $$('.nav-link');
-        currentNavLinks.forEach(link => {
-            // Remove event listeners anteriores
-            link.removeEventListener('click', handleNavClick);
-            // Adiciona novo event listener
-            link.addEventListener('click', handleNavClick);
-        });
-    };
-
-    // Handle navigation clicks (CORRIGIDO)
-    const handleNavClick = (e) => {
-        const href = e.target.getAttribute('href');
-
-        // Se é um link externo (contém .html, http, etc), permite navegação normal
-        if (isExternalLink(href)) {
-            // Fecha o menu mobile se estiver aberto
-            closeMobileMenu();
-            // Permite que o navegador siga o link normalmente
-            return true;
-        }
-
-        // Se é uma âncora interna, previne comportamento padrão e faz scroll suave
-        e.preventDefault();
-        if (href) {
-            window.smoothScrollTo(href);
-            closeMobileMenu();
-        }
-    };
-
     // Event Listeners
     hamburger?.addEventListener('click', toggleMobileMenu);
     backToTopBtn?.addEventListener('click', e => {
         e.preventDefault();
-        window.smoothScrollTo('#home');
+        smoothScrollTo('#home');
     });
     contactForm?.addEventListener('submit', handleFormSubmit);
 
     // Initial navigation binding
-    window.bindNavigationEvents();
+    bindNavigationEvents();
 
     window.addEventListener('scroll', throttle(handleScroll, 16));
     window.addEventListener('resize', debounce(() => {
         closeMobileMenu();
-        window.updateActiveNavLink();
+        updateActiveNavLink();
     }, 250));
 
     document.addEventListener('keydown', e => {
@@ -565,11 +560,11 @@ document.addEventListener('DOMContentLoaded', function () {
             img.onerror = () => handleImageError(img);
         });
 
-        window.updateActiveNavLink();
-        window.addInteractiveEffects();
-        window.addCertificationEffects();
+        updateActiveNavLink();
+        addInteractiveEffects();
+        addCertificationEffects();
         initCertificationFilters();
-        window.optimizeMobile();
+        optimizeMobile();
         animateCertificationsEntrance();
 
         $$('.hero-content, .section-header').forEach((el, i) => {
@@ -612,24 +607,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.head.appendChild(style);
 
     init();
-
-    // Integração CMS - Listener melhorado
-    document.addEventListener('cms:contentLoaded', (e) => {
-        console.log('🎯 Conteúdo CMS carregado, re-inicializando componentes');
-
-        try {
-            // Re-executar funções que dependem do conteúdo
-            window.updateActiveNavLink();
-            window.addInteractiveEffects();
-            window.addCertificationEffects();
-            window.optimizeMobile();
-
-            // Re-bind eventos de navegação
-            window.bindNavigationEvents();
-
-            console.log('✅ Componentes re-inicializados com sucesso');
-        } catch (error) {
-            console.error('❌ Erro ao re-inicializar componentes:', error);
-        }
-    });
 });
