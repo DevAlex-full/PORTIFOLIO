@@ -163,12 +163,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Smooth scroll function
     const smoothScrollTo = (target) => {
         let anchor = target;
+        
+        // Remove qualquer parte antes do # se existir
         if (target.includes('#')) {
             anchor = '#' + target.split('#')[1];
-        }
-
-        if (!anchor.startsWith('#')) {
-            anchor = '#' + anchor;
+        } else if (!target.startsWith('#')) {
+            anchor = '#' + target;
         }
 
         const element = $(anchor);
@@ -180,14 +180,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Check if link is external
-    const isExternalLink = (href) => {
+    // Check if link is external or internal page
+    const isExternalOrPageLink = (href) => {
         return href && (
             href.startsWith('http') ||
             href.startsWith('//') ||
             href.includes('.html') ||
             href.includes('.php') ||
-            href.includes('.aspx')
+            href.includes('.aspx') ||
+            href.startsWith('./pages/') ||
+            href.startsWith('pages/') ||
+            href.startsWith('../')
+        );
+    };
+
+    // Check if link is internal anchor
+    const isInternalAnchor = (href) => {
+        return href && (
+            href.startsWith('#') ||
+            (href.includes('#') && !href.includes('.html') && !href.startsWith('http'))
         );
     };
 
@@ -195,18 +206,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const handleNavClick = (e) => {
         const href = e.target.getAttribute('href');
 
-        // Se é um link externo, permite navegação normal
-        if (isExternalLink(href)) {
+        // Se é um link externo ou para outra página, permite navegação normal
+        if (isExternalOrPageLink(href)) {
             closeMobileMenu();
-            return true;
+            return true; // Permite o comportamento padrão
         }
 
         // Se é uma âncora interna, previne comportamento padrão e faz scroll suave
-        e.preventDefault();
-        if (href) {
+        if (isInternalAnchor(href)) {
+            e.preventDefault();
             smoothScrollTo(href);
             closeMobileMenu();
+            return false;
         }
+
+        // Para outros casos, permite navegação normal
+        closeMobileMenu();
+        return true;
     };
 
     // Bind navigation events
