@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // DOM Elements
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => document.querySelectorAll(selector);
-    
+
     const hamburger = $('.hamburger');
     const navMenu = $('.nav-menu');
     const navLinks = $$('.nav-link');
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateThemeIcon(theme) {
             const lightIcon = $('.theme-icon-light');
             const darkIcon = $('.theme-icon-dark');
-            
+
             if (lightIcon && darkIcon) {
                 if (theme === this.DARK) {
                     lightIcon.style.cssText = 'opacity: 1; transform: rotate(0deg) scale(1)';
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         bindEvents() {
             themeToggle?.addEventListener('click', () => this.toggleTheme());
-            
+
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 if (!this.currentTheme) this.setTheme(e.matches ? this.DARK : this.LIGHT);
             });
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Utility Functions
     const throttle = (func, limit) => {
         let inThrottle;
-        return function(...args) {
+        return function (...args) {
             if (!inThrottle) {
                 func.apply(this, args);
                 inThrottle = true;
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const debounce = (func, wait) => {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const fileName = img.src.split('/').pop();
         const paths = [`./imagens/${fileName}`, `./${fileName}`, `src/imagens/${fileName}`, `imagens/${fileName}`];
         let i = 0;
-        
+
         const tryNext = () => {
             if (i < paths.length) {
                 img.src = paths[i++];
@@ -160,24 +160,35 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.remove('menu-open');
     };
 
-    // Função para smooth scroll - GLOBAL
+    // Função para smooth scroll - GLOBAL (CORRIGIDA)
     window.smoothScrollTo = (target) => {
         let anchor = target;
         if (target.includes('#')) {
             anchor = '#' + target.split('#')[1];
         }
-        
+
         if (!anchor.startsWith('#')) {
             anchor = '#' + anchor;
         }
-        
+
         const element = $(anchor);
         if (element) {
-            window.scrollTo({ 
-                top: element.offsetTop - 70, 
-                behavior: 'smooth' 
+            window.scrollTo({
+                top: element.offsetTop - 70,
+                behavior: 'smooth'
             });
         }
+    };
+
+    // Função para verificar se é link externo
+    const isExternalLink = (href) => {
+        return href && (
+            href.startsWith('http') ||
+            href.startsWith('//') ||
+            href.includes('.html') ||
+            href.includes('.php') ||
+            href.includes('.aspx')
+        );
     };
 
     const animateOnScroll = () => {
@@ -193,12 +204,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const animateStatsOnScroll = () => {
         const statCards = $$('.stat-card');
         const certificationsSection = $('#certifications');
-        
+
         if (certificationsSection) {
             const sectionTop = certificationsSection.offsetTop;
             const sectionBottom = sectionTop + certificationsSection.offsetHeight;
             const scrollPos = window.scrollY + window.innerHeight / 2;
-            
+
             if (scrollPos >= sectionTop && scrollPos <= sectionBottom) {
                 statCards.forEach((card, index) => {
                     setTimeout(() => {
@@ -214,17 +225,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const animateNumber = (element) => {
         if (!element || element.hasAttribute('data-animated')) return;
-        
+
         const text = element.textContent;
         const number = parseInt(text.replace(/\D/g, ''));
         const suffix = text.replace(/[\d]/g, '');
-        
+
         if (isNaN(number)) return;
-        
+
         element.setAttribute('data-animated', 'true');
         let current = 0;
         const increment = number / 30;
-        
+
         const timer = setInterval(() => {
             current += increment;
             if (current >= number) {
@@ -238,9 +249,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Form Handling
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        
+
         if (!contactForm) return;
-        
+
         const data = new FormData(contactForm);
         const fields = {
             name: data.get('name') || '',
@@ -256,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const btn = contactForm.querySelector('button[type="submit"]');
         if (!btn) return;
-        
+
         const originalText = btn.textContent;
         btn.textContent = 'Enviando...';
         btn.disabled = true;
@@ -272,9 +283,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const validateForm = (fields) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return fields.name.trim().length >= 2 &&
-               emailRegex.test(fields.email) &&
-               fields.subject.trim().length >= 3 &&
-               fields.message.trim().length >= 10;
+            emailRegex.test(fields.email) &&
+            fields.subject.trim().length >= 3 &&
+            fields.message.trim().length >= 10;
     };
 
     const showNotification = (message, type = 'info') => {
@@ -283,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const notification = document.createElement('div');
         const icons = { success: 'check-circle', error: 'exclamation-circle', info: 'info-circle' };
         const colors = { success: '#10b981', error: '#ef4444', info: '#6366f1' };
-        
+
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
             <div class="notification-content">
@@ -351,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const icon = card.querySelector('.stat-icon');
                 if (icon) icon.style.transform = 'scale(1.1) rotate(5deg)';
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 const icon = card.querySelector('.stat-icon');
                 if (icon) icon.style.transform = 'scale(1) rotate(0deg)';
@@ -364,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $$('.certification-card').forEach(card => {
             const certIcon = card.querySelector('.cert-icon');
             const certStatus = card.querySelector('.cert-status');
-            
+
             card.addEventListener('mouseenter', () => {
                 if (certIcon) certIcon.style.transform = 'scale(1.1) rotate(5deg)';
                 if (certStatus?.classList.contains('verified')) {
@@ -372,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     certStatus.style.animation = 'pulse 1s ease-in-out';
                 }
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 if (certIcon) certIcon.style.transform = 'scale(1) rotate(0deg)';
                 if (certStatus) {
@@ -392,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const title = card.querySelector('.cert-title')?.textContent || '';
         const institution = card.querySelector('.cert-institution')?.textContent || '';
         const skills = Array.from(card.querySelectorAll('.cert-skill')).map(skill => skill.textContent);
-        
+
         showNotification(
             `Certificação: ${title} | Instituição: ${institution} | Habilidades: ${skills.join(', ')}`,
             'info'
@@ -403,11 +414,11 @@ document.addEventListener('DOMContentLoaded', function () {
     window.optimizeMobile = () => {
         if (window.innerWidth <= 768) {
             window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
-            
+
             $$('input, textarea').forEach(input => {
                 input.onfocus = () => input.style.fontSize = '16px';
             });
-            
+
             setTimeout(() => {
                 $$('img').forEach((img, i) => {
                     setTimeout(() => {
@@ -421,14 +432,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Certification Filters
     const initCertificationFilters = () => {
         const certCards = $$('.certification-card');
-        
+
         const filterByStatus = (status) => {
             certCards.forEach(card => {
                 const cardStatus = card.querySelector('.cert-status');
                 const shouldShow = !status || cardStatus?.classList.contains(status);
-                
+
                 card.style.display = shouldShow ? 'block' : 'none';
-                
+
                 if (shouldShow) {
                     setTimeout(() => {
                         card.style.opacity = '1';
@@ -474,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Scroll Functions
     const handleScroll = () => {
         if (isScrolling) return;
-        
+
         isScrolling = true;
         requestAnimationFrame(() => {
             const scrollTop = window.pageYOffset;
@@ -487,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Bind navigation events - FUNÇÃO GLOBAL
+    // Bind navigation events - FUNÇÃO GLOBAL (CORRIGIDA)
     window.bindNavigationEvents = () => {
         const currentNavLinks = $$('.nav-link');
         currentNavLinks.forEach(link => {
@@ -498,9 +509,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
+    // Handle navigation clicks (CORRIGIDO)
     const handleNavClick = (e) => {
-        e.preventDefault();
         const href = e.target.getAttribute('href');
+
+        // Se é um link externo (contém .html, http, etc), permite navegação normal
+        if (isExternalLink(href)) {
+            // Fecha o menu mobile se estiver aberto
+            closeMobileMenu();
+            // Permite que o navegador siga o link normalmente
+            return true;
+        }
+
+        // Se é uma âncora interna, previne comportamento padrão e faz scroll suave
+        e.preventDefault();
         if (href) {
             window.smoothScrollTo(href);
             closeMobileMenu();
@@ -509,9 +531,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event Listeners
     hamburger?.addEventListener('click', toggleMobileMenu);
-    backToTopBtn?.addEventListener('click', e => { 
-        e.preventDefault(); 
-        window.smoothScrollTo('#home'); 
+    backToTopBtn?.addEventListener('click', e => {
+        e.preventDefault();
+        window.smoothScrollTo('#home');
     });
     contactForm?.addEventListener('submit', handleFormSubmit);
 
@@ -524,10 +546,10 @@ document.addEventListener('DOMContentLoaded', function () {
         window.updateActiveNavLink();
     }, 250));
 
-    document.addEventListener('keydown', e => { 
-        if (e.key === 'Escape') closeMobileMenu(); 
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeMobileMenu();
     });
-    
+
     document.addEventListener('click', e => {
         if (hamburger && navMenu && !hamburger.contains(e.target) && !navMenu.contains(e.target)) {
             closeMobileMenu();
@@ -537,12 +559,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize
     const init = () => {
         themeManager.init();
-        
+
         $$('img').forEach(img => {
             img.onload = () => img.style.opacity = '1';
             img.onerror = () => handleImageError(img);
         });
-        
+
         window.updateActiveNavLink();
         window.addInteractiveEffects();
         window.addCertificationEffects();
@@ -594,17 +616,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Integração CMS - Listener melhorado
     document.addEventListener('cms:contentLoaded', (e) => {
         console.log('🎯 Conteúdo CMS carregado, re-inicializando componentes');
-        
+
         try {
             // Re-executar funções que dependem do conteúdo
             window.updateActiveNavLink();
             window.addInteractiveEffects();
             window.addCertificationEffects();
             window.optimizeMobile();
-            
+
             // Re-bind eventos de navegação
             window.bindNavigationEvents();
-            
+
             console.log('✅ Componentes re-inicializados com sucesso');
         } catch (error) {
             console.error('❌ Erro ao re-inicializar componentes:', error);
