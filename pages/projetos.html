@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -15,13 +16,15 @@
     <link rel="stylesheet" href="../src/css/projetos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <img src="../favicon-32x32.png" alt="Logo" class="logo-icon" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <img src="../favicon-32x32.png" alt="Logo" class="logo-icon"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="logo-fallback"><i class="fas fa-code"></i></div>
                     <h2>Alexander Bueno Santiago</h2>
                 </div>
@@ -58,7 +61,8 @@
 
             <div class="projects-hero">
                 <h1>Todos os Meus Projetos</h1>
-                <p>Uma coleção completa dos projetos que desenvolvi, desde aplicações web interativas até soluções comerciais.</p>
+                <p>Uma coleção completa dos projetos que desenvolvi, desde aplicações web interativas até soluções
+                    comerciais.</p>
             </div>
 
             <!-- Projects Stats -->
@@ -98,15 +102,46 @@
             <!-- Projects Grid -->
             <div class="projects-grid" id="projectsGrid">
 
+                <!-- Gerador de senhas -->
+                <div class="project-card" data-category="interactive web">
+                    <div class="project-image">
+                        <img src="../src/imagens/gerador de senha.png" alt="Gerador de senhas" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>Gerador de senhas</span>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Gerador de senhas</h3>
+                        <p class="project-description">Um aplicativo web moderno e seguro para gerar senhas solicitadas
+                            com alta entropia, desenvolvido com HTML5, CSS3 e JavaScript vanilla.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://devalex-full.github.io/GERADOR-DE-SENHAS/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/GERADOR-DE-SENHAS" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- CineMatch -->
                 <div class="project-card" data-category="interactive web">
                     <div class="project-image">
-                        <img src="../src/imagens/CineMatch.png" alt="Projeto CineMatch" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/CineMatch.png" alt="Projeto CineMatch" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>CineMatch</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">CineMatch</h3>
-                        <p class="project-description">CineMatch é uma aplicação web inteligente que utiliza Inteligência Artificial para recomendar filmes personalizados baseados no humor, sentimentos ou preferências do usuário. Desenvolvido durante a Imersão Dev do Futuro , o projeto combina tecnologias modernas para criar uma experiência única de descoberta científica.</p>
+                        <p class="project-description">CineMatch é uma aplicação web inteligente que utiliza
+                            Inteligência Artificial para recomendar filmes personalizados baseados no humor, sentimentos
+                            ou preferências do usuário. Desenvolvido durante a Imersão Dev do Futuro , o projeto combina
+                            tecnologias modernas para criar uma experiência única de descoberta científica.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -115,8 +150,10 @@
                             <span class="tag">IA</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://my-cinematch.netlify.app/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/CineMatch" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://my-cinematch.netlify.app/" class="project-link" target="_blank"
+                                rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/CineMatch" class="project-link" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -124,12 +161,16 @@
                 <!-- Projeto Spider-Man -->
                 <div class="project-card" data-category="interactive web">
                     <div class="project-image">
-                        <img src="../src/imagens/homem-aranha1.png" alt="Projeto Spider-Man Multiverses" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>Spider-Man Multiverses</span></div>
+                        <img src="../src/imagens/homem-aranha1.png" alt="Projeto Spider-Man Multiverses" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>Spider-Man
+                                Multiverses</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Homem Aranha Multiversos</h3>
-                        <p class="project-description">Uma aplicação web interativa que celebra o universo cinematográfico do Homem-Aranha, apresentando os diferentes atores e suas interpretações icônicas do personagem ao longo dos anos.</p>
+                        <p class="project-description">Uma aplicação web interativa que celebra o universo
+                            cinematográfico do Homem-Aranha, apresentando os diferentes atores e suas interpretações
+                            icônicas do personagem ao longo dos anos.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -137,8 +178,11 @@
                             <span class="tag">Responsivo</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://spider-man-multiverses-dio-chi.vercel.app/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/spider-man-multiverses" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://spider-man-multiverses-dio-chi.vercel.app/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/spider-man-multiverses" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -146,12 +190,16 @@
                 <!-- Projeto Mundo Invertido -->
                 <div class="project-card" data-category="interactive web">
                     <div class="project-image">
-                        <img src="../src/imagens/mundo-invertido1.png" alt="Projeto Mundo Invertido" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="project-fallback"><i class="fas fa-mobile-alt"></i><span>Mundo Invertido</span></div>
+                        <img src="../src/imagens/mundo-invertido1.png" alt="Projeto Mundo Invertido" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="project-fallback"><i class="fas fa-mobile-alt"></i><span>Mundo Invertido</span>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Mundo Invertido</h3>
-                        <p class="project-description">Uma experiência web imersiva inspirada na série Stranger Things, onde os usuários podem alternar entre o mundo normal e o mundo invertido, explorando diferentes visuais, sons e interações.</p>
+                        <p class="project-description">Uma experiência web imersiva inspirada na série Stranger Things,
+                            onde os usuários podem alternar entre o mundo normal e o mundo invertido, explorando
+                            diferentes visuais, sons e interações.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -159,8 +207,12 @@
                             <span class="tag">Animações</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/semana-frontend-mundo-invertido/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/semana-frontend-mundo-invertido" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/semana-frontend-mundo-invertido/"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/semana-frontend-mundo-invertido"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -168,12 +220,15 @@
                 <!-- Projeto BarberLess -->
                 <div class="project-card" data-category="commercial landing">
                     <div class="project-image">
-                        <img src="../src/imagens/barbearia1.png" alt="Projeto BarberLess" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/barbearia1.png" alt="Projeto BarberLess" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-cut"></i><span>BarberLess</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">BarberLess</h3>
-                        <p class="project-description">Uma aplicação web moderna e responsiva para a barbearia Barber Less, localizada em São Paulo. O projeto oferece uma interface intuitiva para visualização de serviços, profissionais e agendamentos via WhatsApp.</p>
+                        <p class="project-description">Uma aplicação web moderna e responsiva para a barbearia Barber
+                            Less, localizada em São Paulo. O projeto oferece uma interface intuitiva para visualização
+                            de serviços, profissionais e agendamentos via WhatsApp.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -181,8 +236,11 @@
                             <span class="tag">WhatsApp API</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/projeto-barbearia/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/projeto-barbearia" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/projeto-barbearia/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/projeto-barbearia" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -190,12 +248,15 @@
                 <!-- Projeto Portfolio (este site) -->
                 <div class="project-card" data-category="web landing">
                     <div class="project-image">
-                        <img src="../src/imagens/portifolio.png" alt="Portfólio Pessoal" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/portifolio.png" alt="Portfólio Pessoal" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-user"></i><span>Portfólio</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Portfólio Pessoal</h3>
-                        <p class="project-description">Meu portfólio pessoal desenvolvido com foco em performance, acessibilidade e design moderno. Apresenta meus projetos, habilidades e certificações de forma interativa.</p>
+                        <p class="project-description">Meu portfólio pessoal desenvolvido com foco em performance,
+                            acessibilidade e design moderno. Apresenta meus projetos, habilidades e certificações de
+                            forma interativa.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -206,8 +267,10 @@
                             <span class="tag">Dark Mode</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://portifoliodevalex.netlify.app/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/PORTIFOLIO" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://portifoliodevalex.netlify.app/" class="project-link" target="_blank"
+                                rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/PORTIFOLIO" class="project-link" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -215,12 +278,15 @@
                 <!-- Projeto Yu-Gi-Oh -->
                 <div class="project-card" data-category="game interactive">
                     <div class="project-image">
-                        <img src="../src/imagens/yugioh.png" alt="Jogo Yu-Gi-Oh" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/yugioh.png" alt="Jogo Yu-Gi-Oh" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-gamepad"></i><span>Yu-Gi-Oh</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Yu-Gi-Oh Jo-Ken-Po</h3>
-                        <p class="project-description">Um jogo interativo que combina a nostalgia do universo Yu-Gi-Oh com a simplicidade clássica do jogo Pedra, Papel e Tesoura (Jo-Ken-Po). Desafie o computador em duelos épicos usando cartas icônicas do anime!</p>
+                        <p class="project-description">Um jogo interativo que combina a nostalgia do universo Yu-Gi-Oh
+                            com a simplicidade clássica do jogo Pedra, Papel e Tesoura (Jo-Ken-Po). Desafie o computador
+                            em duelos épicos usando cartas icônicas do anime!</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -228,8 +294,11 @@
                             <span class="tag">Game Logic</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/js-yugioh-assets/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/js-yugioh-assets" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/js-yugioh-assets/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/js-yugioh-assets" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -237,12 +306,15 @@
                 <!-- Projeto Piano Virtual -->
                 <div class="project-card" data-category="interactive web">
                     <div class="project-image">
-                        <img src="../src/imagens/piano virtual.png" alt="Piano Virtual" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/piano virtual.png" alt="Piano Virtual" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-music"></i><span>Piano Virtual</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Piano Virtual</h3>
-                        <p class="project-description">Um simulador de piano interativo desenvolvido com HTML, CSS e JavaScript puro, totalmente responsivo e funcional em dispositivos desktop, tablet e mobile com sons reais de piano.</p>
+                        <p class="project-description">Um simulador de piano interativo desenvolvido com HTML, CSS e
+                            JavaScript puro, totalmente responsivo e funcional em dispositivos desktop, tablet e mobile
+                            com sons reais de piano.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -250,8 +322,12 @@
                             <span class="tag">Web Audio API</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/Construindo-um-Simulador-de-Piano/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/Construindo-um-Simulador-de-Piano" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/Construindo-um-Simulador-de-Piano/"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/Construindo-um-Simulador-de-Piano"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -259,12 +335,16 @@
                 <!-- Projeto Trilha de CSS - DIO -->
                 <div class="project-card" data-category="web landing">
                     <div class="project-image">
-                        <img src="../src/imagens/trilha-dio.png" alt="Trilha de CSS DIO" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/trilha-dio.png" alt="Trilha de CSS DIO" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fab fa-css3-alt"></i><span>Trilha CSS</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Trilha de CSS - DIO</h3>
-                        <p class="project-description">Landing page moderna e responsiva desenvolvida para a Trilha de CSS da Digital Innovation One (DIO). O projeto apresenta informações sobre o curso de CSS de forma atrativa e profissional, utilizando técnicas avançadas de CSS e design contemporâneo.</p>
+                        <p class="project-description">Landing page moderna e responsiva desenvolvida para a Trilha de
+                            CSS da Digital Innovation One (DIO). O projeto apresenta informações sobre o curso de CSS de
+                            forma atrativa e profissional, utilizando técnicas avançadas de CSS e design contemporâneo.
+                        </p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -272,8 +352,11 @@
                             <span class="tag">Grid Layout</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/trilha-css-desafio-01/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/trilha-css-desafio" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/trilha-css-desafio-01/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/trilha-css-desafio" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -281,12 +364,15 @@
                 <!-- Projeto Detona Ralph -->
                 <div class="project-card" data-category="game interactive">
                     <div class="project-image">
-                        <img src="../src/imagens/detona-ralph.png" alt="Jogo Detona Ralph" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/detona-ralph.png" alt="Jogo Detona Ralph" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-hammer"></i><span>Detona Ralph</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Detona Ralph</h3>
-                        <p class="project-description">Um jogo inspirado no clássico "Whac-a-Mole" com temática do personagem Ralph do filme da Disney. O objetivo é clicar no Ralph sempre que ele aparecer em uma das janelas, acumulando pontos antes que o tempo acabe.</p>
+                        <p class="project-description">Um jogo inspirado no clássico "Whac-a-Mole" com temática do
+                            personagem Ralph do filme da Disney. O objetivo é clicar no Ralph sempre que ele aparecer em
+                            uma das janelas, acumulando pontos antes que o tempo acabe.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -294,8 +380,10 @@
                             <span class="tag">Game Timer</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/DETONA-RALPH/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/jsgame-detona-ralph" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/DETONA-RALPH/" class="project-link" target="_blank"
+                                rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/jsgame-detona-ralph" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -303,12 +391,15 @@
                 <!-- Projeto Jogo Da Memoria -->
                 <div class="project-card" data-category="game interactive">
                     <div class="project-image">
-                        <img src="../src/imagens/jogo-da-memoria.png" alt="Jogo da Memória" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/jogo-da-memoria.png" alt="Jogo da Memória" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-brain"></i><span>Jogo da Memória</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Jogo da Memória</h3>
-                        <p class="project-description">Um jogo da memória interativo desenvolvido com HTML, CSS e JavaScript vanilla. O objetivo é encontrar todos os pares de emojis idênticos virando as cartas. Teste sua memória e agilidade!</p>
+                        <p class="project-description">Um jogo da memória interativo desenvolvido com HTML, CSS e
+                            JavaScript vanilla. O objetivo é encontrar todos os pares de emojis idênticos virando as
+                            cartas. Teste sua memória e agilidade!</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -316,8 +407,11 @@
                             <span class="tag">Logic Game</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/Jogo-da-Memoria/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/js-emoji-memory-game" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/Jogo-da-Memoria/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/js-emoji-memory-game" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -325,12 +419,16 @@
                 <!-- Projeto Pokedex -->
                 <div class="project-card" data-category="web interactive">
                     <div class="project-image">
-                        <img src="../src/imagens/pokedex.png" alt="Pokédex" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/pokedex.png" alt="Pokédex" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-search"></i><span>Pokédex</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Pokédex</h3>
-                        <p class="project-description">A Pokédex é uma aplicação web que oferece uma experiência completa para visualizar informações detalhadas dos primeiros 151 Pokémon da primeira geração. Com design responsivo e interface moderna, permite aos usuários explorar características, estatísticas e habilidades de cada Pokémon de forma interativa.</p>
+                        <p class="project-description">A Pokédex é uma aplicação web que oferece uma experiência
+                            completa para visualizar informações detalhadas dos primeiros 151 Pokémon da primeira
+                            geração. Com design responsivo e interface moderna, permite aos usuários explorar
+                            características, estatísticas e habilidades de cada Pokémon de forma interativa.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -338,8 +436,11 @@
                             <span class="tag">PokéAPI</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/js-developer-pokedex/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/js-developer-pokedex" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/js-developer-pokedex/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/js-developer-pokedex" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -347,12 +448,15 @@
                 <!-- Projeto ONG -->
                 <div class="project-card" data-category="web landing commercial">
                     <div class="project-image">
-                        <img src="../src/imagens/ong.png" alt="Site ONG" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/ong.png" alt="Site ONG" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-heart"></i><span>ONG</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">ONG Proteção Animal</h3>
-                        <p class="project-description">Um site responsivo e moderno desenvolvido para uma ONG fictícia de proteção animal, focado na promoção de adoção responsável e conscientização sobre bem-estar animal. Interface intuitiva e design emotivo.</p>
+                        <p class="project-description">Um site responsivo e moderno desenvolvido para uma ONG fictícia
+                            de proteção animal, focado na promoção de adoção responsável e conscientização sobre
+                            bem-estar animal. Interface intuitiva e design emotivo.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -360,8 +464,11 @@
                             <span class="tag">UX Design</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/Projeto-Front-End-ONG/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/Projeto-Front-End-ONG" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/Projeto-Front-End-ONG/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/Projeto-Front-End-ONG" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -369,12 +476,15 @@
                 <!-- Projeto LojaTech -->
                 <div class="project-card" data-category="web commercial">
                     <div class="project-image">
-                        <img src="../src/imagens/loja-virtual.png" alt="LojaTech E-commerce" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/loja-virtual.png" alt="LojaTech E-commerce" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-shopping-cart"></i><span>LojaTech</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">LojaTech E-commerce</h3>
-                        <p class="project-description">LojaTech é uma aplicação web desenvolvida para demonstrar as funcionalidades essenciais de um e-commerce moderno. O projeto apresenta uma interface limpa e intuitiva, focada na experiência do usuário para compra de produtos tecnológicos.</p>
+                        <p class="project-description">LojaTech é uma aplicação web desenvolvida para demonstrar as
+                            funcionalidades essenciais de um e-commerce moderno. O projeto apresenta uma interface limpa
+                            e intuitiva, focada na experiência do usuário para compra de produtos tecnológicos.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -382,8 +492,12 @@
                             <span class="tag">E-commerce</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/PROJETO-FRONT-END-WEB-VENDAS-CONCLUIDO/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/PROJETO-FRONT-END-WEB-VENDAS-CONCLUIDO" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/PROJETO-FRONT-END-WEB-VENDAS-CONCLUIDO/"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/PROJETO-FRONT-END-WEB-VENDAS-CONCLUIDO"
+                                class="project-link" target="_blank" rel="noopener noreferrer"><i
+                                    class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -391,12 +505,16 @@
                 <!-- Projeto Cibernético -->
                 <div class="project-card" data-category="interactive web">
                     <div class="project-image">
-                        <img src="../src/imagens/cibernetico.png" alt="Projeto Cibernético" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <img src="../src/imagens/cibernetico.png" alt="Projeto Cibernético" loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="project-fallback"><i class="fas fa-robot"></i><span>Cyberpunk</span></div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Cibernético</h3>
-                        <p class="project-description">Este projeto foi desenvolvido como parte da Semana do Desenvolvedor promovida pela DevQuest. A proposta era criar uma interface interativa e responsiva que exibisse personagens fictícios com visual cyberpunk, permitindo ao usuário alternar entre eles dinamicamente.</p>
+                        <p class="project-description">Este projeto foi desenvolvido como parte da Semana do
+                            Desenvolvedor promovida pela DevQuest. A proposta era criar uma interface interativa e
+                            responsiva que exibisse personagens fictícios com visual cyberpunk, permitindo ao usuário
+                            alternar entre eles dinamicamente.</p>
                         <div class="project-tags">
                             <span class="tag">HTML5</span>
                             <span class="tag">CSS3</span>
@@ -404,8 +522,11 @@
                             <span class="tag">Cyberpunk UI</span>
                         </div>
                         <div class="project-links">
-                            <a href="https://devalex-full.github.io/Projeto-Web-Front-End/" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i>Demo</a>
-                            <a href="https://github.com/DevAlex-full/Projeto-Web-Front-End" class="project-link" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
+                            <a href="https://devalex-full.github.io/Projeto-Web-Front-End/" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i
+                                    class="fas fa-external-link-alt"></i>Demo</a>
+                            <a href="https://github.com/DevAlex-full/Projeto-Web-Front-End" class="project-link"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i>Código</a>
                         </div>
                     </div>
                 </div>
@@ -436,4 +557,5 @@
     <!-- Scripts -->
     <script src="../src/scripts/projetos.js"></script>
 </body>
+
 </html>
