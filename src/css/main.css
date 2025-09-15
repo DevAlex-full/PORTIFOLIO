@@ -269,6 +269,35 @@ body.menu-open {
     width: 100%;
 }
 
+/* Estilos para o botão de download do currículo */
+.cv-download {
+    display: flex !important;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.6rem;
+    background: var(--gradient) !important;
+    border-radius: var(--radius);
+    color: white !important;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.cv-download:hover {
+    background: var(--gradient-alt) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -3px rgba(139, 92, 246, 0.2);
+}
+
+.cv-download::after {
+    display: none !important;
+}
+
+.cv-download i {
+    font-size: 1.4rem;
+}
+
 .hamburger {
     display: none;
     flex-direction: column;
@@ -1086,6 +1115,14 @@ body.menu-open {
         font-size: 1.8rem;
         display: block;
         width: 100%;
+    }
+
+    .cv-download {
+        justify-content: center;
+        width: 100%;
+        margin: 1rem 0;
+        padding: 1.2rem 2rem;
+        min-height: 48px;
     }
 
     .nav-logo h2 {
