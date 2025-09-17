@@ -524,6 +524,64 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
+    // Scroll Indicator (Seta para baixo)
+    const initScrollIndicator = () => {
+        const scrollIndicator = $('.scroll-indicator');
+        
+        if (scrollIndicator) {
+            // Adicionar cursor pointer para indicar que é clicável
+            scrollIndicator.style.cursor = 'pointer';
+            
+            // Evento de clique na seta
+            scrollIndicator.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Scroll suave para a próxima seção (about)
+                const aboutSection = $('#about');
+                if (aboutSection) {
+                    window.scrollTo({
+                        top: aboutSection.offsetTop - 70, // 70px de offset para o header fixo
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            
+            // Adicionar efeito hover mais pronunciado
+            scrollIndicator.addEventListener('mouseenter', () => {
+                scrollIndicator.style.transform = 'translateX(-50%) scale(1.2)';
+                scrollIndicator.style.color = 'var(--accent)';
+            });
+            
+            scrollIndicator.addEventListener('mouseleave', () => {
+                scrollIndicator.style.transform = 'translateX(-50%) scale(1)';
+                scrollIndicator.style.color = 'var(--primary)';
+            });
+            
+            // Ocultar a seta quando não estiver na seção hero
+            const hideScrollIndicatorOnScroll = () => {
+                const heroSection = $('#home');
+                if (heroSection) {
+                    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight - 200;
+                    const scrollTop = window.pageYOffset;
+                    
+                    if (scrollTop > heroBottom) {
+                        scrollIndicator.style.opacity = '0';
+                        scrollIndicator.style.visibility = 'hidden';
+                    } else {
+                        scrollIndicator.style.opacity = '1';
+                        scrollIndicator.style.visibility = 'visible';
+                    }
+                }
+            };
+            
+            // Adicionar ao evento de scroll existente
+            window.addEventListener('scroll', throttle(hideScrollIndicatorOnScroll, 16));
+            
+            // Inicializar visibilidade
+            hideScrollIndicatorOnScroll();
+        }
+    };
+
     // Scroll Functions
     const handleScroll = () => {
         if (isScrolling) return;
@@ -582,6 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
         initCertificationFilters();
         optimizeMobile();
         animateCertificationsEntrance();
+        initScrollIndicator(); // Adiciona a funcionalidade da seta
 
         $$('.hero-content, .section-header').forEach((el, i) => {
             el.style.cssText = 'opacity: 0; transform: translateY(30px)';
