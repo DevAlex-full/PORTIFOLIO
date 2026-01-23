@@ -17,6 +17,192 @@ document.addEventListener('DOMContentLoaded', function () {
     let isScrolling = false;
     let currentSection = 'home';
 
+    // ========================================
+    // SISTEMA DE CARROSSEL - NOVO
+    // ========================================
+    
+    const Carousel = {
+        carousels: [],
+
+        init() {
+            const carouselContainers = $$('.carousel-container');
+            
+            carouselContainers.forEach((container, index) => {
+                const carousel = {
+                    container,
+                    track: container.querySelector('.carousel-track'),
+                    slides: container.querySelectorAll('.carousel-slide'),
+                    prevBtn: container.querySelector('.carousel-btn.prev'),
+                    nextBtn: container.querySelector('.carousel-btn.next'),
+                    currentIndex: 0,
+                    autoplayInterval: null,
+                    isHovered: false
+                };
+
+                if (!carousel.track || carousel.slides.length === 0) {
+                    console.warn(`Carrossel ${index} não possui slides`);
+                    return;
+                }
+
+                // Event listeners
+                carousel.prevBtn?.addEventListener('click', () => this.prev(carousel));
+                carousel.nextBtn?.addEventListener('click', () => this.next(carousel));
+
+                // Pausar autoplay ao passar mouse
+                container.addEventListener('mouseenter', () => {
+                    carousel.isHovered = true;
+                    this.stopAutoplay(carousel);
+                });
+
+                container.addEventListener('mouseleave', () => {
+                    carousel.isHovered = false;
+                    this.startAutoplay(carousel);
+                });
+
+                // Touch events para mobile
+                this.addTouchEvents(carousel);
+
+                // Verificar carregamento das imagens
+                this.checkImages(carousel);
+
+                // Iniciar autoplay
+                this.startAutoplay(carousel);
+
+                this.carousels.push(carousel);
+            });
+
+            console.log(`✅ ${this.carousels.length} carrosséis inicializados`);
+        },
+
+        checkImages(carousel) {
+            carousel.slides.forEach((slide, index) => {
+                const img = slide.querySelector('img');
+                if (img) {
+                    img.addEventListener('error', () => {
+                        console.warn(`Erro ao carregar imagem ${index + 1} do carrossel`);
+                        this.handleImageError(img);
+                    });
+
+                    // Forçar verificação se imagem já falhou
+                    if (img.complete && img.naturalWidth === 0) {
+                        this.handleImageError(img);
+                    }
+                }
+            });
+        },
+
+        handleImageError(img) {
+            // Tenta caminhos alternativos
+            const fileName = img.src.split('/').pop();
+            const paths = [
+                `./src/imagens/${fileName}`,
+                `src/imagens/${fileName}`,
+                `./imagens/${fileName}`,
+                `imagens/${fileName}`
+            ];
+
+            let currentPathIndex = 0;
+
+            const tryNextPath = () => {
+                if (currentPathIndex < paths.length) {
+                    img.src = paths[currentPathIndex++];
+                    img.addEventListener('error', tryNextPath, { once: true });
+                } else {
+                    // Todas as tentativas falharam, mostrar fallback
+                    const slide = img.closest('.carousel-slide');
+                    const fallback = slide?.querySelector('.project-fallback');
+                    if (fallback) {
+                        img.style.display = 'none';
+                        fallback.style.display = 'flex';
+                    }
+                }
+            };
+
+            tryNextPath();
+        },
+
+        goToSlide(carousel, index) {
+            carousel.currentIndex = index;
+            const offset = -index * 100;
+            carousel.track.style.transform = `translateX(${offset}%)`;
+        },
+
+        next(carousel) {
+            const nextIndex = (carousel.currentIndex + 1) % carousel.slides.length;
+            this.goToSlide(carousel, nextIndex);
+        },
+
+        prev(carousel) {
+            const prevIndex = (carousel.currentIndex - 1 + carousel.slides.length) % carousel.slides.length;
+            this.goToSlide(carousel, prevIndex);
+        },
+
+        startAutoplay(carousel) {
+            if (carousel.autoplayInterval) return;
+            
+            carousel.autoplayInterval = setInterval(() => {
+                if (!carousel.isHovered) {
+                    this.next(carousel);
+                }
+            }, 5000); // 5 segundos
+        },
+
+        stopAutoplay(carousel) {
+            if (carousel.autoplayInterval) {
+                clearInterval(carousel.autoplayInterval);
+                carousel.autoplayInterval = null;
+            }
+        },
+
+        addTouchEvents(carousel) {
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+
+            carousel.container.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                carousel.isHovered = true;
+                this.stopAutoplay(carousel);
+            });
+
+            carousel.container.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentX = e.touches[0].clientX;
+            });
+
+            carousel.container.addEventListener('touchend', () => {
+                if (!isDragging) return;
+                
+                const diff = startX - currentX;
+                const threshold = 50; // pixels mínimos para considerar swipe
+
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        this.next(carousel);
+                    } else {
+                        this.prev(carousel);
+                    }
+                }
+
+                isDragging = false;
+                carousel.isHovered = false;
+                this.startAutoplay(carousel);
+            });
+        },
+
+        destroy() {
+            this.carousels.forEach(carousel => {
+                this.stopAutoplay(carousel);
+            });
+            this.carousels = [];
+        }
+    };
+
+    // ========================================
+    // FIM DO SISTEMA DE CARROSSEL
+    // ========================================
+
     // Theme Management
     const themeManager = {
         DARK: 'dark',
@@ -105,16 +291,27 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     };
 
-    // Image Handling
+    // Image Handling - MELHORADO
     function handleImageError(img) {
         const fileName = img.src.split('/').pop();
-        const paths = [`./imagens/${fileName}`, `./${fileName}`, `src/imagens/${fileName}`, `imagens/${fileName}`];
+        const paths = [
+            `./src/imagens/${fileName}`,
+            `src/imagens/${fileName}`,
+            `./imagens/${fileName}`,
+            `imagens/${fileName}`,
+            `../src/imagens/${fileName}`,
+            `../imagens/${fileName}`
+        ];
+        
         let i = 0;
 
         const tryNext = () => {
             if (i < paths.length) {
-                img.src = paths[i++];
+                const newPath = paths[i++];
+                console.log(`Tentando carregar: ${newPath}`);
+                img.src = newPath;
             } else {
+                console.warn(`Todas as tentativas falharam para: ${fileName}`);
                 img.style.display = 'none';
                 const fallback = img.nextElementSibling;
                 if (fallback?.classList.contains('profile-fallback') || fallback?.classList.contains('project-fallback')) {
@@ -125,6 +322,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
         img.addEventListener('error', tryNext, { once: true });
         tryNext();
+    }
+
+    // Função para carregar imagens com retry
+    function loadImageWithRetry(img, maxRetries = 3) {
+        let retryCount = 0;
+        
+        const attemptLoad = () => {
+            if (img.complete && img.naturalWidth > 0) {
+                img.style.opacity = '1';
+                return;
+            }
+
+            img.addEventListener('error', () => {
+                retryCount++;
+                if (retryCount < maxRetries) {
+                    console.log(`Retry ${retryCount} para ${img.src}`);
+                    setTimeout(() => {
+                        img.src = img.src + '?retry=' + retryCount;
+                    }, 1000);
+                } else {
+                    handleImageError(img);
+                }
+            }, { once: true });
+
+            img.addEventListener('load', () => {
+                img.style.opacity = '1';
+            }, { once: true });
+        };
+
+        attemptLoad();
     }
 
     // Navigation Functions
@@ -160,11 +387,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.classList.remove('menu-open');
     };
 
-    // Smooth scroll function
     const smoothScrollTo = (target) => {
         let anchor = target;
         
-        // Remove qualquer parte antes do # se existir
         if (target.includes('#')) {
             anchor = '#' + target.split('#')[1];
         } else if (!target.startsWith('#')) {
@@ -180,7 +405,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Check if link is external or internal page
     const isExternalOrPageLink = (href) => {
         return href && (
             href.startsWith('http') ||
@@ -194,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Check if link is internal anchor
     const isInternalAnchor = (href) => {
         return href && (
             href.startsWith('#') ||
@@ -202,17 +425,14 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Handle navigation clicks
     const handleNavClick = (e) => {
         const href = e.target.getAttribute('href');
 
-        // Se é um link externo ou para outra página, permite navegação normal
         if (isExternalOrPageLink(href)) {
             closeMobileMenu();
-            return true; // Permite o comportamento padrão
+            return true;
         }
 
-        // Se é uma âncora interna, previne comportamento padrão e faz scroll suave
         if (isInternalAnchor(href)) {
             e.preventDefault();
             smoothScrollTo(href);
@@ -220,12 +440,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return false;
         }
 
-        // Para outros casos, permite navegação normal
         closeMobileMenu();
         return true;
     };
 
-    // Bind navigation events
     const bindNavigationEvents = () => {
         navLinks.forEach(link => {
             link.removeEventListener('click', handleNavClick);
@@ -452,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Mobile Optimizations
+    // Mobile Optimizations - MELHORADO
     const optimizeMobile = () => {
         if (window.innerWidth <= 768) {
             window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
@@ -461,13 +679,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 input.onfocus = () => input.style.fontSize = '16px';
             });
 
+            // Carregamento otimizado de imagens no mobile
             setTimeout(() => {
                 $$('img').forEach((img, i) => {
                     setTimeout(() => {
-                        if (img.naturalWidth === 0 || !img.complete) handleImageError(img);
-                    }, i * 200);
+                        if (img.naturalWidth === 0 || !img.complete) {
+                            loadImageWithRetry(img);
+                        }
+                    }, i * 100); // Escalonar carregamento
                 });
-            }, 1000);
+            }, 500);
         }
     };
 
@@ -524,29 +745,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Scroll Indicator (Seta para baixo)
+    // Scroll Indicator
     const initScrollIndicator = () => {
         const scrollIndicator = $('.scroll-indicator');
         
         if (scrollIndicator) {
-            // Adicionar cursor pointer para indicar que é clicável
             scrollIndicator.style.cursor = 'pointer';
             
-            // Evento de clique na seta
             scrollIndicator.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                // Scroll suave para a próxima seção (about)
                 const aboutSection = $('#about');
                 if (aboutSection) {
                     window.scrollTo({
-                        top: aboutSection.offsetTop - 70, // 70px de offset para o header fixo
+                        top: aboutSection.offsetTop - 70,
                         behavior: 'smooth'
                     });
                 }
             });
             
-            // Adicionar efeito hover mais pronunciado
             scrollIndicator.addEventListener('mouseenter', () => {
                 scrollIndicator.style.transform = 'translateX(-50%) scale(1.2)';
                 scrollIndicator.style.color = 'var(--accent)';
@@ -557,7 +773,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 scrollIndicator.style.color = 'var(--primary)';
             });
             
-            // Ocultar a seta quando não estiver na seção hero
             const hideScrollIndicatorOnScroll = () => {
                 const heroSection = $('#home');
                 if (heroSection) {
@@ -574,10 +789,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             };
             
-            // Adicionar ao evento de scroll existente
             window.addEventListener('scroll', throttle(hideScrollIndicatorOnScroll, 16));
-            
-            // Inicializar visibilidade
             hideScrollIndicatorOnScroll();
         }
     };
@@ -606,13 +818,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     contactForm?.addEventListener('submit', handleFormSubmit);
 
-    // Initial navigation binding
     bindNavigationEvents();
 
     window.addEventListener('scroll', throttle(handleScroll, 16));
     window.addEventListener('resize', debounce(() => {
         closeMobileMenu();
         updateActiveNavLink();
+        // Reinicializar carrosséis se necessário
+        if (window.innerWidth <= 768) {
+            Carousel.destroy();
+            setTimeout(() => Carousel.init(), 100);
+        }
     }, 250));
 
     document.addEventListener('keydown', e => {
@@ -627,11 +843,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize
     const init = () => {
+        console.log('🚀 Inicializando portfólio...');
+        
         themeManager.init();
 
+        // Inicializar carrosséis
+        Carousel.init();
+
+        // Carregar todas as imagens com sistema de retry
         $$('img').forEach(img => {
-            img.onload = () => img.style.opacity = '1';
-            img.onerror = () => handleImageError(img);
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease';
+            
+            img.onload = () => {
+                img.style.opacity = '1';
+            };
+            
+            img.onerror = () => {
+                handleImageError(img);
+            };
+
+            // Se imagem já está carregada mas falhou
+            if (img.complete && img.naturalWidth === 0) {
+                handleImageError(img);
+            }
         });
 
         updateActiveNavLink();
@@ -640,7 +875,7 @@ document.addEventListener('DOMContentLoaded', function () {
         initCertificationFilters();
         optimizeMobile();
         animateCertificationsEntrance();
-        initScrollIndicator(); // Adiciona a funcionalidade da seta
+        initScrollIndicator();
 
         $$('.hero-content, .section-header').forEach((el, i) => {
             el.style.cssText = 'opacity: 0; transform: translateY(30px)';
@@ -650,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         animateOnScroll();
-        console.log('🚀 Portfólio inicializado!');
+        console.log('✅ Portfólio inicializado com sucesso!');
     };
 
     // Add CSS animations
