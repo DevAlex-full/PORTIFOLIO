@@ -34,8 +34,8 @@
                     <li><a href="#projects" class="nav-link">Destaque</a></li>
                     <li><a href="./pages/projetos.html" class="nav-link">Todos os Projetos</a></li>
                     <li><a href="#contact" class="nav-link">Contato</a></li>
-                    <li><a href="./src/assets/Alex Santiago - Dev.pdf"
-                            class="nav-link cv-download" download="Alex Santiago - Dev.pdf"
+                    <li><a href="./src/assets/Currículo de Design de Sistemas em Estilo Simples Branco e Preto.pdf"
+                            class="nav-link cv-download" download="Alexander_Bueno_Santiago_Curriculo.pdf"
                             target="_blank">
                             <i class="fas fa-download"></i>
                             <span>Currículo</span>
@@ -64,7 +64,6 @@
                     <h1 class="hero-title">Olá, eu sou <span class="highlight">Alexander Bueno Santiago</span></h1>
                     <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=4000&pause=500&color=9615F7&center=true&width=435&lines=Seja+Bem-Vindo!;Sou+Desenvolvedor+Web+FullStack;E+Estudante+de+Sistemas+para+Internet"
                         alt="Typing SVG" />
-                    <!-- <p class="hero-subtitle">Desenvolvedor Front-End Junior</p> -->
                     <p class="hero-description">Criando experiências digitais incríveis através de código limpo e design
                         inovador.</p>
                     <div class="hero-buttons">
@@ -98,7 +97,7 @@
                     <p>
                         Desenvolvedor Web FullStack que transforma ideias complexas em experiências
                         digitais elegantes e funcionais. Minha especialidade está em criar soluções
-                        que vão além do "fazer funcionar" — desenvolvo produtos que usuários adoram
+                        que vão além do "fazer funcionar" – desenvolvo produtos que usuários adoram
                         usar, que escalam com eficiência e que resolvem problemas reais do mercado.
                     </p>
                     <p>
@@ -407,7 +406,7 @@
         </div>
     </section>
 
-    <!-- Projects -->
+    <!-- Projects - COM CARROSSEL -->
     <section id="projects" class="projects">
         <div class="container">
             <div class="section-header">
@@ -415,33 +414,48 @@
                 <p class="section-subtitle">Alguns dos meus trabalhos mais recentes</p>
             </div>
             <div class="projects-grid">
+                
+                <!-- PROJETO 1: BarberFlow - COM CARROSSEL -->
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="./src/imagens/Barberflow1.png" alt="Projeto BarberFlow" loading="lazy"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>BarberFlow</span></div>
+                        <div class="carousel-container">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/Barberflow1.png" alt="BarberFlow - Tela 1" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/Barberflow2.png" alt="BarberFlow - Tela 2" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/Barberflow3.png" alt="BarberFlow - Tela 3" loading="lazy">
+                                </div>
+                            </div>
+                            <button class="carousel-btn prev" aria-label="Imagem anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-btn next" aria-label="Próxima imagem">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="project-fallback">
+                            <i class="fas fa-laptop-code"></i>
+                            <span>BarberFlow</span>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">BarberFlow</h3>
                         <p class="project-description">BarberFlow é uma solução SaaS completa desenvolvida para
                             modernizar e otimizar a gestão de barbearias. O sistema oferece uma plataforma integrada que
                             conecta proprietários, barbeiros e clientes, facilitando o agendamento de serviços, gestão
-                            financeira e operacional do negócio.
-                            Objetivo
-                            Desenvolver uma plataforma web responsiva que permita às barbearias gerenciar seus
-                            agendamentos, clientes, pagamentos e serviços de forma profissional e eficiente, eliminando
-                            processos manuais e melhorando a experiência do cliente.</p>
+                            financeira e operacional do negócio.</p>
                         <div class="project-tags">
                             <span class="tag">React</span>
                             <span class="tag">Next.js</span>
                             <span class="tag">TypeScript</span>
                             <span class="tag">Tailwind CSS</span>
-                            <span class="tag">Context API</span>
                             <span class="tag">Node.js</span>
                             <span class="tag">Express</span>
                             <span class="tag">Prisma ORM</span>
-                            <span class="tag">Middlewares</span>
-                            <span class="tag">Arquitetura em camadas (routes, services, controllers)</span>
                         </div>
                         <div class="project-links">
                             <a href="https://barberflowoficial.vercel.app/" class="project-link" target="_blank"
@@ -456,12 +470,32 @@
                     </div>
                 </div>
 
+                <!-- PROJETO 2: Spider-Man Multiverses - COM CARROSSEL -->
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="./src/imagens/homem-aranha1.png" alt="Projeto Spider-Man Multiverses" loading="lazy"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="project-fallback"><i class="fas fa-laptop-code"></i><span>Spider-Man
-                                Multiverses</span></div>
+                        <div class="carousel-container">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/homem-aranha1.png" alt="Spider-Man - Tela 1" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/homem-aranha2.png" alt="Spider-Man - Tela 2" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/homem-aranha3.png" alt="Spider-Man - Tela 3" loading="lazy">
+                                </div>
+                            </div>
+                            <button class="carousel-btn prev" aria-label="Imagem anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-btn next" aria-label="Próxima imagem">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="project-fallback">
+                            <i class="fas fa-laptop-code"></i>
+                            <span>Spider-Man Multiverses</span>
+                        </div>
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Homem Aranha Multiversos</h3>
@@ -484,11 +518,31 @@
                     </div>
                 </div>
 
+                <!-- PROJETO 3: Mundo Invertido - COM CARROSSEL -->
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="./src/imagens/mundo-invertido1.png" alt="Projeto Mundo Invertido" loading="lazy"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="project-fallback"><i class="fas fa-mobile-alt"></i><span>Mundo Invertido</span>
+                        <div class="carousel-container">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/mundo-invertido1.png" alt="Mundo Invertido - Tela 1" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/mundo-invertido2.png" alt="Mundo Invertido - Tela 2" loading="lazy">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="./src/imagens/mundo-invertido3.png" alt="Mundo Invertido - Tela 3" loading="lazy">
+                                </div>
+                            </div>
+                            <button class="carousel-btn prev" aria-label="Imagem anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-btn next" aria-label="Próxima imagem">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="project-fallback">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Mundo Invertido</span>
                         </div>
                     </div>
                     <div class="project-content">
