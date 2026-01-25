@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentSection = 'home';
 
     // ========================================
-    // SISTEMA DE CARROSSEL - NOVO
+    // SISTEMA DE CARROSSEL - CORRIGIDO
     // ========================================
     
     const Carousel = {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Touch events para mobile
                 this.addTouchEvents(carousel);
 
-                // Verificar carregamento das imagens
+                // Verificar carregamento das imagens - CORRIGIDO
                 this.checkImages(carousel);
 
                 // Iniciar autoplay
@@ -78,39 +78,64 @@ document.addEventListener('DOMContentLoaded', function () {
             carousel.slides.forEach((slide, index) => {
                 const img = slide.querySelector('img');
                 if (img) {
+                    // Guardar src original
+                    const originalSrc = img.getAttribute('src');
+                    
                     img.addEventListener('error', () => {
-                        console.warn(`Erro ao carregar imagem ${index + 1} do carrossel`);
-                        this.handleImageError(img);
+                        console.warn(`❌ Erro ao carregar imagem ${index + 1} do carrossel`);
+                        this.handleImageError(img, originalSrc);
+                    });
+
+                    img.addEventListener('load', () => {
+                        console.log(`✅ Imagem ${index + 1} carregada com sucesso`);
                     });
 
                     // Forçar verificação se imagem já falhou
                     if (img.complete && img.naturalWidth === 0) {
-                        this.handleImageError(img);
+                        this.handleImageError(img, originalSrc);
                     }
                 }
             });
         },
 
-        handleImageError(img) {
-            // Tenta caminhos alternativos
-            const fileName = img.src.split('/').pop();
+        handleImageError(img, originalSrc) {
+            const fileName = originalSrc.split('/').pop();
+            
+            // Lista de caminhos possíveis - ORDEM CORRIGIDA
             const paths = [
-                `./src/imagens/${fileName}`,
-                `src/imagens/${fileName}`,
-                `./imagens/${fileName}`,
-                `imagens/${fileName}`
+                `src/imagens/${fileName}`,           // Sem ./
+                `./src/imagens/${fileName}`,         // Com ./
+                `/src/imagens/${fileName}`,          // Com /
+                `imagens/${fileName}`,               // Direto
+                `./imagens/${fileName}`,             // Direto com ./
+                `/imagens/${fileName}`,              // Direto com /
+                `../src/imagens/${fileName}`,        // Para páginas internas
             ];
 
             let currentPathIndex = 0;
+            let alreadyTried = new Set([originalSrc]);
 
             const tryNextPath = () => {
                 if (currentPathIndex < paths.length) {
-                    img.src = paths[currentPathIndex++];
+                    const newPath = paths[currentPathIndex++];
+                    
+                    // Evitar tentar o mesmo caminho duas vezes
+                    if (alreadyTried.has(newPath)) {
+                        tryNextPath();
+                        return;
+                    }
+                    
+                    alreadyTried.add(newPath);
+                    console.log(`🔄 Tentando carregar: ${newPath}`);
+                    
+                    img.removeEventListener('error', tryNextPath);
                     img.addEventListener('error', tryNextPath, { once: true });
+                    img.src = newPath;
                 } else {
-                    // Todas as tentativas falharam, mostrar fallback
+                    // Todas as tentativas falharam
+                    console.error(`❌ Todas as tentativas falharam para: ${fileName}`);
                     const slide = img.closest('.carousel-slide');
-                    const fallback = slide?.querySelector('.project-fallback');
+                    const fallback = slide?.closest('.project-image')?.querySelector('.project-fallback');
                     if (fallback) {
                         img.style.display = 'none';
                         fallback.style.display = 'flex';
@@ -144,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!carousel.isHovered) {
                     this.next(carousel);
                 }
-            }, 5000); // 5 segundos
+            }, 5000);
         },
 
         stopAutoplay(carousel) {
@@ -175,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!isDragging) return;
                 
                 const diff = startX - currentX;
-                const threshold = 50; // pixels mínimos para considerar swipe
+                const threshold = 50;
 
                 if (Math.abs(diff) > threshold) {
                     if (diff > 0) {
@@ -198,10 +223,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.carousels = [];
         }
     };
-
-    // ========================================
-    // FIM DO SISTEMA DE CARROSSEL
-    // ========================================
 
     // Theme Management
     const themeManager = {
@@ -291,27 +312,42 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     };
 
-    // Image Handling - MELHORADO
+    // Image Handling - CORRIGIDO PARA HOSPEDAGEM
     function handleImageError(img) {
-        const fileName = img.src.split('/').pop();
+        const originalSrc = img.getAttribute('src') || img.src;
+        const fileName = originalSrc.split('/').pop();
+        
         const paths = [
-            `./src/imagens/${fileName}`,
             `src/imagens/${fileName}`,
-            `./imagens/${fileName}`,
+            `./src/imagens/${fileName}`,
+            `/src/imagens/${fileName}`,
             `imagens/${fileName}`,
+            `./imagens/${fileName}`,
+            `/imagens/${fileName}`,
             `../src/imagens/${fileName}`,
             `../imagens/${fileName}`
         ];
         
         let i = 0;
+        let tried = new Set([originalSrc]);
 
         const tryNext = () => {
             if (i < paths.length) {
                 const newPath = paths[i++];
-                console.log(`Tentando carregar: ${newPath}`);
+                
+                if (tried.has(newPath)) {
+                    tryNext();
+                    return;
+                }
+                
+                tried.add(newPath);
+                console.log(`🔄 Tentando carregar: ${newPath}`);
+                
+                img.removeEventListener('error', tryNext);
+                img.addEventListener('error', tryNext, { once: true });
                 img.src = newPath;
             } else {
-                console.warn(`Todas as tentativas falharam para: ${fileName}`);
+                console.error(`❌ Falha ao carregar: ${fileName}`);
                 img.style.display = 'none';
                 const fallback = img.nextElementSibling;
                 if (fallback?.classList.contains('profile-fallback') || fallback?.classList.contains('project-fallback')) {
@@ -320,38 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        img.addEventListener('error', tryNext, { once: true });
         tryNext();
-    }
-
-    // Função para carregar imagens com retry
-    function loadImageWithRetry(img, maxRetries = 3) {
-        let retryCount = 0;
-        
-        const attemptLoad = () => {
-            if (img.complete && img.naturalWidth > 0) {
-                img.style.opacity = '1';
-                return;
-            }
-
-            img.addEventListener('error', () => {
-                retryCount++;
-                if (retryCount < maxRetries) {
-                    console.log(`Retry ${retryCount} para ${img.src}`);
-                    setTimeout(() => {
-                        img.src = img.src + '?retry=' + retryCount;
-                    }, 1000);
-                } else {
-                    handleImageError(img);
-                }
-            }, { once: true });
-
-            img.addEventListener('load', () => {
-                img.style.opacity = '1';
-            }, { once: true });
-        };
-
-        attemptLoad();
     }
 
     // Navigation Functions
@@ -460,7 +465,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Stats Animation
     const animateStatsOnScroll = () => {
         const statCards = $$('.stat-card');
         const certificationsSection = $('#certifications');
@@ -506,7 +510,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 50);
     };
 
-    // Form Handling
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
@@ -597,7 +600,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => document.contains(notification) && close(), 5000);
     };
 
-    // Interactive Effects
     const addInteractiveEffects = () => {
         $$('.project-card').forEach(card => {
             card.onmouseenter = () => card.style.transform = 'translateY(-10px) scale(1.02)';
@@ -630,7 +632,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Certification Effects
     const addCertificationEffects = () => {
         $$('.certification-card').forEach(card => {
             const certIcon = card.querySelector('.cert-icon');
@@ -670,7 +671,6 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // Mobile Optimizations - MELHORADO
     const optimizeMobile = () => {
         if (window.innerWidth <= 768) {
             window.addEventListener('scroll', throttle(handleScroll, 16), { passive: true });
@@ -678,42 +678,11 @@ document.addEventListener('DOMContentLoaded', function () {
             $$('input, textarea').forEach(input => {
                 input.onfocus = () => input.style.fontSize = '16px';
             });
-
-            // Carregamento otimizado de imagens no mobile
-            setTimeout(() => {
-                $$('img').forEach((img, i) => {
-                    setTimeout(() => {
-                        if (img.naturalWidth === 0 || !img.complete) {
-                            loadImageWithRetry(img);
-                        }
-                    }, i * 100); // Escalonar carregamento
-                });
-            }, 500);
         }
     };
 
-    // Certification Filters
     const initCertificationFilters = () => {
         const certCards = $$('.certification-card');
-
-        const filterByStatus = (status) => {
-            certCards.forEach(card => {
-                const cardStatus = card.querySelector('.cert-status');
-                const shouldShow = !status || cardStatus?.classList.contains(status);
-
-                card.style.display = shouldShow ? 'block' : 'none';
-
-                if (shouldShow) {
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 100);
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                }
-            });
-        };
 
         const updateCertificationCount = () => {
             const verified = $$('.cert-status.verified').length;
@@ -725,7 +694,6 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCertificationCount();
     };
 
-    // Entrance Animations
     const animateCertificationsEntrance = () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
@@ -745,7 +713,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
-    // Scroll Indicator
     const initScrollIndicator = () => {
         const scrollIndicator = $('.scroll-indicator');
         
@@ -794,7 +761,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    // Scroll Functions
     const handleScroll = () => {
         if (isScrolling) return;
 
@@ -824,7 +790,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', debounce(() => {
         closeMobileMenu();
         updateActiveNavLink();
-        // Reinicializar carrosséis se necessário
         if (window.innerWidth <= 768) {
             Carousel.destroy();
             setTimeout(() => Carousel.init(), 100);
@@ -846,24 +811,21 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('🚀 Inicializando portfólio...');
         
         themeManager.init();
-
-        // Inicializar carrosséis
         Carousel.init();
 
-        // Carregar todas as imagens com sistema de retry
+        // Carregar imagens com tratamento de erro
         $$('img').forEach(img => {
             img.style.opacity = '0';
             img.style.transition = 'opacity 0.3s ease';
             
-            img.onload = () => {
+            img.addEventListener('load', () => {
                 img.style.opacity = '1';
-            };
+            });
             
-            img.onerror = () => {
+            img.addEventListener('error', () => {
                 handleImageError(img);
-            };
+            });
 
-            // Se imagem já está carregada mas falhou
             if (img.complete && img.naturalWidth === 0) {
                 handleImageError(img);
             }
@@ -888,7 +850,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('✅ Portfólio inicializado com sucesso!');
     };
 
-    // Add CSS animations
     const style = document.createElement('style');
     style.textContent = `
         @keyframes pulse {
