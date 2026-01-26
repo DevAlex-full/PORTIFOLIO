@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    // DOM Elements
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => document.querySelectorAll(selector);
 
@@ -18,16 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentSection = 'home';
 
     // ========================================
-    // SISTEMA DE CARROSSEL - CORRIGIDO
+    // SISTEMA DE CARROSSEL - CORRIGIDO DEFINITIVAMENTE
     // ========================================
     
     const Carousel = {
         carousels: [],
 
-        init() {
+        async init() {
             const carouselContainers = $$('.carousel-container');
             
-            carouselContainers.forEach((container, index) => {
+            for (const container of carouselContainers) {
                 const carousel = {
                     container,
                     track: container.querySelector('.carousel-track'),
@@ -39,16 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     isHovered: false
                 };
 
-                if (!carousel.track || carousel.slides.length === 0) {
-                    console.warn(`Carrossel ${index} não possui slides`);
-                    return;
-                }
+                if (!carousel.track || carousel.slides.length === 0) continue;
+
+                // AGUARDAR TODAS AS IMAGENS CARREGAREM
+                await this.waitForImages(carousel);
 
                 // Event listeners
                 carousel.prevBtn?.addEventListener('click', () => this.prev(carousel));
                 carousel.nextBtn?.addEventListener('click', () => this.next(carousel));
 
-                // Pausar autoplay ao passar mouse
                 container.addEventListener('mouseenter', () => {
                     carousel.isHovered = true;
                     this.stopAutoplay(carousel);
@@ -59,91 +57,71 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.startAutoplay(carousel);
                 });
 
-                // Touch events para mobile
                 this.addTouchEvents(carousel);
-
-                // Verificar carregamento das imagens - CORRIGIDO
-                this.checkImages(carousel);
-
-                // Iniciar autoplay
                 this.startAutoplay(carousel);
-
                 this.carousels.push(carousel);
-            });
+            }
 
-            console.log(`✅ ${this.carousels.length} carrosséis inicializados`);
+            console.log(`✅ ${this.carousels.length} carrosséis inicializados com imagens carregadas`);
         },
 
-        checkImages(carousel) {
-            carousel.slides.forEach((slide, index) => {
-                const img = slide.querySelector('img');
-                if (img) {
-                    // Guardar src original
-                    const originalSrc = img.getAttribute('src');
-                    
-                    img.addEventListener('error', () => {
-                        console.warn(`❌ Erro ao carregar imagem ${index + 1} do carrossel`);
-                        this.handleImageError(img, originalSrc);
-                    });
-
-                    img.addEventListener('load', () => {
-                        console.log(`✅ Imagem ${index + 1} carregada com sucesso`);
-                    });
-
-                    // Forçar verificação se imagem já falhou
-                    if (img.complete && img.naturalWidth === 0) {
-                        this.handleImageError(img, originalSrc);
-                    }
+        // NOVA FUNÇÃO: Aguardar todas as imagens carregarem
+        waitForImages(carousel) {
+            return new Promise((resolve) => {
+                const images = Array.from(carousel.slides).map(slide => slide.querySelector('img')).filter(Boolean);
+                
+                if (images.length === 0) {
+                    resolve();
+                    return;
                 }
+
+                let loadedCount = 0;
+                const totalImages = images.length;
+
+                const checkComplete = () => {
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        console.log(`✅ Todas as ${totalImages} imagens do carrossel carregadas`);
+                        resolve();
+                    }
+                };
+
+                images.forEach((img, index) => {
+                    if (img.complete && img.naturalWidth > 0) {
+                        // Imagem já carregada
+                        checkComplete();
+                    } else {
+                        // Aguardar carregamento
+                        img.addEventListener('load', () => {
+                            console.log(`✅ Imagem ${index + 1}/${totalImages} carregada`);
+                            checkComplete();
+                        }, { once: true });
+
+                        img.addEventListener('error', () => {
+                            console.warn(`⚠️ Erro ao carregar imagem ${index + 1}, usando fallback`);
+                            this.showFallback(img);
+                            checkComplete();
+                        }, { once: true });
+
+                        // Timeout de segurança (5 segundos)
+                        setTimeout(() => {
+                            if (!img.complete) {
+                                console.warn(`⏱️ Timeout na imagem ${index + 1}, continuando...`);
+                                checkComplete();
+                            }
+                        }, 5000);
+                    }
+                });
             });
         },
 
-        handleImageError(img, originalSrc) {
-            const fileName = originalSrc.split('/').pop();
-            
-            // Lista de caminhos possíveis - ORDEM CORRIGIDA
-            const paths = [
-                `src/imagens/${fileName}`,           // Sem ./
-                `./src/imagens/${fileName}`,         // Com ./
-                `/src/imagens/${fileName}`,          // Com /
-                `imagens/${fileName}`,               // Direto
-                `./imagens/${fileName}`,             // Direto com ./
-                `/imagens/${fileName}`,              // Direto com /
-                `../src/imagens/${fileName}`,        // Para páginas internas
-            ];
-
-            let currentPathIndex = 0;
-            let alreadyTried = new Set([originalSrc]);
-
-            const tryNextPath = () => {
-                if (currentPathIndex < paths.length) {
-                    const newPath = paths[currentPathIndex++];
-                    
-                    // Evitar tentar o mesmo caminho duas vezes
-                    if (alreadyTried.has(newPath)) {
-                        tryNextPath();
-                        return;
-                    }
-                    
-                    alreadyTried.add(newPath);
-                    console.log(`🔄 Tentando carregar: ${newPath}`);
-                    
-                    img.removeEventListener('error', tryNextPath);
-                    img.addEventListener('error', tryNextPath, { once: true });
-                    img.src = newPath;
-                } else {
-                    // Todas as tentativas falharam
-                    console.error(`❌ Todas as tentativas falharam para: ${fileName}`);
-                    const slide = img.closest('.carousel-slide');
-                    const fallback = slide?.closest('.project-image')?.querySelector('.project-fallback');
-                    if (fallback) {
-                        img.style.display = 'none';
-                        fallback.style.display = 'flex';
-                    }
-                }
-            };
-
-            tryNextPath();
+        showFallback(img) {
+            const slide = img.closest('.carousel-slide');
+            const fallback = slide?.closest('.project-image')?.querySelector('.project-fallback');
+            if (fallback) {
+                img.style.display = 'none';
+                fallback.style.display = 'flex';
+            }
         },
 
         goToSlide(carousel, index) {
@@ -311,53 +289,6 @@ document.addEventListener('DOMContentLoaded', function () {
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
     };
-
-    // Image Handling - CORRIGIDO PARA HOSPEDAGEM
-    function handleImageError(img) {
-        const originalSrc = img.getAttribute('src') || img.src;
-        const fileName = originalSrc.split('/').pop();
-        
-        const paths = [
-            `src/imagens/${fileName}`,
-            `./src/imagens/${fileName}`,
-            `/src/imagens/${fileName}`,
-            `imagens/${fileName}`,
-            `./imagens/${fileName}`,
-            `/imagens/${fileName}`,
-            `../src/imagens/${fileName}`,
-            `../imagens/${fileName}`
-        ];
-        
-        let i = 0;
-        let tried = new Set([originalSrc]);
-
-        const tryNext = () => {
-            if (i < paths.length) {
-                const newPath = paths[i++];
-                
-                if (tried.has(newPath)) {
-                    tryNext();
-                    return;
-                }
-                
-                tried.add(newPath);
-                console.log(`🔄 Tentando carregar: ${newPath}`);
-                
-                img.removeEventListener('error', tryNext);
-                img.addEventListener('error', tryNext, { once: true });
-                img.src = newPath;
-            } else {
-                console.error(`❌ Falha ao carregar: ${fileName}`);
-                img.style.display = 'none';
-                const fallback = img.nextElementSibling;
-                if (fallback?.classList.contains('profile-fallback') || fallback?.classList.contains('project-fallback')) {
-                    fallback.style.display = 'flex';
-                }
-            }
-        };
-
-        tryNext();
-    }
 
     // Navigation Functions
     const updateActiveNavLink = () => {
@@ -807,29 +738,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Initialize
-    const init = () => {
+    const init = async () => {
         console.log('🚀 Inicializando portfólio...');
         
         themeManager.init();
-        Carousel.init();
-
-        // Carregar imagens com tratamento de erro
-        $$('img').forEach(img => {
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 0.3s ease';
-            
-            img.addEventListener('load', () => {
-                img.style.opacity = '1';
-            });
-            
-            img.addEventListener('error', () => {
-                handleImageError(img);
-            });
-
-            if (img.complete && img.naturalWidth === 0) {
-                handleImageError(img);
-            }
-        });
+        
+        // Inicializar carrossel de forma assíncrona (aguardando imagens)
+        await Carousel.init();
 
         updateActiveNavLink();
         addInteractiveEffects();
