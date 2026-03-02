@@ -209,6 +209,10 @@ document.addEventListener('DOMContentLoaded', function() {
         commercial: {
             name: 'Comerciais',
             selector: (categories) => categories.includes('commercial')
+        },
+        game: {
+            name: 'Jogos',
+            selector: (categories) => categories.includes('game')
         }
     };
 
@@ -675,9 +679,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('keydown', function(e) {
             // Números 1-5 para filtros rápidos
             if (e.ctrlKey || e.metaKey) {
-                const filters = ['all', 'web', 'landing', 'interactive', 'commercial'];
+                const filters = ['all', 'web', 'landing', 'interactive', 'commercial', 'game'];
                 const keyNum = parseInt(e.key);
-                if (keyNum >= 1 && keyNum <= 5) {
+                if (keyNum >= 1 && keyNum <= 6) {
                     e.preventDefault();
                     filterProjects(filters[keyNum - 1]);
                 }
