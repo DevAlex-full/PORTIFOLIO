@@ -213,6 +213,14 @@ document.addEventListener('DOMContentLoaded', function() {
         game: {
             name: 'Jogos',
             selector: (categories) => categories.includes('game')
+        },
+        personal: {
+            name: 'Pessoais',
+            selector: (categories) => categories.includes('personal')
+        },
+        course: {
+            name: 'Cursos',
+            selector: (categories) => categories.includes('course')
         }
     };
 
@@ -679,9 +687,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('keydown', function(e) {
             // Números 1-5 para filtros rápidos
             if (e.ctrlKey || e.metaKey) {
-                const filters = ['all', 'web', 'landing', 'interactive', 'commercial', 'game'];
+                const filters = ['all', 'web', 'landing', 'interactive', 'commercial', 'game', 'personal', 'course'];
                 const keyNum = parseInt(e.key);
-                if (keyNum >= 1 && keyNum <= 6) {
+                if (keyNum >= 1 && keyNum <= 8) {
                     e.preventDefault();
                     filterProjects(filters[keyNum - 1]);
                 }
