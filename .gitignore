@@ -1,0 +1,69 @@
+# ================================
+# Next.js
+# ================================
+.next/
+out/
+build/
+
+# ================================
+# Node.js
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ================================
+# Variáveis de Ambiente
+# ================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# ================================
+# TypeScript
+# ================================
+*.tsbuildinfo
+next-env.d.ts
+
+# ================================
+# IDEs e Editores
+# ================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ================================
+# Logs
+# ================================
+logs/
+*.log
+
+# ================================
+# Cache
+# ================================
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+
+# ================================
+# Vercel
+# ================================
+.vercel/
+
+# ================================
+# Misc
+# ================================
+*.pem
+.nyc_output/
+coverage/
