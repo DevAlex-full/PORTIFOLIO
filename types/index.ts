@@ -17,7 +17,6 @@ export interface Project {
 }
 
 export type ProjectCategory =
-  | 'all'
   | 'web'
   | 'landing'
   | 'interactive'
@@ -25,6 +24,7 @@ export type ProjectCategory =
   | 'game'
   | 'personal'
   | 'course'
+  | 'client'
 
 export interface Skill {
   name: string

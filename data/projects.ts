@@ -1,7 +1,6 @@
 import type { Project } from '@/types'
 
 export const projects: Project[] = [
-
   {
     id: 'taskflow',
     title: 'TaskFlow',
@@ -15,15 +14,13 @@ export const projects: Project[] = [
     ],
     tags: ['React', 'TypeScript', 'Vite', 'TailwindCSS', 'Lucide React', 'Node.js', 'Express', 'PostgreSQL', 'Supabase'],
     categories: ['web', 'interactive', 'personal'],
-    featured: true,
+    featured: false,
     highlight: 'Full Stack',
     links: {
-      demo: 'https://taskflowoficial.vercel.app/',
-      githubFrontend: 'https://github.com/DevAlex-full/Todo-List-Pro',
-      githubBackend: 'https://github.com/DevAlex-full/Todo-List-Pro-Back-end',
+      demo: '',
+      github: '',
     },
   },
-
   {
     id: 'barberflow',
     title: 'BarberFlow',
@@ -45,7 +42,6 @@ export const projects: Project[] = [
       githubBackend: 'https://github.com/DevAlex-full/BarberFlow-Back-End',
     },
   },
-
   {
     id: 'advocacia-pro',
     title: 'Advocacia Pro',
@@ -66,7 +62,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/advocacia-landing-wordpress',
     },
   },
-  
   {
     id: 'barberless',
     title: 'BarberLess',
@@ -80,7 +75,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/projeto-barbearia',
     },
   },
-  
   {
     id: 'portfolio',
     title: 'Portfólio Pessoal',
@@ -94,7 +88,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/PORTIFOLIO',
     },
   },
-  
   {
     id: 'pitadas-descobertas',
     title: 'Pitadas & Descobertas',
@@ -108,7 +101,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Suas-Receitas-Favoritas',
     },
   },
-  
   {
     id: 'gerador-cores',
     title: 'Gerador de Paletas de Cores',
@@ -122,7 +114,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Gerador-de-Paletas-de-Cores',
     },
   },
-  
   {
     id: 'conversor-moedas',
     title: 'Conversor de Moedas',
@@ -136,7 +127,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Conversor-de-Moedas',
     },
   },
-  
   {
     id: 'gerador-senhas',
     title: 'Gerador de Senhas',
@@ -150,7 +140,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/GERADOR-DE-SENHAS',
     },
   },
-  
   {
     id: 'ong-protecao-animal',
     title: 'ONG Proteção Animal',
@@ -164,7 +153,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Projeto-Front-End-ONG',
     },
   },
-  
   {
     id: 'lojatech',
     title: 'LojaTech E-commerce',
@@ -178,7 +166,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/PROJETO-FRONT-END-WEB-VENDAS-CONCLUIDO',
     },
   },
-  
   {
     id: 'luxestore',
     title: 'LuxeStore',
@@ -192,7 +179,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Exerc-cio---Buscar-dados-de-uma-API',
     },
   },
-  
   {
     id: 'cinematch',
     title: 'CineMatch',
@@ -206,7 +192,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/CineMatch',
     },
   },
-  
   {
     id: 'pokedex',
     title: 'Pokédex',
@@ -220,7 +205,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/js-developer-pokedex',
     },
   },
-  
   {
     id: 'buscador-ceps',
     title: 'Buscador de CEPs',
@@ -234,7 +218,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Buscar-dados-de-uma-API-baseado-em-informa--es-do-usu-rio',
     },
   },
-  
   {
     id: 'github-viewer',
     title: 'Visualizador de Perfil do GitHub',
@@ -248,7 +231,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/visualizador-perfil-github',
     },
   },
-  
   {
     id: 'formulario-zod',
     title: 'Formulário com ZOD',
@@ -262,7 +244,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Exerc-cio---Adicionando-novos-campos-de-valida--o-com-Zod',
     },
   },
-  
   {
     id: 'todo-list',
     title: 'TODO-LIST',
@@ -276,7 +257,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Remover-tarefa-individual-TODO-React',
     },
   },
-  
   {
     id: 'formulario-texto',
     title: 'Formulário de Texto',
@@ -290,7 +270,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Pegando-o-valor-de-um-input-React',
     },
   },
-  
   {
     id: 'formulario-login',
     title: 'Formulário de Login',
@@ -304,7 +283,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Exerc-cio-de-Tailwind---Formul-rio-de-Login',
     },
   },
-  
   {
     id: 'props-react',
     title: 'Exercício de Props em React',
@@ -318,7 +296,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Recebendo-e-renderizando-props-React',
     },
   },
-  
   {
     id: 'contador',
     title: 'Contador com Limite Personalizado',
@@ -332,7 +309,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Contador-com-Limite-Personalizado-React',
     },
   },
-  
   {
     id: 'card',
     title: 'Card de Produto',
@@ -346,7 +322,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Exerc-cio-de-Tailwind---Card-de-produto',
     },
   },
-  
   {
     id: 'homem-aranha',
     title: 'Homem Aranha Multiversos',
@@ -358,7 +333,7 @@ export const projects: Project[] = [
       { src: '/imagens/homem-aranha2.png', alt: 'Spider-Man - Tela 2' },
       { src: '/imagens/homem-aranha3.png', alt: 'Spider-Man - Tela 3' },
     ],
-    featured: false,
+    featured: true,
     highlight: 'Curso DIO',
     tags: ['HTML5', 'CSS3', 'JavaScript', 'Responsivo'],
     categories: ['web', 'interactive', 'landing', 'course'],
@@ -367,7 +342,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/spider-man-multiverses',
     },
   },
-  
   {
     id: 'mundo-invertido',
     title: 'Mundo Invertido',
@@ -386,7 +360,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/semana-frontend-mundo-invertido',
     },
   },
-  
   {
     id: 'piano-virtual',
     title: 'Piano Virtual',
@@ -400,7 +373,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Construindo-um-Simulador-de-Piano',
     },
   },
-
   {
     id: 'trilha-css-dio',
     title: 'Trilha de CSS - DIO',
@@ -414,7 +386,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/trilha-css-desafio',
     },
   },
-
   {
     id: 'cibernetico',
     title: 'Cibernético',
@@ -428,7 +399,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/Projeto-Web-Front-End',
     },
   },
-
   {
     id: 'yugioh',
     title: 'Yu-Gi-Oh Jo-Ken-Po',
@@ -442,7 +412,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/js-yugioh-assets',
     },
   },
-
   {
     id: 'detona-ralph',
     title: 'Detona Ralph',
@@ -456,7 +425,6 @@ export const projects: Project[] = [
       github: 'https://github.com/DevAlex-full/jsgame-detona-ralph',
     },
   },
-
   {
     id: 'jogo-memoria',
     title: 'Jogo da Memória',
@@ -483,4 +451,5 @@ export const filterLabels: Record<string, string> = {
   game: 'Jogos',
   personal: 'Pessoais',
   course: 'Cursos',
+  client: 'Vitrine de Clientes',
 }

@@ -10,7 +10,7 @@ import type { ProjectCategory } from '@/types'
 import Link from 'next/link'
 
 const filterKeys: (ProjectCategory | 'all')[] = [
-  'all', 'web', 'landing', 'interactive', 'commercial', 'game', 'personal', 'course',
+  'all', 'web', 'landing', 'interactive', 'commercial', 'game', 'personal', 'course', 'client',
 ]
 
 // Tecnologias únicas — automático via Set
