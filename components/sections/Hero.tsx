@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowDown, Github, Linkedin, Mail, Download } from 'lucide-react'
+import { projects } from '@/data/projects'
 
 export function Hero() {
   const scrollToAbout = () => {
@@ -156,7 +157,7 @@ export function Hero() {
 
               <div className="absolute -bottom-4 -left-8 bg-bg-card border border-cyan-500/20 rounded-xl px-4 py-2.5 shadow-card animate-float" style={{ animationDelay: '2s' }}>
                 <p className="font-mono text-xs text-slate-500">projetos</p>
-                <p className="font-display font-bold text-cyan-400 text-xl mt-0.5">30+</p>
+                <p className="font-display font-bold text-cyan-400 text-xl mt-0.5">{projects.length}+</p>
               </div>
 
               <div className="absolute top-1/2 -right-16 bg-bg-card border border-violet-600/20 rounded-xl px-4 py-2.5 shadow-card animate-float" style={{ animationDelay: '1s' }}>
