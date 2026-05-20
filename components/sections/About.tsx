@@ -3,31 +3,31 @@
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { cn } from '@/lib/utils'
-import { Code2, Layers, Zap, Users } from 'lucide-react'
+import { Code2, Layers, Rocket, TrendingUp } from 'lucide-react'
 import { projects } from '@/data/projects'
 import { certifications } from '@/data/certifications'
 import { skills } from '@/data/skills'
 
 const highlights = [
   {
-    icon: Code2,
-    title: 'Código Limpo',
-    description: 'Aplico princípios SOLID, Clean Code e arquitetura em camadas em todos os projetos.',
-  },
-  {
     icon: Layers,
-    title: 'Full Stack',
-    description: 'Do banco de dados ao UI — domínio completo do ciclo de desenvolvimento.',
+    title: 'Full Stack Completo',
+    description: 'Do banco de dados à interface — sistemas web, mobile e aplicações desktop em um único profissional.',
   },
   {
-    icon: Zap,
-    title: 'Performance First',
-    description: 'Foco em performance, SEO e Core Web Vitals desde a concepção.',
+    icon: Code2,
+    title: 'Código que Escala',
+    description: 'Aplico SOLID, Clean Code e arquitetura em camadas para entregar software que cresce com o seu negócio.',
   },
   {
-    icon: Users,
+    icon: Rocket,
+    title: 'Entrega Real',
+    description: 'MVP funcional em dias, não meses. Foco em resultado desde o primeiro commit até o deploy em produção.',
+  },
+  {
+    icon: TrendingUp,
     title: 'Visão de Negócio',
-    description: 'Entendo que software resolve problemas reais — desenvolvimento orientado ao impacto.',
+    description: 'Entendo que software resolve dores reais. Desenvolvimento orientado a impacto e retorno financeiro.',
   },
 ]
 
@@ -52,32 +52,37 @@ export function About() {
           {/* Left: Text */}
           <div className="space-y-5">
             <p className="text-slate-300 text-lg leading-relaxed">
-              Sou Desenvolvedor Web Full Stack que transforma ideias complexas em experiências
-              digitais elegantes e funcionais. Minha especialidade está em soluções que vão além
-              do{' '}
-              <span className="text-violet-300 font-medium">"fazer funcionar"</span> — desenvolvo
-              produtos que as pessoas adoram usar, que resolvem problemas reais do mercado.
+              Sou Desenvolvedor Full Stack e entrego{' '}
+              <span className="text-violet-300 font-medium">soluções digitais completas</span>{' '}
+              — de sistemas web e SaaS a aplicações desktop e automações. Não sou especialista
+              em apenas uma camada: domino o ciclo inteiro, do banco de dados ao deploy em produção.
             </p>
             <p className="text-slate-400 leading-relaxed">
-              Trabalho com <span className="text-violet-300">React</span>,{' '}
+              No front, trabalho com{' '}
+              <span className="text-violet-300">React</span>,{' '}
               <span className="text-violet-300">Next.js</span> e{' '}
-              <span className="text-violet-300">TypeScript</span> no front, integrando APIs com
-              Node.js e Express no back. Cada projeto é uma oportunidade de aplicar arquitetura
-              limpa, código testável e UI que encanta.
+              <span className="text-violet-300">TypeScript</span>. No back, construo APIs
+              robustas com <span className="text-violet-300">Node.js</span> e{' '}
+              <span className="text-violet-300">Express</span>, com{' '}
+              <span className="text-violet-300">PostgreSQL</span> e{' '}
+              <span className="text-violet-300">Prisma ORM</span>. Para desktop e automações,
+              uso <span className="text-violet-300">Python</span> com foco em entrega rápida
+              e resultado concreto.
             </p>
             <p className="text-slate-400 leading-relaxed">
-              Atualmente cursando <span className="text-cyan-400 font-medium">Tecnologia em
-              Sistemas para Internet</span> na UNIFATEC, com formação contínua em certificações
-              especializadas. Acredito que o desenvolvimento de software é uma arte que exige
-              criatividade e raciocínio lógico em igual medida.
+              Já construí um{' '}
+              <span className="text-cyan-400 font-medium">SaaS multi-tenant</span> do zero,
+              desenvolvi sistemas para clientes reais e crio automações que eliminam trabalho
+              manual. Acredito que o melhor software é aquele que resolve um problema de verdade
+              — e faz isso de forma simples, rápida e escalável.
             </p>
 
-            {/* Stats row — automático, atualiza sozinho */}
+            {/* Stats row — automático */}
             <div className="grid grid-cols-3 gap-4 pt-4">
               {[
                 { value: `${projects.length}+`, label: 'Projetos' },
                 { value: `${certifications.length}+`, label: 'Certificações' },
-                { value: `${skills.length}+`, label: 'Habilidades' },
+                { value: `${skills.length}+`, label: 'Tecnologias' },
               ].map(({ value, label }) => (
                 <div
                   key={label}

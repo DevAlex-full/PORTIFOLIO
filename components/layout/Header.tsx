@@ -6,12 +6,13 @@ import { cn } from '@/lib/utils'
 import { useRouter, usePathname } from 'next/navigation'
 
 const navItems = [
-  { label: 'Início', href: '#home' },
-  { label: 'Sobre', href: '#about' },
-  { label: 'Habilidades', href: '#skills' },
-  { label: 'Certificações', href: '#certifications' },
-  { label: 'Projetos', href: '#projects' },
-  { label: 'Contato', href: '#contact' },
+  { label: 'Início',       href: '#home'         },
+  { label: 'Sobre',        href: '#about'        },
+  { label: 'Habilidades',  href: '#skills'       },
+  { label: 'Certificações',href: '#certifications'},
+  { label: 'Projetos',     href: '#projects'     },
+  { label: 'Serviços',     href: '#services'     },
+  { label: 'Contato',      href: '#contact'      },
 ]
 
 export function Header() {
@@ -25,7 +26,6 @@ export function Header() {
     const onScroll = () => {
       setScrolled(window.scrollY > 20)
 
-      // Active section detection
       const sections = navItems.map((item) => item.href.replace('#', ''))
       for (const section of [...sections].reverse()) {
         const el = document.getElementById(section)
@@ -44,12 +44,10 @@ export function Header() {
     setMobileOpen(false)
     const id = href.replace('#', '')
 
-    // Se estiver na home, faz scroll direto
     if (pathname === '/') {
       const el = document.getElementById(id)
       if (el) el.scrollIntoView({ behavior: 'smooth' })
     } else {
-      // Se estiver em outra rota (/projects), navega para home + âncora
       router.push(`/${href}`)
     }
   }
@@ -64,13 +62,13 @@ export function Header() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+
         {/* Logo */}
         <a
           href="#home"
           onClick={(e) => { e.preventDefault(); handleNavClick('#home') }}
           className="flex items-center gap-2 group"
         >
-          {/* Logo — arquivo favicon-32x32.png na pasta public/ */}
           <div className="w-9 h-9 rounded-lg overflow-hidden border border-violet-600/30 group-hover:border-violet-500/50 transition-all duration-300 bg-violet-600/10 flex items-center justify-center">
             <img
               src="/imagens/logo alex.png"
@@ -110,7 +108,7 @@ export function Header() {
           })}
         </nav>
 
-        {/* CTA Button */}
+        {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
           <a
             href="/vitrine-clientes"
@@ -147,7 +145,7 @@ export function Header() {
       <div
         className={cn(
           'md:hidden absolute top-full left-0 right-0 bg-bg-primary/95 backdrop-blur-xl border-b border-violet-600/10 overflow-hidden transition-all duration-300',
-          mobileOpen ? 'max-h-96 py-4' : 'max-h-0'
+          mobileOpen ? 'max-h-[30rem] py-4' : 'max-h-0'
         )}
       >
         <nav className="flex flex-col px-6 gap-1">

@@ -49,7 +49,7 @@ export function Hero() {
             {/* Typing SVG */}
             <div className="mb-8">
               <img
-                src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=4000&pause=500&color=9615F7&center=false&width=435&lines=Seja+Bem-Vindo!;Sou+Desenvolvedor+Web+FullStack;E+Estudante+de+Sistemas+para+Internet"
+                src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=4000&pause=500&color=9615F7&center=false&width=435&lines=Seja+Bem-Vindo!;Desenvolvedor+FullStack+S%C3%AAnior;Web+%E2%80%A2+Desktop+%E2%80%A2+APIs+%E2%80%A2+Automa%C3%A7%C3%B5es"
                 alt="Typing SVG"
                 className="h-8"
               />
@@ -57,12 +57,12 @@ export function Hero() {
 
             {/* Description */}
             <p className="text-slate-400 text-lg leading-relaxed mb-10 max-w-lg">
-              Transformo ideias complexas em soluções digitais elegantes e funcionais.
-              Especializado em{' '}
-              <span className="text-violet-300 font-medium">React</span>,{' '}
-              <span className="text-violet-300 font-medium">Next.js</span> e{' '}
-              <span className="text-violet-300 font-medium">Node.js</span> — cada projeto
-              é uma oportunidade de aplicar arquitetura limpa e código testável.
+              Construo soluções digitais completas — sistemas{' '}
+              <span className="text-violet-300 font-medium">web</span>,{' '}
+              <span className="text-violet-300 font-medium">SaaS</span>,{' '}
+              <span className="text-violet-300 font-medium">aplicações desktop</span> e{' '}
+              <span className="text-violet-300 font-medium">automações</span>. Do back-end ao deploy,
+              entrego arquitetura sólida e resultado real para o seu negócio.
             </p>
 
             {/* CTAs */}
