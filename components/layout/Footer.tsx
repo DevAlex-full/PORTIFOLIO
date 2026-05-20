@@ -1,32 +1,21 @@
-// 📁 CAMINHO: portfolio/components/layout/Footer.tsx
+// 📁 CAMINHO: components/layout/Footer.tsx
 'use client'
 
 import { Github, Linkedin, Instagram, Heart } from 'lucide-react'
 
 const socialLinks = [
-  {
-    icon: Github,
-    href: 'https://github.com/DevAlex-full',
-    label: 'GitHub',
-  },
-  {
-    icon: Linkedin,
-    href: 'https://www.linkedin.com/in/alexander-bueno-43823a358/',
-    label: 'LinkedIn',
-  },
-  {
-    icon: Instagram,
-    href: 'https://www.instagram.com/devalex_fullstack/',
-    label: 'Instagram',
-  },
+  { icon: Github,    href: 'https://github.com/DevAlex-full',                          label: 'GitHub'    },
+  { icon: Linkedin,  href: 'https://www.linkedin.com/in/alexander-bueno-43823a358/',    label: 'LinkedIn'  },
+  { icon: Instagram, href: 'https://www.instagram.com/devalex_fullstack/',              label: 'Instagram' },
 ]
 
 const navLinks = [
-  { label: 'Sobre', href: '#about' },
-  { label: 'Habilidades', href: '#skills' },
-  { label: 'Certificações', href: '#certifications' },
-  { label: 'Projetos', href: '#projects' },
-  { label: 'Contato', href: '#contact' },
+  { label: 'Sobre',        href: '#about'         },
+  { label: 'Habilidades',  href: '#skills'        },
+  { label: 'Certificações',href: '#certifications' },
+  { label: 'Projetos',     href: '#projects'      },
+  { label: 'Serviços',     href: '#services'      },
+  { label: 'Contato',      href: '#contact'       },
 ]
 
 export function Footer() {
@@ -55,7 +44,7 @@ export function Footer() {
               </div>
             </div>
             <p className="font-body text-sm text-slate-500 leading-relaxed max-w-xs">
-              Transformando ideias em experiências digitais elegantes e funcionais.
+              Sistemas web, SaaS, desktop e automações — do planejamento ao deploy.
             </p>
           </div>
 
@@ -108,7 +97,7 @@ export function Footer() {
             © {year} Alexander Bueno Santiago — Todos os direitos reservados.
           </p>
           <p className="font-body text-xs text-slate-600 flex items-center gap-1.5">
-            Desenvolvido por DevAlex-full
+            Desenvolvido por DevAlex
             <Heart size={11} className="text-violet-400 fill-violet-400" />
             e muito código
             <span className="ml-1 font-mono text-[10px] px-1.5 py-0.5 rounded border border-violet-600/30 text-violet-500">
