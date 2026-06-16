@@ -1,88 +1,28 @@
 'use client'
 
+// 📁 CAMINHO: components/sections/Services.tsx (ALTERADO)
+// Removidos arrays hardcoded e WHATSAPP_NUMBER.
+// Recebe ServicesData como prop. Layout e animações preservados.
+// Icons mapeados por nome (armazenados como string no banco).
+
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { cn } from '@/lib/utils'
-import { Check, Zap, Globe, Server, Monitor, Bot, Smartphone } from 'lucide-react'
+import { SectionHeader }      from '@/components/ui/SectionHeader'
+import { cn }                 from '@/lib/utils'
+import { Check, Zap, Globe, Server, Monitor, Bot, Smartphone, LucideIcon } from 'lucide-react'
+import type { ServicesData }  from '@/types/api'
 
-const WHATSAPP_NUMBER = '5511983943905'
+const ICON_MAP: Record<string, LucideIcon> = {
+  Globe, Server, Zap, Monitor, Bot, Smartphone, Check,
+}
 
-const plans = [
-  {
-    id: 'landing',
-    icon: Globe,
-    name: 'Site & Landing Page',
-    price: 'A partir de R$ 800',
-    period: 'entrega única',
-    description: 'Presença digital profissional e otimizada para converter visitantes em clientes.',
-    highlight: false,
-    badge: null,
-    features: [
-      'Site institucional ou landing page',
-      'Design responsivo (mobile + desktop)',
-      'Formulário de contato via WhatsApp',
-      'SEO básico configurado',
-      'Deploy em produção incluso',
-      'Suporte por 30 dias',
-    ],
-    cta: 'Solicitar Orçamento',
-    message: 'Olá, Alexander! Tenho interesse no pacote Site & Landing Page. Pode me passar mais detalhes?',
-  },
-  {
-    id: 'sistema',
-    icon: Server,
-    name: 'Sistema Web',
-    price: 'A partir de R$ 2.500',
-    period: 'entrega única',
-    description: 'Aplicação web completa com back-end, banco de dados, autenticação e painel administrativo.',
-    highlight: true,
-    badge: 'Mais Solicitado',
-    features: [
-      'Front-end React / Next.js',
-      'Back-end Node.js + API REST',
-      'Banco de dados PostgreSQL',
-      'Autenticação e controle de acesso',
-      'Painel administrativo',
-      'Deploy em produção incluso',
-      'Documentação técnica',
-      'Suporte por 60 dias',
-    ],
-    cta: 'Solicitar Orçamento',
-    message: 'Olá, Alexander! Tenho interesse no pacote Sistema Web. Pode me passar mais detalhes?',
-  },
-  {
-    id: 'saas',
-    icon: Zap,
-    name: 'SaaS / Plataforma',
-    price: 'A partir de R$ 6.000',
-    period: 'sob consulta',
-    description: 'Plataforma multi-tenant, marketplace ou sistema complexo com escalabilidade desde a arquitetura.',
-    highlight: false,
-    badge: 'Premium',
-    features: [
-      'Arquitetura multi-tenant',
-      'App mobile (React Native)',
-      'Módulos customizados',
-      'Integrações e webhooks',
-      'Gestão financeira / relatórios',
-      'Infraestrutura escalável',
-      'CI/CD configurado',
-      'Suporte contínuo (plano mensal)',
-    ],
-    cta: 'Agendar Conversa',
-    message: 'Olá, Alexander! Tenho interesse no pacote SaaS / Plataforma. Pode me passar mais detalhes?',
-  },
-]
+interface ServicesProps {
+  data: ServicesData
+}
 
-const extras = [
-  { icon: Monitor,    label: 'Aplicação Desktop (.exe)', description: 'Programas Windows standalone em Python ou Electron' },
-  { icon: Bot,        label: 'Automações & N8N',         description: 'Fluxos automáticos, integrações entre sistemas e chatbots' },
-  { icon: Smartphone, label: 'App Mobile',               description: 'Aplicativo iOS + Android com React Native / Expo' },
-  { icon: Server,     label: 'API & Microserviços',      description: 'Back-end isolado, integrações e endpoints para terceiros' },
-]
-
-export function Services() {
+export function Services({ data }: ServicesProps) {
   const { ref, isVisible } = useScrollAnimation()
+
+  const { plans = [], extras = [] } = data
 
   return (
     <section id="services" className="py-32 relative">
@@ -103,15 +43,15 @@ export function Services() {
           )}
         >
           {plans.map((plan) => {
-            const Icon = plan.icon
-            const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(plan.message)}`
+            const waLink = `https://wa.me/${encodeURIComponent(plan.ctaMessage ?? '')}`
+            const Icon   = ICON_MAP['Globe'] // ícone genérico; banco pode evoluir para armazenar icon
 
             return (
               <div
                 key={plan.id}
                 className={cn(
                   'relative flex flex-col p-7 rounded-2xl border transition-all duration-300',
-                  plan.highlight
+                  plan.highlighted
                     ? 'border-violet-500/60 bg-violet-600/10 shadow-[0_0_40px_rgba(124,58,237,0.12)]'
                     : 'border-violet-600/20 bg-bg-card hover:border-violet-500/35 hover:bg-bg-hover'
                 )}
@@ -120,7 +60,7 @@ export function Services() {
                 {plan.badge && (
                   <span className={cn(
                     'absolute -top-3 left-1/2 -translate-x-1/2 font-mono text-[11px] px-3 py-1 rounded-full border whitespace-nowrap',
-                    plan.highlight
+                    plan.highlighted
                       ? 'bg-violet-600 border-violet-500 text-white'
                       : 'bg-bg-card border-amber-500/40 text-amber-400'
                   )}>
@@ -128,10 +68,10 @@ export function Services() {
                   </span>
                 )}
 
-                {/* Icon + name */}
+                {/* Icon */}
                 <div className={cn(
                   'w-11 h-11 rounded-xl flex items-center justify-center mb-4 border',
-                  plan.highlight
+                  plan.highlighted
                     ? 'bg-violet-600/30 border-violet-500/40'
                     : 'bg-violet-600/15 border-violet-600/20'
                 )}>
@@ -145,7 +85,7 @@ export function Services() {
                 <div className="mb-6">
                   <p className={cn(
                     'font-display font-bold text-2xl',
-                    plan.highlight ? 'text-violet-300' : 'text-white'
+                    plan.highlighted ? 'text-violet-300' : 'text-white'
                   )}>
                     {plan.price}
                   </p>
@@ -164,17 +104,17 @@ export function Services() {
 
                 {/* CTA */}
                 <a
-                  href={waLink}
+                  href={`https://wa.me/?text=${encodeURIComponent(plan.ctaMessage)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    'w-full flex items-center justify-center py-3 rounded-xl font-display font-semibold text-sm transition-all hover:-translate-y-0.5',
-                    plan.highlight
-                      ? 'bg-violet-600 text-white hover:bg-violet-500 shadow-lg'
-                      : 'border border-violet-600/30 text-violet-300 hover:border-violet-500 hover:bg-violet-600/10'
+                    'w-full py-3.5 rounded-xl font-display font-semibold text-sm text-center transition-all duration-300 hover:-translate-y-0.5 block',
+                    plan.highlighted
+                      ? 'bg-violet-600 text-white hover:bg-violet-500 shadow-lg hover:shadow-glow-violet'
+                      : 'border border-violet-600/30 text-violet-300 hover:bg-violet-600/10 hover:border-violet-500'
                   )}
                 >
-                  {plan.cta}
+                  {plan.ctaText}
                 </a>
               </div>
             )
@@ -182,33 +122,30 @@ export function Services() {
         </div>
 
         {/* Extras */}
-        <div>
-          <p className="font-mono text-xs text-slate-500 uppercase tracking-widest text-center mb-2">
-            Também desenvolvo
-          </p>
-          <p className="text-slate-500 text-sm text-center mb-8">
-            Serviços avulsos ou complementares ao seu projeto principal
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {extras.map(({ icon: Icon, label, description }) => (
-              <div
-                key={label}
-                className="group p-5 rounded-xl border border-violet-600/15 bg-bg-card hover:border-violet-500/30 hover:bg-bg-hover transition-all duration-300 text-center"
-              >
-                <div className="w-10 h-10 rounded-lg bg-violet-600/15 border border-violet-600/20 flex items-center justify-center mx-auto mb-3 group-hover:bg-violet-600/25 transition-colors">
-                  <Icon size={18} className="text-violet-400" />
-                </div>
-                <p className="font-display font-semibold text-white text-sm mb-1.5">{label}</p>
-                <p className="text-slate-500 text-xs leading-relaxed">{description}</p>
-              </div>
-            ))}
+        {extras.length > 0 && (
+          <div>
+            <h3 className="font-display font-bold text-white text-center text-lg mb-8">
+              Outros Serviços
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {extras.map((extra) => {
+                const Icon = ICON_MAP[extra.icon] ?? Monitor
+                return (
+                  <div
+                    key={extra.id}
+                    className="p-5 rounded-xl border border-violet-600/20 bg-bg-card hover:border-violet-500/35 hover:bg-bg-hover transition-all duration-300 group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-violet-600/15 border border-violet-600/20 flex items-center justify-center mb-3 group-hover:bg-violet-600/25 transition-colors">
+                      <Icon size={18} className="text-violet-400" />
+                    </div>
+                    <p className="font-display font-semibold text-white text-sm mb-1.5">{extra.label}</p>
+                    <p className="text-slate-500 text-xs leading-relaxed">{extra.description}</p>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        </div>
-
-        {/* Fine print */}
-        <p className="text-center font-mono text-xs text-slate-600 mt-10">
-          Valores variam conforme escopo, prazo e complexidade. Pagamento em até 2× (50/50) ou à vista com desconto.
-        </p>
+        )}
       </div>
     </section>
   )

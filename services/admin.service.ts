@@ -1,0 +1,164 @@
+/**
+ * services/admin.service.ts
+ * Todas as chamadas CRUD do painel administrativo.
+ * Usa a instância Axios autenticada.
+ */
+
+import { api } from '@/lib/api'
+import type {
+  ProjectData, CertificationData, SkillData,
+  ServicePlanData, ServiceExtraData,
+  HeroData, AboutData, ContactData, SiteSettingsData,
+  LeadData, MediaData, DashboardStats,
+} from '@/types/api'
+
+// ============================================================
+// AUTH
+// ============================================================
+export const authService = {
+  login: (email: string, password: string) =>
+    api.post<{ token: string; admin: { id: string; email: string; name: string } }>(
+      '/api/auth/login', { email, password }
+    ),
+
+  me: () => api.get<{ admin: { id: string; email: string; name: string } }>('/api/auth/me'),
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    api.post('/api/auth/change-password', { currentPassword, newPassword }),
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+export const dashboardService = {
+  getStats: () => api.get<DashboardStats>('/api/dashboard/stats'),
+}
+
+// ============================================================
+// PROJECTS
+// ============================================================
+export const projectService = {
+  getAll:   ()               => api.get<ProjectData[]>('/api/projects/all'),
+  getOne:   (id: string)     => api.get<ProjectData>(`/api/projects/${id}`),
+  create:   (data: Partial<ProjectData>) => api.post<ProjectData>('/api/projects', data),
+  update:   (id: string, data: Partial<ProjectData>) => api.put<ProjectData>(`/api/projects/${id}`, data),
+  delete:   (id: string)     => api.delete(`/api/projects/${id}`),
+  reorder:  (id: string, order: number) => api.patch(`/api/projects/${id}/order`, { order }),
+}
+
+// ============================================================
+// CERTIFICATIONS
+// ============================================================
+export const certificationService = {
+  getAll:  ()               => api.get<CertificationData[]>('/api/certifications/all'),
+  create:  (data: Partial<CertificationData>) => api.post<CertificationData>('/api/certifications', data),
+  update:  (id: string, data: Partial<CertificationData>) => api.put<CertificationData>(`/api/certifications/${id}`, data),
+  delete:  (id: string)     => api.delete(`/api/certifications/${id}`),
+}
+
+// ============================================================
+// SKILLS
+// ============================================================
+export const skillService = {
+  getAll:  ()               => api.get<SkillData[]>('/api/skills/all'),
+  create:  (data: Partial<SkillData>) => api.post<SkillData>('/api/skills', data),
+  update:  (id: string, data: Partial<SkillData>) => api.put<SkillData>(`/api/skills/${id}`, data),
+  delete:  (id: string)     => api.delete(`/api/skills/${id}`),
+}
+
+// ============================================================
+// SERVICES
+// ============================================================
+export const servicePlanService = {
+  getAll:  ()               => api.get<ServicePlanData[]>('/api/services/plans'),
+  create:  (data: Partial<ServicePlanData>) => api.post<ServicePlanData>('/api/services/plans', data),
+  update:  (id: string, data: Partial<ServicePlanData>) => api.put<ServicePlanData>(`/api/services/plans/${id}`, data),
+  delete:  (id: string)     => api.delete(`/api/services/plans/${id}`),
+}
+
+export const serviceExtraService = {
+  getAll:  ()               => api.get<ServiceExtraData[]>('/api/services/extras'),
+  create:  (data: Partial<ServiceExtraData>) => api.post<ServiceExtraData>('/api/services/extras', data),
+  update:  (id: string, data: Partial<ServiceExtraData>) => api.put<ServiceExtraData>(`/api/services/extras/${id}`, data),
+  delete:  (id: string)     => api.delete(`/api/services/extras/${id}`),
+}
+
+// ============================================================
+// SINGLE RECORDS
+// ============================================================
+export const heroService = {
+  get:    ()                 => api.get<HeroData>('/api/hero'),
+  update: (data: Partial<HeroData>) => api.put<HeroData>('/api/hero', data),
+}
+
+export const aboutService = {
+  get:    ()                 => api.get<AboutData>('/api/about'),
+  update: (data: Partial<AboutData>) => api.put<AboutData>('/api/about', data),
+}
+
+export const contactService = {
+  get:    ()                 => api.get<ContactData>('/api/contact'),
+  update: (data: Partial<ContactData>) => api.put<ContactData>('/api/contact', data),
+}
+
+export const settingsService = {
+  get:    ()                 => api.get<SiteSettingsData>('/api/settings'),
+  update: (data: Partial<SiteSettingsData>) => api.put<SiteSettingsData>('/api/settings', data),
+}
+
+// ============================================================
+// LEADS
+// ============================================================
+export const leadService = {
+  getAll: (params?: {
+    page?: number; limit?: number
+    status?: string; archived?: boolean; search?: string
+  }) => api.get<{
+    leads: LeadData[]; total: number; page: number; totalPages: number
+  }>('/api/leads', { params }),
+
+  getOne:      (id: string) => api.get<LeadData>(`/api/leads/${id}`),
+  updateStatus:(id: string, status: string) =>
+    api.patch<LeadData>(`/api/leads/${id}/status`, { status }),
+  archive:     (id: string, archived = true) =>
+    api.patch<LeadData>(`/api/leads/${id}/archive`, { archived }),
+  delete:      (id: string) => api.delete(`/api/leads/${id}`),
+}
+
+// ============================================================
+// MEDIA
+// ============================================================
+export const mediaService = {
+  getAll: (params?: { page?: number; limit?: number; search?: string }) =>
+    api.get<{ items: MediaData[]; total: number; page: number; totalPages: number }>(
+      '/api/media', { params }
+    ),
+
+  upload: (file: File, onProgress?: (pct: number) => void) => {
+    const fd = new FormData()
+    fd.append('file', file)
+    return api.post<MediaData>('/api/media', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (e) => {
+        if (onProgress && e.total) {
+          onProgress(Math.round((e.loaded * 100) / e.total))
+        }
+      },
+    })
+  },
+
+  uploadBatch: (files: File[], onProgress?: (pct: number) => void) => {
+    const fd = new FormData()
+    files.forEach(f => fd.append('files', f))
+    return api.post<{ results: unknown[] }>('/api/media/batch', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (e) => {
+        if (onProgress && e.total) {
+          onProgress(Math.round((e.loaded * 100) / e.total))
+        }
+      },
+    })
+  },
+
+  delete: (id: string) => api.delete(`/api/media/${id}`),
+}

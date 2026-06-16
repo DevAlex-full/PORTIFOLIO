@@ -1,69 +1,74 @@
 'use client'
 
+// 📁 CAMINHO: components/sections/Contact.tsx (ALTERADO)
+// Removidos contactInfo hardcoded e WHATSAPP_NUMBER.
+// Recebe ContactData como prop. Layout e form preservados.
+
 import { useState } from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { cn } from '@/lib/utils'
+import { SectionHeader }      from '@/components/ui/SectionHeader'
+import { cn }                 from '@/lib/utils'
 import { Mail, Phone, MapPin, Github, Linkedin, Instagram, MessageCircle } from 'lucide-react'
+import type { ContactData }   from '@/types/api'
 
-// Número do WhatsApp (somente dígitos com código do país)
-const WHATSAPP_NUMBER = '5511983943905'
+interface ContactProps {
+  data: ContactData
+}
 
-const contactInfo = [
-  {
-    icon: Phone,
-    label: 'WhatsApp',
-    value: '+55 11 98394-3905',
-    href: `https://wa.me/${WHATSAPP_NUMBER}`,
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'alex.bueno22@hotmail.com',
-    href: 'mailto:alex.bueno22@hotmail.com',
-  },
-  {
-    icon: MapPin,
-    label: 'Localização',
-    value: 'São Paulo, SP',
-    href: null,
-  },
-  {
-    icon: Github,
-    label: 'GitHub',
-    value: 'DevAlex-full',
-    href: 'https://github.com/DevAlex-full',
-  },
-  {
-    icon: Linkedin,
-    label: 'LinkedIn',
-    value: 'alexander-bueno-43823a358',
-    href: 'https://www.linkedin.com/in/alexander-bueno-43823a358/',
-  },
-  {
-    icon: Instagram,
-    label: 'Instagram',
-    value: '@devalex_fullstack',
-    href: 'https://www.instagram.com/devalex_fullstack/',
-  },
-]
-
-export function Contact() {
+export function Contact({ data }: ContactProps) {
   const { ref, isVisible } = useScrollAnimation()
   const [formState, setFormState] = useState({ name: '', subject: '', message: '' })
 
+  const whatsapp = data.whatsapp ?? '5511983943905'
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
-    const text = 
+    const text =
       `Olá, Alexander! 👋\n\n` +
       `*Nome:* ${formState.name}\n` +
       `*Assunto:* ${formState.subject}\n\n` +
       `*Mensagem:*\n${formState.message}`
-
-    const encoded = encodeURIComponent(text)
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, '_blank')
+    window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`, '_blank')
   }
+
+  const contactItems = [
+    data.whatsapp && {
+      icon:  Phone,
+      label: 'WhatsApp',
+      value: data.whatsapp.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 $2 $3-$4'),
+      href:  `https://wa.me/${data.whatsapp}`,
+    },
+    data.email && {
+      icon:  Mail,
+      label: 'Email',
+      value: data.email,
+      href:  `mailto:${data.email}`,
+    },
+    data.location && {
+      icon:  MapPin,
+      label: 'Localização',
+      value: data.location,
+      href:  null,
+    },
+    data.githubUrl && {
+      icon:  Github,
+      label: 'GitHub',
+      value: data.github ?? data.githubUrl,
+      href:  data.githubUrl,
+    },
+    data.linkedinUrl && {
+      icon:  Linkedin,
+      label: 'LinkedIn',
+      value: data.linkedin ?? data.linkedinUrl,
+      href:  data.linkedinUrl,
+    },
+    data.instagramUrl && {
+      icon:  Instagram,
+      label: 'Instagram',
+      value: data.instagram ?? data.instagramUrl,
+      href:  data.instagramUrl,
+    },
+  ].filter(Boolean) as Array<{ icon: typeof Phone; label: string; value: string | null; href: string | null }>
 
   return (
     <section id="contact" className="py-32 relative">
@@ -91,7 +96,7 @@ export function Contact() {
             </p>
 
             <div className="space-y-3">
-              {contactInfo.map(({ icon: Icon, label, value, href }) => (
+              {contactItems.map(({ icon: Icon, label, value, href }) => (
                 <div
                   key={label}
                   className="flex items-center gap-4 p-4 rounded-xl border border-violet-600/15 bg-bg-card hover:border-violet-500/30 transition-all group"
@@ -138,7 +143,7 @@ export function Contact() {
                   type="text"
                   required
                   value={formState.name}
-                  onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
+                  onChange={(e) => setFormState(s => ({ ...s, name: e.target.value }))}
                   placeholder="Como posso te chamar?"
                   className="w-full px-4 py-3 rounded-lg border border-violet-600/20 bg-bg-primary text-slate-300 placeholder-slate-700 font-body text-sm focus:outline-none focus:border-violet-500 transition-colors"
                 />
@@ -150,7 +155,7 @@ export function Contact() {
                   type="text"
                   required
                   value={formState.subject}
-                  onChange={(e) => setFormState((s) => ({ ...s, subject: e.target.value }))}
+                  onChange={(e) => setFormState(s => ({ ...s, subject: e.target.value }))}
                   placeholder="Ex: Orçamento de projeto, Parceria..."
                   className="w-full px-4 py-3 rounded-lg border border-violet-600/20 bg-bg-primary text-slate-300 placeholder-slate-700 font-body text-sm focus:outline-none focus:border-violet-500 transition-colors"
                 />
@@ -162,7 +167,7 @@ export function Contact() {
                   required
                   rows={5}
                   value={formState.message}
-                  onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
+                  onChange={(e) => setFormState(s => ({ ...s, message: e.target.value }))}
                   placeholder="Descreva seu projeto ou ideia..."
                   className="w-full px-4 py-3 rounded-lg border border-violet-600/20 bg-bg-primary text-slate-300 placeholder-slate-700 font-body text-sm focus:outline-none focus:border-violet-500 transition-colors resize-none"
                 />

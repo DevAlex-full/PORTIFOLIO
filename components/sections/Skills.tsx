@@ -1,35 +1,55 @@
 'use client'
 
+// 📁 CAMINHO: components/sections/Skills.tsx (ALTERADO)
+// Removidas importações de data/skills.
+// Recebe SkillData[] como prop. Animações e filtros preservados.
+
 import { useState } from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { skills, skillCategories } from '@/data/skills'
-import { cn } from '@/lib/utils'
-import type { SkillCategory } from '@/types'
+import { SectionHeader }      from '@/components/ui/SectionHeader'
+import { cn }                 from '@/lib/utils'
+import type { SkillData, SkillCategory } from '@/types/api'
+
+const SKILL_CATEGORIES = [
+  { key: 'frontend', label: 'Front-End'      },
+  { key: 'backend',  label: 'Back-End'       },
+  { key: 'database', label: 'Banco de Dados' },
+  { key: 'devops',   label: 'DevOps'         },
+  { key: 'tools',    label: 'Ferramentas'    },
+  { key: 'design',   label: 'Design'         },
+]
 
 const levelColors = {
-  expert: 'text-violet-300 border-violet-500/40 bg-violet-600/15',
-  advanced: 'text-cyan-300 border-cyan-500/30 bg-cyan-500/10',
+  expert:       'text-violet-300 border-violet-500/40 bg-violet-600/15',
+  advanced:     'text-cyan-300 border-cyan-500/30 bg-cyan-500/10',
   intermediate: 'text-slate-300 border-slate-600/40 bg-slate-700/20',
 }
 
 const levelLabels = {
-  expert: 'Expert',
-  advanced: 'Avançado',
+  expert:       'Expert',
+  advanced:     'Avançado',
   intermediate: 'Intermediário',
 }
 
-export function Skills() {
+interface SkillsProps {
+  data: SkillData[]
+}
+
+export function Skills({ data }: SkillsProps) {
   const [activeCategory, setActiveCategory] = useState<SkillCategory | 'all'>('all')
   const { ref, isVisible } = useScrollAnimation()
 
   const filtered = activeCategory === 'all'
-    ? skills
-    : skills.filter((s) => s.category === activeCategory)
+    ? data
+    : data.filter(s => s.category === activeCategory)
+
+  // Filtra apenas categorias que têm itens
+  const activeCategories = SKILL_CATEGORIES.filter(cat =>
+    data.some(s => s.category === cat.key)
+  )
 
   return (
     <section id="skills" className="py-32 relative">
-      {/* Subtle background */}
       <div className="absolute inset-0 bg-bg-secondary/30 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative">
@@ -51,7 +71,7 @@ export function Skills() {
           >
             Todos
           </button>
-          {skillCategories.map(({ key, label }) => (
+          {activeCategories.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setActiveCategory(key as SkillCategory)}
@@ -77,12 +97,12 @@ export function Skills() {
         >
           {filtered.map((skill, i) => (
             <div
-              key={skill.name}
+              key={skill.id}
               className={cn(
                 'group relative p-4 rounded-xl border bg-bg-card',
                 'hover:border-violet-500/40 hover:bg-bg-hover hover:-translate-y-1',
                 'transition-all duration-300 text-center cursor-default',
-                levelColors[skill.level]
+                levelColors[skill.level as keyof typeof levelColors] ?? levelColors.intermediate
               )}
               style={{ transitionDelay: `${i * 30}ms` }}
             >
@@ -90,13 +110,11 @@ export function Skills() {
               <span
                 className={cn(
                   'font-mono text-[10px] px-2 py-0.5 rounded-full border',
-                  levelColors[skill.level]
+                  levelColors[skill.level as keyof typeof levelColors] ?? levelColors.intermediate
                 )}
               >
-                {levelLabels[skill.level]}
+                {levelLabels[skill.level as keyof typeof levelLabels] ?? skill.level}
               </span>
-
-              {/* Hover glow */}
               <div className="absolute inset-0 rounded-xl bg-violet-600/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             </div>
           ))}

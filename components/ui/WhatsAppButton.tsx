@@ -1,10 +1,19 @@
 'use client'
 
-const WHATSAPP_NUMBER = '5511983943905'
-const WHATSAPP_MESSAGE = 'Olá, Alexander! Vi seu portfólio e gostaria de conversar sobre um projeto.'
+// 📁 CAMINHO: components/ui/WhatsAppButton.tsx (ALTERADO)
+// WHATSAPP_NUMBER agora lido do prop recebido do Server Component.
+// Fallback para variável de ambiente ou número padrão caso prop não exista.
 
-export function WhatsAppButton() {
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`
+interface WhatsAppButtonProps {
+  whatsapp?: string
+  message?:  string
+}
+
+export function WhatsAppButton({
+  whatsapp = process.env.NEXT_PUBLIC_WHATSAPP ?? '5511983943905',
+  message  = 'Olá, Alexander! Vi seu portfólio e gostaria de conversar sobre um projeto.',
+}: WhatsAppButtonProps) {
+  const href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`
 
   return (
     <a
@@ -37,10 +46,7 @@ export function WhatsAppButton() {
         hover:scale-110
         transition-all duration-300
       ">
-        {/* Ping ring */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
-
-        {/* WhatsApp SVG icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 32 32"

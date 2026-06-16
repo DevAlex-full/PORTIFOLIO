@@ -1,18 +1,22 @@
-// 📁 CAMINHO: portfolio/components/ui/ProjectCard.tsx
+// 📁 CAMINHO: components/ui/ProjectCard.tsx (ALTERADO)
+// Agora recebe ProjectData da API ao invés do tipo Project local.
+// Links mapeados dos campos planos (linkDemo, linkGithub, linkGithubFront, linkGithubBack).
 
-import type { Project } from '@/types'
+import type { ProjectData } from '@/types/api'
 import { ExternalLink, Github } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Carousel } from './Carousel'
+import { cn }               from '@/lib/utils'
+import { Carousel }         from './Carousel'
 
 interface ProjectCardProps {
-  project: Project
+  project:   ProjectData
   className?: string
-  style?: React.CSSProperties
+  style?:     React.CSSProperties
 }
 
 export function ProjectCard({ project, className, style }: ProjectCardProps) {
-  const carouselImages = project.images ?? [{ src: project.image, alt: project.title }]
+  const carouselImages = project.images?.length
+    ? project.images
+    : [{ src: project.image ?? '/placeholder.png', alt: project.title }]
 
   return (
     <article
@@ -27,11 +31,10 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
       {/* Top gradient line on hover */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
 
-      {/* === IMAGEM / CARROSSEL === */}
+      {/* IMAGEM / CARROSSEL */}
       <div className="relative">
         <Carousel images={carouselImages} />
 
-        {/* Badges */}
         {project.featured && (
           <div className="absolute top-3 left-3 z-10 pointer-events-none">
             <span className="font-mono text-[10px] px-2 py-1 rounded bg-violet-600/80 backdrop-blur-sm text-white border border-violet-500/30">
@@ -48,29 +51,27 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
         )}
       </div>
 
-      {/* === CONTEÚDO === */}
+      {/* CONTEÚDO */}
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-display font-semibold text-white text-lg mb-2 group-hover:text-violet-300 transition-colors">
           {project.title}
         </h3>
         <p className="text-slate-400 text-sm leading-relaxed mb-4">
-          {project.description}
+          {project.shortDescription}
         </p>
 
-        {/* Tags - todas visíveis */}
+        {/* Tags */}
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {project.tags.map((tag) => (
-            <span key={tag} className="tech-tag">
-              {tag}
-            </span>
+          {project.tags.map(tag => (
+            <span key={tag} className="tech-tag">{tag}</span>
           ))}
         </div>
 
-        {/* === LINKS (sempre visíveis, sem overlay) === */}
+        {/* LINKS */}
         <div className="flex items-center gap-2 pt-3 border-t border-violet-600/10">
-          {project.links.demo && (
+          {project.linkDemo && (
             <a
-              href={project.links.demo}
+              href={project.linkDemo}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600/20 border border-violet-600/30 text-violet-300 text-xs font-medium hover:bg-violet-600 hover:text-white transition-all duration-200"
@@ -79,9 +80,9 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
               Demo
             </a>
           )}
-          {project.links.github && (
+          {project.linkGithub && (
             <a
-              href={project.links.github}
+              href={project.linkGithub}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-400 text-xs font-medium hover:border-violet-500 hover:text-white transition-all duration-200"
@@ -90,32 +91,31 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
               Código
             </a>
           )}
-          {project.links.githubFrontend && (
+          {project.linkGithubFront && (
             <a
-              href={project.links.githubFrontend}
+              href={project.linkGithubFront}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-400 text-xs font-medium hover:border-violet-500 hover:text-white transition-all duration-200"
             >
               <Github size={12} />
-              Front-End
+              Front
             </a>
           )}
-          {project.links.githubBackend && (
+          {project.linkGithubBack && (
             <a
-              href={project.links.githubBackend}
+              href={project.linkGithubBack}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-400 text-xs font-medium hover:border-violet-500 hover:text-white transition-all duration-200"
             >
               <Github size={12} />
-              Back-End
+              Back
             </a>
           )}
         </div>
       </div>
 
-      {/* Bottom glow on hover */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </article>
   )

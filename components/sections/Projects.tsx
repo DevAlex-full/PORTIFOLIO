@@ -1,15 +1,25 @@
 'use client'
 
+// 📁 CAMINHO: components/sections/Projects.tsx (ALTERADO)
+// Removida importação de data/projects.
+// Recebe ProjectData[] e filtra featured no componente.
+
 import React from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { ProjectCard } from '@/components/ui/ProjectCard'
-import { featuredProjects } from '@/data/projects'
-import { cn } from '@/lib/utils'
-import { ArrowRight } from 'lucide-react'
+import { SectionHeader }      from '@/components/ui/SectionHeader'
+import { ProjectCard }        from '@/components/ui/ProjectCard'
+import { cn }                 from '@/lib/utils'
+import { ArrowRight }         from 'lucide-react'
+import type { ProjectData }   from '@/types/api'
 
-export function Projects() {
+interface ProjectsProps {
+  data: ProjectData[]
+}
+
+export function Projects({ data }: ProjectsProps) {
   const { ref, isVisible } = useScrollAnimation()
+
+  const featured = data.filter(p => p.featured)
 
   return (
     <section id="projects" className="py-32 relative">
@@ -28,7 +38,7 @@ export function Projects() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           )}
         >
-          {featuredProjects.map((project, i) => (
+          {featured.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}

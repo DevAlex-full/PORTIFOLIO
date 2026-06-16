@@ -1,38 +1,30 @@
 'use client'
 
+// 📁 CAMINHO: components/sections/About.tsx (ALTERADO)
+// Removidas importações de data/*.
+// Recebe AboutData como prop + projectsCount para stats.
+// Animações e layout preservados.
+
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { cn } from '@/lib/utils'
-import { Code2, Layers, Rocket, TrendingUp } from 'lucide-react'
-import { projects } from '@/data/projects'
-import { certifications } from '@/data/certifications'
-import { skills } from '@/data/skills'
+import { SectionHeader }      from '@/components/ui/SectionHeader'
+import { cn }                 from '@/lib/utils'
+import { Code2, Layers, Rocket, TrendingUp, LucideIcon } from 'lucide-react'
+import type { AboutData }     from '@/types/api'
 
-const highlights = [
-  {
-    icon: Layers,
-    title: 'Full Stack Completo',
-    description: 'Do banco de dados à interface — sistemas web, mobile e aplicações desktop em um único profissional.',
-  },
-  {
-    icon: Code2,
-    title: 'Código que Escala',
-    description: 'Aplico SOLID, Clean Code e arquitetura em camadas para entregar software que cresce com o seu negócio.',
-  },
-  {
-    icon: Rocket,
-    title: 'Entrega Real',
-    description: 'MVP funcional em dias, não meses. Foco em resultado desde o primeiro commit até o deploy em produção.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Visão de Negócio',
-    description: 'Entendo que software resolve dores reais. Desenvolvimento orientado a impacto e retorno financeiro.',
-  },
-]
+// Mapeia ícone por nome (vem do banco como string)
+const ICON_MAP: Record<string, LucideIcon> = {
+  Layers, Code2, Rocket, TrendingUp,
+}
 
-export function About() {
+interface AboutProps {
+  data:          AboutData
+  projectsCount: number
+}
+
+export function About({ data, projectsCount }: AboutProps) {
   const { ref, isVisible } = useScrollAnimation()
+
+  const highlights = Array.isArray(data.highlights) ? data.highlights : []
 
   return (
     <section id="about" className="py-32 relative">
@@ -51,38 +43,22 @@ export function About() {
         >
           {/* Left: Text */}
           <div className="space-y-5">
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Sou Desenvolvedor Full Stack e entrego{' '}
-              <span className="text-violet-300 font-medium">soluções digitais completas</span>{' '}
-              — de sistemas web e SaaS a aplicações desktop e automações. Não sou especialista
-              em apenas uma camada: domino o ciclo inteiro, do banco de dados ao deploy em produção.
-            </p>
-            <p className="text-slate-400 leading-relaxed">
-              No front, trabalho com{' '}
-              <span className="text-violet-300">React</span>,{' '}
-              <span className="text-violet-300">Next.js</span> e{' '}
-              <span className="text-violet-300">TypeScript</span>. No back, construo APIs
-              robustas com <span className="text-violet-300">Node.js</span> e{' '}
-              <span className="text-violet-300">Express</span>, com{' '}
-              <span className="text-violet-300">PostgreSQL</span> e{' '}
-              <span className="text-violet-300">Prisma ORM</span>. Para desktop e automações,
-              uso <span className="text-violet-300">Python</span> com foco em entrega rápida
-              e resultado concreto.
-            </p>
-            <p className="text-slate-400 leading-relaxed">
-              Já construí um{' '}
-              <span className="text-cyan-400 font-medium">SaaS multi-tenant</span> do zero,
-              desenvolvi sistemas para clientes reais e crio automações que eliminam trabalho
-              manual. Acredito que o melhor software é aquele que resolve um problema de verdade
-              — e faz isso de forma simples, rápida e escalável.
-            </p>
+            {data.paragraph1 && (
+              <p className="text-slate-300 text-lg leading-relaxed">{data.paragraph1}</p>
+            )}
+            {data.paragraph2 && (
+              <p className="text-slate-400 leading-relaxed">{data.paragraph2}</p>
+            )}
+            {data.paragraph3 && (
+              <p className="text-slate-400 leading-relaxed">{data.paragraph3}</p>
+            )}
 
-            {/* Stats row — automático */}
+            {/* Stats row */}
             <div className="grid grid-cols-3 gap-4 pt-4">
               {[
-                { value: `${projects.length}+`, label: 'Projetos' },
-                { value: `${certifications.length}+`, label: 'Certificações' },
-                { value: `${skills.length}+`, label: 'Tecnologias' },
+                { value: `${projectsCount}+`, label: 'Projetos'      },
+                { value: '8+',                label: 'Certificações' },
+                { value: '25+',               label: 'Tecnologias'   },
               ].map(({ value, label }) => (
                 <div
                   key={label}
@@ -97,19 +73,22 @@ export function About() {
 
           {/* Right: Highlights */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {highlights.map(({ icon: Icon, title, description }, i) => (
-              <div
-                key={title}
-                className="group p-5 rounded-xl border border-violet-600/20 bg-bg-card hover:border-violet-500/40 hover:bg-bg-hover transition-all duration-300"
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div className="w-10 h-10 rounded-lg bg-violet-600/20 border border-violet-600/20 flex items-center justify-center mb-3 group-hover:bg-violet-600/30 transition-colors">
-                  <Icon size={18} className="text-violet-400" />
+            {highlights.map(({ icon, title, description }, i) => {
+              const Icon = ICON_MAP[icon] ?? Layers
+              return (
+                <div
+                  key={title}
+                  className="group p-5 rounded-xl border border-violet-600/20 bg-bg-card hover:border-violet-500/40 hover:bg-bg-hover transition-all duration-300"
+                  style={{ transitionDelay: `${i * 100}ms` }}
+                >
+                  <div className="w-10 h-10 rounded-lg bg-violet-600/20 border border-violet-600/20 flex items-center justify-center mb-3 group-hover:bg-violet-600/30 transition-colors">
+                    <Icon size={18} className="text-violet-400" />
+                  </div>
+                  <h3 className="font-display font-semibold text-white text-sm mb-1.5">{title}</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">{description}</p>
                 </div>
-                <h3 className="font-display font-semibold text-white text-sm mb-1.5">{title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{description}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
