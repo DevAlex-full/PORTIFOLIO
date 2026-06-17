@@ -1,6 +1,4 @@
-// 📁 CAMINHO: app/projects/page.tsx (ALTERADO)
-// Agora é Server Component.
-// Busca projetos no servidor e passa para AllProjects.
+
 
 import type { Metadata }   from 'next'
 import { AllProjects }     from '@/components/sections/AllProjects'

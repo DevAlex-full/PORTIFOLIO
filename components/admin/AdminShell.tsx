@@ -1,12 +1,8 @@
 'use client'
 
-// 📁 CAMINHO: components/admin/AdminShell.tsx (CRIADO)
-// Layout completo do painel: Sidebar + Header + Content.
-// Gerencia estado do menu mobile.
-
-import { useState, useEffect } from 'react'
-import { AdminSidebar }  from './AdminSidebar'
-import { AdminHeader }   from './AdminHeader'
+import { useState, useEffect, useCallback } from 'react'
+import { AdminSidebar }     from './AdminSidebar'
+import { AdminHeader }      from './AdminHeader'
 import { dashboardService } from '@/services/admin.service'
 
 interface AdminShellProps {
@@ -18,11 +14,17 @@ export function AdminShell({ title, children }: AdminShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [newLeads,    setNewLeads]    = useState(0)
 
-  useEffect(() => {
+  const fetchStats = useCallback(() => {
     dashboardService.getStats()
       .then(r => setNewLeads(r.data.totals.newLeads))
       .catch(() => {})
   }, [])
+
+  useEffect(() => {
+    fetchStats()
+    window.addEventListener('admin:stats-refresh', fetchStats)
+    return () => window.removeEventListener('admin:stats-refresh', fetchStats)
+  }, [fetchStats])
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#0a0812]">

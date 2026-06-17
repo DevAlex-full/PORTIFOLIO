@@ -117,12 +117,19 @@ export const leadService = {
     leads: LeadData[]; total: number; page: number; totalPages: number
   }>('/api/leads', { params }),
 
-  getOne:      (id: string) => api.get<LeadData>(`/api/leads/${id}`),
-  updateStatus:(id: string, status: string) =>
+  getOne: (id: string) => api.get<LeadData>(`/api/leads/${id}`),
+
+  create: (data: Partial<LeadData>) =>
+    api.post<{ lead: LeadData }>('/api/leads', data),
+
+  update: (id: string, data: Partial<LeadData>) =>
+    api.put<LeadData>(`/api/leads/${id}`, data),
+
+  updateStatus: (id: string, status: string) =>
     api.patch<LeadData>(`/api/leads/${id}/status`, { status }),
-  archive:     (id: string, archived = true) =>
+  archive:      (id: string, archived = true) =>
     api.patch<LeadData>(`/api/leads/${id}/archive`, { archived }),
-  delete:      (id: string) => api.delete(`/api/leads/${id}`),
+  delete:       (id: string) => api.delete(`/api/leads/${id}`),
 }
 
 // ============================================================
@@ -137,8 +144,11 @@ export const mediaService = {
   upload: (file: File, onProgress?: (pct: number) => void) => {
     const fd = new FormData()
     fd.append('file', file)
+    // CORREÇÃO: NÃO definir Content-Type manualmente. O axios/navegador
+    // precisa gerar esse header automaticamente com o boundary correto.
+    // Definir 'multipart/form-data' sem boundary quebra o parser
+    // @fastify/multipart no backend e o upload falha silenciosamente.
     return api.post<MediaData>('/api/media', fd, {
-      headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (e) => {
         if (onProgress && e.total) {
           onProgress(Math.round((e.loaded * 100) / e.total))
@@ -150,8 +160,8 @@ export const mediaService = {
   uploadBatch: (files: File[], onProgress?: (pct: number) => void) => {
     const fd = new FormData()
     files.forEach(f => fd.append('files', f))
+    // Mesma correção: sem header manual de Content-Type.
     return api.post<{ results: unknown[] }>('/api/media/batch', fd, {
-      headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (e) => {
         if (onProgress && e.total) {
           onProgress(Math.round((e.loaded * 100) / e.total))

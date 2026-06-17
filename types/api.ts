@@ -156,6 +156,7 @@ export interface LeadData extends BaseRecord {
   email:    string
   phone:    string | null
   company:  string | null
+  source:   string | null
   message:  string | null
   status:   LeadStatus
   archived: boolean
