@@ -9,7 +9,7 @@ import type {
   ProjectData, CertificationData, SkillData,
   ServicePlanData, ServiceExtraData,
   HeroData, AboutData, ContactData, SiteSettingsData,
-  LeadData, MediaData, DashboardStats,
+  LeadData, MediaData, DashboardStats, ClientData,
 } from '@/types/api'
 
 // ============================================================
@@ -44,6 +44,17 @@ export const projectService = {
   update:   (id: string, data: Partial<ProjectData>) => api.put<ProjectData>(`/api/projects/${id}`, data),
   delete:   (id: string)     => api.delete(`/api/projects/${id}`),
   reorder:  (id: string, order: number) => api.patch(`/api/projects/${id}/order`, { order }),
+}
+
+// ============================================================
+// CLIENTS — Vitrine de clientes / cases
+// ============================================================
+export const clientService = {
+  getAll:   ()               => api.get<ClientData[]>('/api/clients/all'),
+  create:   (data: Partial<ClientData>) => api.post<ClientData>('/api/clients', data),
+  update:   (id: string, data: Partial<ClientData>) => api.put<ClientData>(`/api/clients/${id}`, data),
+  delete:   (id: string)     => api.delete(`/api/clients/${id}`),
+  reorder:  (id: string, order: number) => api.patch(`/api/clients/${id}/order`, { order }),
 }
 
 // ============================================================

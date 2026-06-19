@@ -1,7 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/admin/AdminSidebar.tsx (CRIADO)
-
 import Link       from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn }     from '@/lib/utils'
@@ -9,7 +7,7 @@ import { useAdminAuth } from '@/contexts/AdminAuthContext'
 import {
   LayoutDashboard, FolderKanban, Award, Zap, Briefcase,
   User, Info, Phone, Settings, Search, Image, Users,
-  X, LogOut, ChevronRight,
+  X, LogOut, ChevronRight, Building2,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -32,6 +30,7 @@ const NAV_GROUPS = [
     label: 'Portfólio',
     items: [
       { label: 'Projetos',      href: '/admin/projetos',      icon: FolderKanban },
+      { label: 'Clientes',      href: '/admin/clientes',      icon: Building2    },
       { label: 'Certificados',  href: '/admin/certificados',  icon: Award        },
       { label: 'Habilidades',   href: '/admin/habilidades',   icon: Zap          },
       { label: 'Serviços',      href: '/admin/servicos',      icon: Briefcase    },

@@ -1,6 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/admin/AdminHeader.tsx (CRIADO)
 
 import Link from 'next/link'
 import { Menu, ExternalLink, Bell } from 'lucide-react'

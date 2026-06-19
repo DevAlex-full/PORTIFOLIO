@@ -1,10 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/sections/Hero.tsx (ALTERADO)
-// Removida importação de data/projects.
-// Recebe HeroData como prop — dados vêm do servidor.
-// Toda a identidade visual, animações e layout preservados.
-
 import { ArrowDown, Github, Linkedin, Mail, Download } from 'lucide-react'
 import type { HeroData } from '@/types/api'
 
@@ -40,6 +35,39 @@ export function Hero({ data }: HeroProps) {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Text */}
           <div>
+            {/* CORREÇÃO 3: foto em mobile/tablet — antes a única versão da
+                foto estava dentro de "hidden lg:flex" (visível apenas a
+                partir de 1024px), então ela simplesmente não existia em
+                nenhum breakpoint menor. Este bloco é uma versão mais
+                simples (sem os badges flutuantes decorativos, que não
+                cabem bem em telas estreitas), visível só abaixo de "lg"
+                — a versão desktop completa, mais abaixo, continua exatamente
+                como estava. */}
+            <div className="flex lg:hidden justify-center mb-10">
+              <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-2xl border border-violet-600/30 bg-bg-card overflow-hidden shadow-card flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent z-10" />
+                <img
+                  src={data.photoUrl ?? '/imagens/alex%20(1).jpeg'}
+                  alt={data.name ?? 'Alexander Bueno Santiago'}
+                  className="w-full h-full object-cover object-top"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                    const fallback = e.currentTarget.nextElementSibling as HTMLElement
+                    if (fallback) fallback.style.display = 'flex'
+                  }}
+                />
+                <div className="hidden absolute inset-0 items-center justify-center" style={{ display: 'none' }}>
+                  <div className="text-center">
+                    <div className="w-16 h-16 rounded-full border-2 border-violet-500/50 bg-violet-600/20 flex items-center justify-center mx-auto mb-2">
+                      <span className="font-display text-2xl font-bold text-violet-300">
+                        {data.name?.[0] ?? 'A'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Badge disponível */}
             {data.available && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-600/30 bg-violet-600/10 mb-8">

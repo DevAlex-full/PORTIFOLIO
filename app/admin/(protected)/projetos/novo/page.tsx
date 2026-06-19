@@ -1,4 +1,10 @@
-// 📁 CAMINHO: app/admin/(protected)/projetos/novo/page.tsx (CRIADO)
-// Reutiliza o formulário de [id] com id='novo'
+import { AdminShell }   from '@/components/admin/AdminShell'
+import { ProjectForm }  from '@/components/admin/forms/ProjectForm'
 
-export { default } from '../[id]/page'
+export default function NovoProjetoPage() {
+  return (
+    <AdminShell title="Novo Projeto">
+      <ProjectForm />
+    </AdminShell>
+  )
+}

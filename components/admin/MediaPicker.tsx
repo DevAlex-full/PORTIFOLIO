@@ -1,9 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/admin/MediaPicker.tsx (CRIADO)
-// Componente de seleção de mídia.
-// Permite selecionar da biblioteca existente ou fazer upload novo.
-
 import { useState, useEffect, useRef } from 'react'
 import { mediaService } from '@/services/admin.service'
 import { Image as ImageIcon, Upload, X, Search, Check } from 'lucide-react'

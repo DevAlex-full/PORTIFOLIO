@@ -148,6 +148,28 @@ export interface SiteSettingsData extends BaseRecord {
   logoUrl:       string | null
 }
 
+// ── Client ────────────────────────────────────────────────────
+export interface ClientMetric {
+  value: string
+  label: string
+}
+
+export interface ClientData extends BaseRecord {
+  name:         string
+  subtitle:     string | null
+  segment:      string | null
+  description:  string
+  image:        string | null
+  images:       ProjectImage[]
+  technologies: string[]
+  metrics:      ClientMetric[]
+  linkDemo:     string | null
+  linkGithub:   string | null
+  featured:     boolean
+  order:        number
+  active:       boolean
+}
+
 // ── Lead ─────────────────────────────────────────────────────
 export type LeadStatus = 'novo' | 'em_contato' | 'proposta' | 'convertido' | 'perdido'
 
@@ -181,6 +203,8 @@ export interface DashboardStats {
     certifications:  number
     skills:          number
     services:        number
+    clients:         number
+    featuredClients: number
     media:           number
     leads:           number
     newLeads:        number

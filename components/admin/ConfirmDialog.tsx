@@ -1,7 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/admin/ConfirmDialog.tsx (CRIADO)
-
 import { AlertTriangle, X } from 'lucide-react'
 
 interface ConfirmDialogProps {

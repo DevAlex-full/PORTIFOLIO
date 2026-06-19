@@ -7,7 +7,7 @@ import { AdminShell }          from '@/components/admin/AdminShell'
 import { dashboardService }    from '@/services/admin.service'
 import type { DashboardStats } from '@/types/api'
 import {
-  FolderKanban, Award, Zap, Briefcase, Image, Users,
+  FolderKanban, Award, Zap, Briefcase, Image, Users, Building2,
   Star, ArrowUpRight, Loader2, MessageSquare, Clock,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -42,11 +42,12 @@ export default function DashboardPage() {
 
   const statCards = stats ? [
     { label: 'Projetos',       value: stats.totals.projects,       icon: FolderKanban, href: '/admin/projetos',     color: 'violet' },
-    { label: 'Certificações',  value: stats.totals.certifications, icon: Award,        href: '/admin/certificados', color: 'cyan'   },
-    { label: 'Habilidades',    value: stats.totals.skills,         icon: Zap,          href: '/admin/habilidades',  color: 'violet' },
-    { label: 'Serviços',       value: stats.totals.services,       icon: Briefcase,    href: '/admin/servicos',     color: 'cyan'   },
-    { label: 'Mídias',         value: stats.totals.media,          icon: Image,        href: '/admin/midias',       color: 'violet' },
-    { label: 'Leads',          value: stats.totals.leads,          icon: Users,        href: '/admin/leads',        color: 'cyan'   },
+    { label: 'Clientes',       value: stats.totals.clients,        icon: Building2,    href: '/admin/clientes',     color: 'cyan'   },
+    { label: 'Certificações',  value: stats.totals.certifications, icon: Award,        href: '/admin/certificados', color: 'violet' },
+    { label: 'Habilidades',    value: stats.totals.skills,         icon: Zap,          href: '/admin/habilidades',  color: 'cyan'   },
+    { label: 'Serviços',       value: stats.totals.services,       icon: Briefcase,    href: '/admin/servicos',     color: 'violet' },
+    { label: 'Mídias',         value: stats.totals.media,          icon: Image,        href: '/admin/midias',       color: 'cyan'   },
+    { label: 'Leads',          value: stats.totals.leads,          icon: Users,        href: '/admin/leads',        color: 'violet' },
   ] : []
 
   return (
@@ -187,8 +188,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { label: 'Novo Projeto',     href: '/admin/projetos/novo',  icon: FolderKanban },
+                { label: 'Novo Cliente',     href: '/admin/clientes',       icon: Building2    },
                 { label: 'Upload de Mídia',  href: '/admin/midias',         icon: Image        },
-                { label: 'Editar Hero',      href: '/admin/hero',           icon: Users        },
                 { label: 'Ver Leads',        href: '/admin/leads',          icon: MessageSquare},
               ].map(({ label, href, icon: Icon }) => (
                 <Link

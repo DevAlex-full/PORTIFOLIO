@@ -86,16 +86,16 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
     return await publicFetch<SiteSettingsData>('/api/settings')
   } catch {
     return {
-      id: 'fallback-site-settings',
-      siteTitle: 'Alexander Bueno Santiago — Desenvolvedor Full Stack',
-      description: 'Desenvolvedor Full Stack especializado em React, Next.js e Node.js.',
-      keywords: [],
-      ogTitle: null,
+      id:            'fallback',
+      siteTitle:     'Alexander Bueno Santiago — Desenvolvedor Full Stack',
+      description:   'Desenvolvedor Full Stack especializado em React, Next.js e Node.js.',
+      keywords:      [],
+      ogTitle:       null,
       ogDescription: null,
-      faviconUrl: null,
-      logoUrl: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      faviconUrl:    null,
+      logoUrl:       null,
+      createdAt:     new Date().toISOString(),
+      updatedAt:     new Date().toISOString(),
     }
   }
 }
