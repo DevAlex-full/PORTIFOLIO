@@ -1,10 +1,3 @@
-/**
- * lib/api.ts
- * Instância Axios configurada para o painel administrativo.
- * - Injeta token JWT em todas as requisições
- * - Redireciona para /admin/login em caso de 401
- */
-
 import axios from 'axios'
 import { getToken, removeToken } from './auth'
 
@@ -12,17 +5,30 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
 export const api = axios.create({
   baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' },
+  // SEM Content-Type padrão aqui — deixamos o Axios detectar por si.
   timeout: 15_000,
 })
 
-// ── Request interceptor: injeta token ────────────────────────
+// ── Request interceptor ──────────────────────────────────────
 api.interceptors.request.use(
   (config) => {
+    // Token JWT
     const token = getToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    // Define Content-Type: application/json somente para requisições
+    // que NÃO enviam FormData. Para FormData o Axios (e o browser) geram
+    // o header multipart/form-data;boundary=... automaticamente.
+    if (
+      config.data !== undefined &&
+      !(config.data instanceof FormData) &&
+      !config.headers['Content-Type']
+    ) {
+      config.headers['Content-Type'] = 'application/json'
+    }
+
     return config
   },
   (error) => Promise.reject(error)

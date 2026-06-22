@@ -1,9 +1,3 @@
-/**
- * services/admin.service.ts
- * Todas as chamadas CRUD do painel administrativo.
- * Usa a instância Axios autenticada.
- */
-
 import { api } from '@/lib/api'
 import type {
   ProjectData, CertificationData, SkillData,

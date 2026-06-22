@@ -1,10 +1,3 @@
-/**
- * services/public.service.ts
- * Funções de fetch para o site público.
- * Executadas no servidor (Server Components / generateMetadata).
- * Usam fetch nativo com cache do Next.js.
- */
-
 import { publicFetch } from '@/lib/api'
 import type {
   HeroData,
@@ -15,6 +8,7 @@ import type {
   ServicesData,
   ContactData,
   SiteSettingsData,
+  ClientData,
 } from '@/types/api'
 
 // ── Hero ──────────────────────────────────────────────────────
@@ -77,6 +71,14 @@ export async function getContact(): Promise<ContactData> {
     return await publicFetch<ContactData>('/api/contact')
   } catch {
     return {} as ContactData
+  }
+}
+
+export async function getClients(): Promise<ClientData[]> {
+  try {
+    return await publicFetch<ClientData[]>('/api/clients')
+  } catch {
+    return []
   }
 }
 

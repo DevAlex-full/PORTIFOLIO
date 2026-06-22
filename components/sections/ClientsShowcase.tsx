@@ -1,45 +1,51 @@
 'use client'
 
-import Link from 'next/link'
-import { ArrowLeft, ArrowRight, ExternalLink, Github, Scissors, Scale, UtensilsCrossed, ShoppingCart, Building2, Stethoscope, Lock } from 'lucide-react'
-import { SectionHeader } from '@/components/ui/SectionHeader'
 
-// ─── Case próprio ─────────────────────────────────────────────────────────────
-const ownCase = {
-  label: 'Case Próprio',
-  title: 'BarberFlow',
-  subtitle: 'SaaS Multi-tenant para Barbearias',
-  description:
-    'Plataforma completa construída do zero: agendamento online, gestão financeira, controle de estoque, comissões por barbeiro e app mobile. Sistema em produção com arquitetura real de SaaS multi-tenant.',
-  metrics: [
-    { value: 'Multi-tenant', label: 'Arquitetura' },
-    { value: 'Web + Mobile', label: 'Plataformas' },
-    { value: '6 módulos', label: 'Funcionalidades' },
-    { value: 'Em produção', label: 'Status' },
-  ],
-  tags: ['Next.js', 'Node.js', 'PostgreSQL', 'React Native', 'Prisma ORM', 'Supabase'],
-  demo: 'https://barberflowoficial.vercel.app/',
-  github: 'https://github.com/DevAlex-full/barbeflow-frontend',
-  image: '/imagens/barberflow1.png',
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import {
+  ArrowLeft, ArrowRight, ExternalLink, Github,
+  Scissors, Scale, UtensilsCrossed, ShoppingCart, Building2, Stethoscope,
+  Lock, Loader2,
+} from 'lucide-react'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { getClients } from '@/services/public.service'
+import type { ClientData } from '@/types/api'
+
+// ─── Segmentos (estático, visual) ────────────────────────────────────────────
+const segments = [
+  { icon: Scissors,        label: 'Barbearias & Salões',    description: 'Agendamento, gestão e app mobile'      },
+  { icon: Scale,           label: 'Advocacia & Consultoria', description: 'Landing pages e portais de clientes' },
+  { icon: UtensilsCrossed, label: 'Restaurantes & Food',    description: 'Cardápio digital e pedidos online'     },
+  { icon: ShoppingCart,    label: 'E-commerce',             description: 'Lojas completas com gestão de estoque' },
+  { icon: Building2,       label: 'Empresas & Negócios',    description: 'ERPs, CRMs e sistemas internos'        },
+  { icon: Stethoscope,     label: 'Saúde & Clínicas',       description: 'Agendamento e prontuário digital'      },
+]
+
+// ─── Status badge helper ──────────────────────────────────────────────────────
+const STATUS_LABELS: Record<string, string> = {
+  em_producao:    'Em Produção',
+  em_andamento:   'Em Andamento',
+  em_autorizacao: 'Em Autorização',
 }
 
-// ─── Segmentos atendidos ──────────────────────────────────────────────────────
-const segments = [
-  { icon: Scissors,        label: 'Barbearias & Salões',   description: 'Agendamento, gestão e app mobile'      },
-  { icon: Scale,           label: 'Advocacia & Consultoria', description: 'Landing pages e portais de clientes' },
-  { icon: UtensilsCrossed, label: 'Restaurantes & Food',   description: 'Cardápio digital e pedidos online'     },
-  { icon: ShoppingCart,    label: 'E-commerce',            description: 'Lojas completas com gestão de estoque' },
-  { icon: Building2,       label: 'Empresas & Negócios',   description: 'ERPs, CRMs e sistemas internos'        },
-  { icon: Stethoscope,     label: 'Saúde & Clínicas',      description: 'Agendamento e prontuário digital'      },
-]
-
-// ─── Slots "em breve" ─────────────────────────────────────────────────────────
-const comingSoon = [
-  { label: 'Em autorização', text: 'Projeto de sistema web para empresa local — aguardando aprovação do cliente.' },
-  { label: 'Em andamento',   text: 'Sistema desktop para automação de processos — entrega prevista em breve.'    },
-]
-
 export function ClientsShowcase() {
+  const [clients, setClients] = useState<ClientData[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getClients()
+      .then(setClients)
+      .catch(() => setClients([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  // Derivados
+  const featured     = clients.filter(c => c.featured && c.status === 'em_producao')
+  const mainCase     = featured[0] ?? null
+  const otherCases   = featured.slice(1)
+  const comingSoon   = clients.filter(c => c.status === 'em_andamento' || c.status === 'em_autorizacao')
+
   return (
     <section className="min-h-screen pt-28 pb-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -58,108 +64,177 @@ export function ClientsShowcase() {
           description="Cases reais, soluções entregues e segmentos que atendo"
         />
 
-        {/* ── Case próprio ──────────────────────────────────────────────────── */}
-        <div className="mb-20">
-          <p className="font-mono text-xs text-violet-400 uppercase tracking-widest mb-6">
-            ★ Case em Destaque
-          </p>
+        {/* ── Loading ────────────────────────────────────────────────────────── */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 size={28} className="text-violet-400 animate-spin" />
+          </div>
+        )}
 
-          <div className="grid lg:grid-cols-2 gap-8 p-8 rounded-2xl border border-violet-600/30 bg-bg-card relative overflow-hidden">
-            {/* Glow */}
-            <div className="absolute top-0 right-0 w-72 h-72 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
+        {/* ── Case em destaque (primeiro featured em produção) ─────────────── */}
+        {!loading && mainCase && (
+          <div className="mb-20">
+            <p className="font-mono text-xs text-violet-400 uppercase tracking-widest mb-6">
+              ★ Case em Destaque
+            </p>
 
-            {/* Left */}
-            <div className="relative z-10">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-violet-600/40 bg-violet-600/10 font-mono text-[11px] text-violet-300 mb-5">
-                {ownCase.label}
-              </span>
+            <div className="grid lg:grid-cols-2 gap-8 p-8 rounded-2xl border border-violet-600/30 bg-bg-card relative overflow-hidden">
+              {/* Glow */}
+              <div className="absolute top-0 right-0 w-72 h-72 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
 
-              <h3 className="font-display font-bold text-white text-3xl mb-1">{ownCase.title}</h3>
-              <p className="font-mono text-sm text-violet-400 mb-5">{ownCase.subtitle}</p>
+              {/* Left */}
+              <div className="relative z-10">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-violet-600/40 bg-violet-600/10 font-mono text-[11px] text-violet-300 mb-5">
+                  Case Próprio
+                </span>
 
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">{ownCase.description}</p>
+                <h3 className="font-display font-bold text-white text-3xl mb-1">{mainCase.name}</h3>
+                {mainCase.subtitle && (
+                  <p className="font-mono text-sm text-violet-400 mb-5">{mainCase.subtitle}</p>
+                )}
 
-              {/* Metrics */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {ownCase.metrics.map(({ value, label }) => (
-                  <div key={label} className="p-3 rounded-xl border border-violet-600/20 bg-bg-primary">
-                    <p className="font-display font-bold text-violet-300 text-sm">{value}</p>
-                    <p className="font-mono text-[11px] text-slate-600 mt-0.5">{label}</p>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">{mainCase.description}</p>
+
+                {/* Metrics */}
+                {mainCase.metrics.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {mainCase.metrics.map(({ value, label }) => (
+                      <div key={label} className="p-3 rounded-xl border border-violet-600/20 bg-bg-primary">
+                        <p className="font-display font-bold text-violet-300 text-sm">{value}</p>
+                        <p className="font-mono text-[11px] text-slate-600 mt-0.5">{label}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {ownCase.tags.map((t) => (
-                  <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-lg border border-slate-700 text-slate-400">
-                    {t}
-                  </span>
-                ))}
-              </div>
+                {/* Tags */}
+                {mainCase.technologies.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {mainCase.technologies.map((t) => (
+                      <span key={t} className="font-mono text-[11px] px-2.5 py-1 rounded-lg border border-slate-700 text-slate-400">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
-              {/* Links */}
-              <div className="flex gap-3">
-                <a
-                  href={ownCase.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white font-display font-semibold text-sm hover:bg-violet-500 transition-all"
-                >
-                  <ExternalLink size={14} />
-                  Ver Demo
-                </a>
-                <a
-                  href={ownCase.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-display font-semibold text-sm hover:border-violet-500/50 hover:text-white transition-all"
-                >
-                  <Github size={14} />
-                  Código
-                </a>
-              </div>
-            </div>
-
-            {/* Right: Image */}
-            <div className="relative z-10 flex items-center justify-center">
-              <div className="w-full rounded-xl overflow-hidden border border-violet-600/20 shadow-2xl">
-                <img
-                  src={ownCase.image}
-                  alt="BarberFlow Dashboard"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Em breve ──────────────────────────────────────────────────────── */}
-        <div className="mb-20">
-          <p className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-6">
-            Próximos Cases
-          </p>
-          <div className="grid md:grid-cols-2 gap-4">
-            {comingSoon.map(({ label, text }) => (
-              <div
-                key={label}
-                className="p-6 rounded-xl border border-dashed border-slate-700/60 bg-bg-card/50 flex items-start gap-4"
-              >
-                <div className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Lock size={15} className="text-slate-500" />
-                </div>
-                <div>
-                  <span className="font-mono text-[11px] text-amber-400/80 border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 rounded-full">
-                    {label}
-                  </span>
-                  <p className="text-slate-500 text-sm leading-relaxed mt-2">{text}</p>
+                {/* Links */}
+                <div className="flex gap-3 flex-wrap">
+                  {mainCase.linkDemo && (
+                    <a
+                      href={mainCase.linkDemo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white font-display font-semibold text-sm hover:bg-violet-500 transition-all"
+                    >
+                      <ExternalLink size={14} />
+                      Ver Demo
+                    </a>
+                  )}
+                  {mainCase.linkGithub && (
+                    <a
+                      href={mainCase.linkGithub}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-display font-semibold text-sm hover:border-violet-500/50 hover:text-white transition-all"
+                    >
+                      <Github size={14} />
+                      Código
+                    </a>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* ── Segmentos ─────────────────────────────────────────────────────── */}
+              {/* Right: Image */}
+              {mainCase.image && (
+                <div className="relative z-10 flex items-center justify-center">
+                  <div className="w-full rounded-xl overflow-hidden border border-violet-600/20 shadow-2xl">
+                    <img
+                      src={mainCase.image}
+                      alt={mainCase.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Outros cases em destaque ──────────────────────────────────────── */}
+        {!loading && otherCases.length > 0 && (
+          <div className="mb-20">
+            <p className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-6">
+              Outros Cases
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {otherCases.map(client => (
+                <div
+                  key={client.id}
+                  className="group p-6 rounded-xl border border-violet-600/15 bg-bg-card hover:border-violet-500/35 transition-all duration-300"
+                >
+                  <h4 className="font-display font-bold text-white mb-1">{client.name}</h4>
+                  {client.subtitle && (
+                    <p className="font-mono text-xs text-violet-400 mb-3">{client.subtitle}</p>
+                  )}
+                  <p className="text-slate-400 text-sm leading-relaxed mb-4">{client.description}</p>
+                  {client.technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {client.technologies.map(t => (
+                        <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded border border-slate-700 text-slate-500">{t}</span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    {client.linkDemo && (
+                      <a href={client.linkDemo} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 text-white font-mono text-xs hover:bg-violet-500 transition-all">
+                        <ExternalLink size={12} /> Demo
+                      </a>
+                    )}
+                    {client.linkGithub && (
+                      <a href={client.linkGithub} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-700 text-slate-300 font-mono text-xs hover:border-violet-500/50 transition-all">
+                        <Github size={12} /> Código
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Em breve (status em_andamento / em_autorizacao) ───────────────── */}
+        {!loading && comingSoon.length > 0 && (
+          <div className="mb-20">
+            <p className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-6">
+              Próximos Cases
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {comingSoon.map(client => (
+                <div
+                  key={client.id}
+                  className="p-6 rounded-xl border border-dashed border-slate-700/60 bg-bg-card/50 flex items-start gap-4"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Lock size={15} className="text-slate-500" />
+                  </div>
+                  <div>
+                    <span className="font-mono text-[11px] text-amber-400/80 border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 rounded-full">
+                      {STATUS_LABELS[client.status] ?? client.status}
+                    </span>
+                    {client.description && (
+                      <p className="text-slate-500 text-sm leading-relaxed mt-2">{client.description}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Segmentos (estático) ──────────────────────────────────────────── */}
         <div className="mb-20">
           <p className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-2">
             Segmentos que Atendo
@@ -184,7 +259,7 @@ export function ClientsShowcase() {
           </div>
         </div>
 
-        {/* ── CTA ───────────────────────────────────────────────────────────── */}
+        {/* ── CTA (estático) ────────────────────────────────────────────────── */}
         <div className="text-center p-10 rounded-2xl border border-violet-600/20 bg-bg-card">
           <h3 className="font-display font-bold text-white text-2xl mb-3">
             Vamos construir o seu case?

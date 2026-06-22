@@ -1,10 +1,3 @@
-/**
- * types/api.ts
- * Tipos que espelham os models do Prisma.
- * Usados tanto nas páginas públicas (SSR) quanto no painel admin.
- */
-
-// ── Shared ────────────────────────────────────────────────────
 export interface BaseRecord {
   id:        string
   createdAt: string
@@ -166,6 +159,8 @@ export interface ClientData extends BaseRecord {
   linkDemo:     string | null
   linkGithub:   string | null
   featured:     boolean
+  // em_producao | em_andamento | em_autorizacao
+  status:       string
   order:        number
   active:       boolean
 }
