@@ -1,14 +1,13 @@
 'use client'
 
-// 📁 CAMINHO: app/admin/(protected)/dashboard/page.tsx (CRIADO)
 
 import { useState, useEffect } from 'react'
 import { AdminShell }          from '@/components/admin/AdminShell'
 import { dashboardService }    from '@/services/admin.service'
 import type { DashboardStats } from '@/types/api'
 import {
-  FolderKanban, Award, Zap, Briefcase, Image, Users, Building2,
-  Star, ArrowUpRight, Loader2, MessageSquare, Clock,
+  FolderKanban, Award, Zap, Briefcase, Image, Users, Building2, MessageSquare,
+  Star, ArrowUpRight, Loader2, Clock,
 } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
@@ -43,11 +42,12 @@ export default function DashboardPage() {
   const statCards = stats ? [
     { label: 'Projetos',       value: stats.totals.projects,       icon: FolderKanban, href: '/admin/projetos',     color: 'violet' },
     { label: 'Clientes',       value: stats.totals.clients,        icon: Building2,    href: '/admin/clientes',     color: 'cyan'   },
-    { label: 'Certificações',  value: stats.totals.certifications, icon: Award,        href: '/admin/certificados', color: 'violet' },
-    { label: 'Habilidades',    value: stats.totals.skills,         icon: Zap,          href: '/admin/habilidades',  color: 'cyan'   },
-    { label: 'Serviços',       value: stats.totals.services,       icon: Briefcase,    href: '/admin/servicos',     color: 'violet' },
-    { label: 'Mídias',         value: stats.totals.media,          icon: Image,        href: '/admin/midias',       color: 'cyan'   },
-    { label: 'Leads',          value: stats.totals.leads,          icon: Users,        href: '/admin/leads',        color: 'violet' },
+    { label: 'Feedbacks',      value: stats.totals.feedbacks,      icon: MessageSquare,href: '/admin/feedbacks',    color: 'violet' },
+    { label: 'Certificações',  value: stats.totals.certifications, icon: Award,        href: '/admin/certificados', color: 'cyan'   },
+    { label: 'Habilidades',    value: stats.totals.skills,         icon: Zap,          href: '/admin/habilidades',  color: 'violet' },
+    { label: 'Serviços',       value: stats.totals.services,       icon: Briefcase,    href: '/admin/servicos',     color: 'cyan'   },
+    { label: 'Mídias',         value: stats.totals.media,          icon: Image,        href: '/admin/midias',       color: 'violet' },
+    { label: 'Leads',          value: stats.totals.leads,          icon: Users,        href: '/admin/leads',        color: 'cyan'   },
   ] : []
 
   return (

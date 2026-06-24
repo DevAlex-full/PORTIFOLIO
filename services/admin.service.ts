@@ -3,7 +3,7 @@ import type {
   ProjectData, CertificationData, SkillData,
   ServicePlanData, ServiceExtraData,
   HeroData, AboutData, ContactData, SiteSettingsData,
-  LeadData, MediaData, DashboardStats, ClientData,
+  LeadData, MediaData, DashboardStats, ClientData, FeedbackData,
 } from '@/types/api'
 
 // ============================================================
@@ -176,4 +176,14 @@ export const mediaService = {
   },
 
   delete: (id: string) => api.delete(`/api/media/${id}`),
+}
+
+// ============================================================
+// FEEDBACKS — Depoimentos de clientes
+// ============================================================
+export const feedbackService = {
+  getAll:  ()                                   => api.get<FeedbackData[]>('/api/feedbacks/all'),
+  create:  (data: Partial<FeedbackData>)        => api.post<FeedbackData>('/api/feedbacks', data),
+  update:  (id: string, data: Partial<FeedbackData>) => api.put<FeedbackData>(`/api/feedbacks/${id}`, data),
+  delete:  (id: string)                         => api.delete(`/api/feedbacks/${id}`),
 }

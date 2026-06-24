@@ -9,6 +9,7 @@ import type {
   ContactData,
   SiteSettingsData,
   ClientData,
+  FeedbackData,
 } from '@/types/api'
 
 // ── Hero ──────────────────────────────────────────────────────
@@ -116,4 +117,12 @@ export async function getHomeData() {
     ])
 
   return { hero, about, projects, certifications, skills, services, contact }
+}
+
+export async function getFeedbacks(): Promise<FeedbackData[]> {
+  try {
+    return await publicFetch<FeedbackData[]>('/api/feedbacks')
+  } catch {
+    return []
+  }
 }

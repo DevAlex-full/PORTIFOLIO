@@ -1,8 +1,5 @@
 'use client'
 
-// 📁 CAMINHO: components/sections/HomeContent.tsx (ALTERADO)
-// Recebe todos os dados como props vindos do Server Component (page.tsx).
-// Mantém a navegação por hash e o comportamento original intactos.
 
 import { useEffect }           from 'react'
 import { useSearchParams }     from 'next/navigation'
@@ -12,6 +9,7 @@ import { Skills }              from '@/components/sections/Skills'
 import { Certifications }      from '@/components/sections/Certifications'
 import { Projects }            from '@/components/sections/Projects'
 import { Services }            from '@/components/sections/Services'
+import { Testimonials }        from '@/components/sections/Testimonials'
 import { Contact }             from '@/components/sections/Contact'
 import type {
   HeroData, AboutData, ProjectData, CertificationData,
@@ -52,6 +50,7 @@ export function HomeContent({
       <Certifications  data={certifications} />
       <Projects        data={projects} />
       <Services        data={services} />
+      <Testimonials    />
       <Contact         data={contact} />
     </>
   )

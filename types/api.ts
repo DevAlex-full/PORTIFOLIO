@@ -1,3 +1,4 @@
+// ── Shared ────────────────────────────────────────────────────
 export interface BaseRecord {
   id:        string
   createdAt: string
@@ -190,6 +191,20 @@ export interface MediaData extends BaseRecord {
   path:         string
 }
 
+// ── Feedback ──────────────────────────────────────────────────
+export interface FeedbackData extends BaseRecord {
+  clientName:  string
+  clientRole:  string | null
+  company:     string | null
+  projectName: string | null
+  content:     string
+  rating:      number
+  imageUrl:    string | null
+  featured:    boolean
+  active:      boolean
+  order:       number
+}
+
 // ── Dashboard ─────────────────────────────────────────────────
 export interface DashboardStats {
   totals: {
@@ -200,6 +215,7 @@ export interface DashboardStats {
     services:        number
     clients:         number
     featuredClients: number
+    feedbacks:       number
     media:           number
     leads:           number
     newLeads:        number

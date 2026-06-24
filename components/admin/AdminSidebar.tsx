@@ -1,5 +1,6 @@
 'use client'
 
+
 import Link       from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn }     from '@/lib/utils'
@@ -7,7 +8,7 @@ import { useAdminAuth } from '@/contexts/AdminAuthContext'
 import {
   LayoutDashboard, FolderKanban, Award, Zap, Briefcase,
   User, Info, Phone, Settings, Search, Image, Users,
-  X, LogOut, ChevronRight, Building2,
+  X, LogOut, ChevronRight, Building2, MessageSquare,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -29,11 +30,12 @@ const NAV_GROUPS = [
   {
     label: 'Portfólio',
     items: [
-      { label: 'Projetos',      href: '/admin/projetos',      icon: FolderKanban },
-      { label: 'Clientes',      href: '/admin/clientes',      icon: Building2    },
-      { label: 'Certificados',  href: '/admin/certificados',  icon: Award        },
-      { label: 'Habilidades',   href: '/admin/habilidades',   icon: Zap          },
-      { label: 'Serviços',      href: '/admin/servicos',      icon: Briefcase    },
+      { label: 'Projetos',      href: '/admin/projetos',      icon: FolderKanban  },
+      { label: 'Clientes',      href: '/admin/clientes',      icon: Building2     },
+      { label: 'Feedbacks',     href: '/admin/feedbacks',     icon: MessageSquare },
+      { label: 'Certificados',  href: '/admin/certificados',  icon: Award         },
+      { label: 'Habilidades',   href: '/admin/habilidades',   icon: Zap           },
+      { label: 'Serviços',      href: '/admin/servicos',      icon: Briefcase     },
     ],
   },
   {
